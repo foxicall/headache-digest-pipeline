@@ -10,6 +10,7 @@ import xml.etree.ElementTree as ET
 import requests
 
 from src.models import Article, ArticleMetadata
+from src.journal_metrics import load_policy
 
 LOGGER = logging.getLogger(__name__)
 EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
@@ -30,12 +31,15 @@ TARGET_SOCIETIES = ("Japanese Headache Society", "Taiwan Headache Society")
 JAPAN_AFFILIATION_QUERY = ('("Japan"[Affiliation] AND ("Cephalalgia"[Journal] '
                            'OR "The Journal of Headache and Pain"[Journal] '
                            'OR "J Headache Pain"[Journal] OR "Headache"[Journal]))')
-DEFAULT_QUERY = "((" + " OR ".join(
+SOCIETY_QUERY = "((" + " OR ".join(
     [f'"{name}"[Journal]' for name in TARGET_JOURNALS]
     + [f'"{name}"[{field}]' for name in TARGET_SOCIETIES
        for field in ("Affiliation", "Title/Abstract", "Corporate Author")]
     + [JAPAN_AFFILIATION_QUERY]
 ) + ") AND " + HEADACHE_QUERY + " AND hasabstract[text])"
+# The strict JIF requirement supersedes the old journal-only source restriction.
+# Society grouping is retained, but cannot grant admission to a lower-JIF source.
+DEFAULT_QUERY = "(" + load_policy().pubmed_clause() + " AND " + HEADACHE_QUERY + " AND hasabstract[text])"
 
 # These are requested source groups, not claims that every associated journal
 # is an official society publication or that its authors are society members.
@@ -79,7 +83,8 @@ GOAL = re.compile(r"\b(?:we (?:aim(?:ed)?|sought)|(?:this|the) study (?:aim(?:s|
                   r"we (?:investigated|evaluated|examined|assessed|compared|studied))\b", re.I)
 PRIMARY_OUTCOME = re.compile(r"\bprimary (?:outcomes?|endpoints?)\b", re.I)
 MIGRAINE_THERAPY = re.compile(r"\b(?:erenumab|fremanezumab|galcanezumab|eptinezumab|"
-                              r"rimegepant|ubrogepant|atogepant|zavegepant|lasmiditan)\b", re.I)
+                              r"rimegepant|ubrogepant|atogepant|zavegepant|lasmiditan|"
+                              r"anti[- ]CGRP|CGRP[- ](?:monoclonal antibodies|mAbs))\b", re.I)
 MIGRAINE_CONTEXT = re.compile(r"(?:treatment|prevention) of (?:migraine|cluster headache)|"
                               r"migraine (?:prevention|treatment)|"
                               r"patients? with (?:(?:episodic|chronic) )?migraine", re.I)
@@ -226,8 +231,9 @@ class CrawlResult:
 
 
 class Crawler:
-    def __init__(self, session=None):
+    def __init__(self, session=None, policy=None):
         self.session = session or requests.Session()
+        self.policy = policy or load_policy()
         self.session.headers.update({"User-Agent": "HeadacheDigest/2.0 (keyless literature reader)"})
 
     def _get(self, endpoint, *, params):
@@ -251,14 +257,18 @@ class Crawler:
         raise AssertionError("unreachable")
 
     def fetch_pubmed(self, since: date, today: date, limit=1000, query=DEFAULT_QUERY):
+        # Apply to custom queries too, then independently check fetched metadata.
+        restricted_query = f"({query}) AND {self.policy.pubmed_clause()}"
         ids = parse_search(self._get("esearch.fcgi", params={
-            "db": "pubmed", "term": query, "retmode": "xml", "retmax": limit,
+            "db": "pubmed", "term": restricted_query, "retmode": "xml", "retmax": limit,
             "sort": "pub_date", "datetype": "pdat", "mindate": since.strftime("%Y/%m/%d"),
             "maxdate": today.strftime("%Y/%m/%d"), "tool": "headache_digest",
         }).content)
         candidates = self.fetch_by_ids(ids)
-        articles = [article for article in candidates if is_headache_topic(article.metadata.title, article.abstract)]
-        LOGGER.info("Topic screen retained %s/%s PubMed candidates", len(articles), len(candidates))
+        articles = [article for article in candidates
+                    if self.policy.eligible(article.metadata.source_society_or_journal)
+                    and is_headache_topic(article.metadata.title, article.abstract)]
+        LOGGER.info("JIF > 15 and topic screens retained %s/%s PubMed candidates", len(articles), len(candidates))
         return articles
 
     def fetch_by_ids(self, ids: list[str]) -> list[Article]:

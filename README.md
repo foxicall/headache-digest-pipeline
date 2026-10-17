@@ -1,6 +1,6 @@
 # Headache Digest
 
-A zero-database Python pipeline and responsive Tailwind CSS reader. Articles live in `data/headache_papers.json`. **Three real, source-verified historical papers make the dashboard work immediately without an API key.**
+A zero-database Python pipeline and responsive Tailwind CSS reader. Articles live in `data/headache_papers.json`. **Only publications from journals with a verified two-year Journal Impact Factor strictly greater than 15 are published.** Unknown, missing, stale-year, or boundary-value metrics are rejected.
 
 ## Quick start
 
@@ -20,6 +20,29 @@ python -m http.server 8000 --bind 127.0.0.1
 ```
 
 Open <http://localhost:8000>. Use HTTP rather than `file://`, which cannot reliably fetch JSON. No database, frontend build or NCBI key is required.
+
+## Strict Journal Impact Factor policy
+
+The policy is a versioned, manually verified snapshot of **2025 two-year JIF (2026 JCR release)**, checked on **2026-10-17**. It is maintained in `data/journal_metrics.json`, independent of the unchanged seven-field clinical summary schema. This is a curated list of verified journals, not an exhaustive list of all journals with JIF > 15.
+
+| Journal | 2025 JIF | Evidence |
+| --- | ---: | --- |
+| The Lancet Neurology | 54.6 | [Source](https://info.thelancet.com/laneur/request-access) |
+| JAMA Neurology | 23.6 | [Source](https://www.wolterskluwer.com/en/solutions/ovid/jama-neurology-262) |
+| Nature Reviews Neurology | 31.2 | [Source](https://www.nature.com/nature-portfolio/about-journals/journal-metrics) |
+| Nature Neuroscience | 20.3 | [Source](https://www.nature.com/nature-portfolio/about-journals/journal-metrics) |
+| Nature Medicine | 52.5 | [Source](https://journalcitationreports.zendesk.com/hc/en-gb/articles/47808147130129-2026) |
+| Nature Communications | 18.1 | [Source](https://www.nature.com/ncomms/ncomms/journal-impact) |
+| Nature | 56.1 | [Source](https://www.nature.com/nature/journal-impact) |
+| The New England Journal of Medicine | 84.5 | [Source](https://www.nejm.org/media-center/fact-sheet) |
+| JAMA | 65.4 | [Source](https://jamanetwork.com/journals/jama/fullarticle/2854582) |
+| The BMJ | 55.1 | [Source](https://bmjgroup.com/about-us/) |
+
+The rule is **JIF > 15**, not ≥ 15. The backend uses decimal comparisons. Null/unknown metrics, unlisted journals and metric years different from the policy year fail closed. CiteScore, SJR, five-year JIF and values inferred by AI are never substitutes. Complete normalized title/alias matching prevents a journal from inheriting another journal's value by prefix or society tag.
+
+The gate is applied in the PubMed query, to fetched metadata, to every new-record/upgrade attempt, to the existing archive on every normal run, and again in the reader. Custom queries, society affiliations and historical seeds cannot bypass it. All 48 records from the preceding archive were removed when this policy was introduced because none passed the verified list; their history remains in Git. An empty archive is valid and is not filled with nonqualifying examples.
+
+To update after a new JCR release, verify **two-year** values and the metric year against Clarivate or publisher sources, update the year/release/verification date and each entry's value, year, aliases and evidence URL, then run tests and the pipeline. New and updated entries require review; the nightly job does not scrape or guess JIF values. The pinned year remains visible until a verified update is committed. Journal-level JIF is an admission criterion, not a quality score for an individual article.
 
 ## Exact data contract
 
@@ -47,13 +70,13 @@ Pydantic v2 rejects extra fields and empty summary strings/lists. Participant co
 
 **With a key:** `gpt-4o-mini` uses OpenAI Structured Outputs with `StructuredSummary` as the response model. The prompt distinguishes `Not reported` (relevant information omitted) from `Not applicable` (irrelevant to the study design). It forbids inventing sample sizes, p-values, mechanisms or eligibility criteria, treats source text as evidence rather than instructions, and separates author-reported limitations from limits of abstract-only reading. Refusals or invalid/incomplete output are reported as failures and remain retryable.
 
-Adding a key also upgrades stored fallback records, including those outside the fetch window, using the abstract retained in `methods`. Upgrades replace records in place without duplicate PMIDs. No additional mode/provenance fields are added to the public schema. The dashboard recognizes fallback records by the exact marker and labels the three curated seed PMIDs separately.
+Adding a key also upgrades stored fallback records, including those outside the fetch window, using the abstract retained in `methods`. Upgrades replace records in place without duplicate PMIDs. No additional mode/provenance fields are added to the public schema. The dashboard recognizes fallback records by the exact marker. All upgrades remain subject to the JIF gate.
 
 The existing Traditional Chinese interface and summary language are retained, with bilingual clinical field labels. Set `SUMMARY_LANGUAGE=English` locally or as a repository variable to change extraction language. English missing-information markers remain explicit. `OPENAI_MODEL` defaults to `gpt-4o-mini`.
 
-## Verified seed papers
+## Historical test fixtures
 
-These historical examples are clearly labeled in the reader; they are not recent query results or current recommendations.
+The original three historical examples are preserved in `tests/fixtures/historical_seeds.json`, with XML evidence in `tests/fixtures/seed_pubmed.xml`. They no longer appear in the published archive: seed status never bypasses the JIF threshold. These fixtures do not represent recent query results or current recommendations.
 
 | Coverage | Paper | Source |
 | --- | --- | --- |
@@ -65,7 +88,7 @@ Metadata and clinical claims were checked against keyless PubMed EFetch on **202
 
 ## PubMed ingestion
 
-The default query in `src/crawler.py` combines the following source groups with headache/migraine, cephalalgia/hemicrania, trigeminal neuralgia, or trigeminal autonomic cephalalgia terms, and requires an abstract. Generic `trigeminal` alone is no longer a search term.
+The default query in `src/crawler.py` combines the verified JIF allowlist with headache/migraine, cephalalgia/hemicrania, trigeminal neuralgia, or trigeminal autonomic cephalalgia terms, and requires an abstract. The prior society journal restriction is superseded by the JIF allowlist. The following source classifications remain available for metadata and filters, but confer no exception to the threshold. Generic `trigeminal` alone is no longer a search term.
 
 | Source group | Journals and additional evidence |
 | --- | --- |
@@ -79,11 +102,11 @@ These are requested journal/affiliation source groups, including associated jour
 
 **Topic screening:** after fetching XML, a deterministic screen requires a topic in the title, an explicit objective or primary outcome about headache/migraine/trigeminal neuralgia, or a sustained opening focus in an unstructured abstract. A named migraine-specific therapy study is also retained when its abstract explicitly identifies migraine treatment/prevention, cluster-headache treatment, or a migraine patient population (for example, galcanezumab pregnancy safety). Background-only mentions, symptom/adverse-event lists (including case-presentation titles), generic trigeminal anatomy and incidental headache in other diseases fail. A journal or affiliation never bypasses the screen. The pipeline repeats this check before any AI call, including custom queries and fallback upgrades.
 
-This conservative lexical rule favors precision and may miss relevant papers without explicit topic wording; it is not a clinical relevance classifier. SIH/IIH and other neurologic diseases are not automatically included without a headache study focus. The existing archive was audited against PubMed abstracts on 2026-10-17: five off-topic records were removed, 16 retained, and source tags refreshed. Verbatim excerpts for ambiguous cases are in `tests/fixtures/scope_pubmed.xml`; earlier records remain available in Git history. Future runs retain the archive and do not delete older papers merely because they fall outside the query window.
+This conservative lexical rule favors precision and may miss relevant papers without explicit topic wording; it is not a clinical relevance classifier. SIH/IIH and other neurologic diseases are not automatically included without a headache study focus. Verbatim excerpts for ambiguous cases are in `tests/fixtures/scope_pubmed.xml`; earlier records remain available in Git history. Future runs retain the archive and do not delete older papers merely because they fall outside the query window.
 
-ESearch and EFetch both use XML. Every request, including retries, is preceded by `time.sleep(0.4)`. Calls run sequentially with timeouts, bounded retries for transient failures and EFetch batches of 100 IDs. No NCBI API key is sent. PubMed query warnings are logged. Some requested full journal names or society phrases may be unmapped; the query retains them alongside indexed journal aliases. Sources absent from PubMed cannot be retrieved by this pipeline. Affiliation searches depend on indexed author metadata and do not capture every society member's work.
+ESearch and EFetch both use XML. Every request, including retries, is preceded by `time.sleep(0.4)`. Calls run sequentially with timeouts, bounded retries for transient failures and EFetch batches of 100 IDs. No NCBI API key is sent. PubMed query warnings are logged. Some journal names may be unmapped; indexed aliases are included in the allowlist query. Sources absent from PubMed cannot be retrieved by this pipeline. Affiliation searches depend on indexed author metadata and do not capture every society member's work.
 
-The default window is **30 calendar days including today**, using the UTC date to set PubMed publication-date (`pdat`) bounds (for example, September 18–October 17 inclusive). Up to 1,000 candidates are fetched per run. All unique candidates that pass topic screening are processed unless an optional attempt cap is supplied. The displayed date prefers PubMed electronic publication date, which can differ from the search date indexed by PubMed. This is a recent-publication digest: delayed indexing may place older articles outside the window. Increase the lookback/candidate limit for backfills.
+The default window is **30 calendar days including today**, using the UTC date to set PubMed publication-date (`pdat`) bounds (for example, September 18–October 17 inclusive). Up to 1,000 candidates are fetched per run. All unique candidates that pass both JIF and topic screening are processed unless an optional attempt cap is supplied. The displayed date prefers PubMed electronic publication date, which can differ from the search date indexed by PubMed. This is a recent-publication digest: delayed indexing may place older articles outside the window. Increase the lookback/candidate limit for backfills.
 
 ```bash
 # Live source check without model calls or file writes.
@@ -95,7 +118,7 @@ python src/main.py --lookback-days 30 --pubmed-limit 200 --max-new 20
 
 Other options: `--output`, `--query`, `--model`, `--language`. OpenAI usage occurs only when a key is supplied; `--max-new` limits record attempts, including upgrades, rather than dollar spend.
 
-Existing JSON is validated before network work. Deduplication covers the saved archive and repeated IDs within a fetched batch. New records are prepended; existing records retain their order. Each success is checkpointed with `indent=2`, `ensure_ascii=False`, `fsync` and atomic replacement. Failures preserve existing data. Invalid JSON or duplicate persisted IDs fail explicitly rather than resetting the archive. Unchanged runs do not rewrite the file. Use one local writer per JSON file; CI serializes runs.
+Existing JSON is validated before network work. Deduplication covers the saved archive and repeated IDs within a fetched batch. New records are prepended; existing records retain their order. Each success is checkpointed with `indent=2`, `ensure_ascii=False`, `fsync` and atomic replacement. Failures preserve eligible records. The JIF gate prunes ineligible records before fetching, even if PubMed subsequently fails; `--fetch-only` never changes the file. Invalid JSON or duplicate persisted IDs fail explicitly rather than resetting the archive. Unchanged runs do not rewrite the file. Use one local writer per JSON file; CI serializes runs.
 
 ## Daily GitHub Actions and Pages
 
@@ -111,7 +134,7 @@ Repository rules must permit bot commits; branch protection is not bypassed. Par
 
 ## Dashboard
 
-The viewer fetches `./data/headache_papers.json` and supports keyword search, date sorting, all seven clinical fields, source/DOI links, and these filter chips: **All**, **IHS / Cephalalgia**, **EHF / JHP**, **ANA / AAN / AHS**, **JHS · 日本頭痛學會**, and **THS · 台灣頭痛學會**. The groups and journal aliases match the source definitions above. *Headache* belongs to ANA / AAN / AHS; a Japanese-affiliated *Cephalalgia* paper can appear under both IHS and JHS, so group counts need not sum to the total.
+The viewer fetches both `./data/headache_papers.json` and `./data/journal_metrics.json`, validates the policy and filters again before displaying or counting papers. Invalid or unavailable metrics stop display instead of falling back to an unrestricted archive. Each card links its JIF value and year to the verified source. Keyword search, date sorting, seven clinical fields and source/DOI links are retained. Chips show All, journals currently represented, and any society groups with matching records; a society match never bypasses JIF. Empty results are explicitly labeled as having no qualifying publications.
 
 Titles and abstracts are inserted as text, never HTML. Relative URLs work under GitHub Pages project paths. Loading, fetch errors, retries, empty results and cached/offline data are handled. The existing app manifest and service worker support installation/offline reading after an online visit; production requires HTTPS.
 
@@ -125,4 +148,4 @@ npm_config_cache=/tmp/headache-npm-cache npx --yes tailwindcss@3.4.17 \
 
 ## Verification
 
-Run `pytest`. Tests use `unittest.mock`, clear API-key environment variables, block real HTTP requests and prevent real OpenAI client creation. Coverage includes the exact schema, XML/DOI/date parsing, query coverage, rate limiting/retries, 30-day defaults and overrides, journal aliases and overlapping source groups, Taiwan classification, strict topic screening and source-based regressions, mocked Structured Outputs, missing/blank keys, deduplication, prepending, upgrades, partial failures, atomic writes and three verified seeds. Tests require no network access, external API key or billing.
+Run `pytest`. Tests use `unittest.mock`, clear API-key environment variables, block real HTTP requests and prevent real OpenAI client creation. Coverage includes the exact schema, XML/DOI/date parsing, query coverage, rate limiting/retries, 30-day defaults and overrides, journal aliases and overlapping source groups, Taiwan classification, strict topic screening and source-based regressions, mocked Structured Outputs, missing/blank keys, deduplication, prepending, upgrades, partial failures, atomic writes, historical seed fixtures, strict JIF boundaries, unknown/wrong-year metrics, custom-query protection and archive pruning. Tests require no network access, external API key or billing.

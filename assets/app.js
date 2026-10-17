@@ -55,6 +55,7 @@ function recordMode(paper) {
 const byId = (id) => document.getElementById(id);
 const state = {
   papers: [],
+  policy: null,
   filter: "all",
   visible: 20,
   cached: false,
@@ -128,21 +129,59 @@ function journalDefinition(source) {
   return JOURNALS.find(([, , aliases]) => aliases.includes(key));
 }
 
+function normalizeJournal(source) {
+  return source.split("|", 1)[0].toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function validateJournalPolicy(policy) {
+  const invalid = () => { throw new Error("期刊 JIF 資料無法核實，暫停顯示文獻。請稍後重試。"); };
+  if (policy?.metric !== "Journal Impact Factor" || policy.threshold_exclusive !== 15 ||
+      !Number.isInteger(policy.metric_year) || policy.metric_year < 2000 ||
+      policy.jcr_release_year !== policy.metric_year + 1 ||
+      !/^\d{4}-\d{2}-\d{2}$/.test(policy.verified_on) ||
+      Number(policy.verified_on.slice(0, 4)) < policy.jcr_release_year ||
+      !Array.isArray(policy.journals)) invalid();
+  const aliases = new Map();
+  for (const entry of policy.journals) {
+    if (!validText(entry.journal) || !Array.isArray(entry.aliases) ||
+        !entry.aliases.every(validText) || !Number.isInteger(entry.metric_year) || entry.metric_year < 2000 ||
+        !safeUrl(entry.source_url) ||
+        (entry.jif !== null && (typeof entry.jif !== "number" || !Number.isFinite(entry.jif) || entry.jif < 0))) invalid();
+    for (const name of [entry.journal, ...entry.aliases]) {
+      const key = normalizeJournal(name);
+      if (!key || name.includes("|") || (aliases.has(key) && aliases.get(key) !== entry)) invalid();
+      aliases.set(key, entry);
+    }
+  }
+  return { ...policy, aliases };
+}
+
+function eligibleMetric(source) {
+  const entry = state.policy?.aliases.get(normalizeJournal(source));
+  return entry && entry.metric_year === state.policy.metric_year &&
+    typeof entry.jif === "number" && entry.jif > 15 ? entry : null;
+}
+
 function canonicalJournal(source) {
-  return journalDefinition(source)?.[0] || source.split("|", 1)[0].trim();
+  return eligibleMetric(source)?.journal || journalDefinition(source)?.[0] || source.split("|", 1)[0].trim();
 }
 
 function matchesFilter(paper, filter) {
   if (filter === "all") return true;
   const source = paper.article_metadata.source_society_or_journal;
+  if (filter.startsWith("journal:")) return eligibleMetric(source)?.journal === filter.slice(8);
   const tags = source.toLowerCase().split("|").map((tag) => tag.trim());
   return journalDefinition(source)?.[1] === filter ||
     (SOCIETY_TAGS[filter] || []).some((tag) => tags.includes(tag));
 }
 
 function renderFilters() {
+  const filters = FILTERS.filter(([key]) => key === "all" || state.papers.some((paper) => matchesFilter(paper, key)));
+  const journals = [...new Set(state.papers.map((paper) => eligibleMetric(paper.article_metadata.source_society_or_journal)?.journal).filter(Boolean))].sort();
+  filters.push(...journals.map((journal) => ["journal:" + journal, journal]));
+  if (!filters.some(([key]) => key === state.filter)) state.filter = "all";
   byId("journal-filters").replaceChildren(
-    ...FILTERS.map(([key, label]) => {
+    ...filters.map(([key, label]) => {
       const count = state.papers.filter((paper) =>
         matchesFilter(paper, key),
       ).length;
@@ -174,6 +213,15 @@ function paperCard(paper, index) {
   const content = element("div");
   const meta = element("div", "paper-meta");
   meta.append(element("span", "source-badge", canonicalJournal(info.source_society_or_journal)));
+  const metric = eligibleMetric(info.source_society_or_journal);
+  if (metric) {
+    const badge = element("a", "source-badge", `JIF ${metric.jif} · ${state.policy.metric_year}`);
+    badge.href = metric.source_url;
+    badge.target = "_blank";
+    badge.rel = "noopener noreferrer";
+    badge.title = "查看期刊 Impact Factor 來源";
+    meta.append(badge);
+  }
   meta.append(element("span", "", info.publication_date || "發表日期未提供"));
   const [modeLabel, modeColor] = MODES[mode];
   meta.append(element("span", "record-mode " + modeColor, modeLabel));
@@ -266,6 +314,7 @@ function render() {
   const query = byId("search").value.trim().toLocaleLowerCase();
   const filtered = state.papers.filter(
     (paper) =>
+      eligibleMetric(paper.article_metadata.source_society_or_journal) &&
       matchesFilter(paper, state.filter) &&
       (!query ||
         [
@@ -302,10 +351,10 @@ function render() {
   const hasData = state.papers.length > 0;
   byId("empty-title").textContent = hasData
     ? "找不到符合的文獻"
-    : "文獻書架準備好了";
+    : "目前沒有符合 JIF > 15 的文獻";
   byId("empty-message").textContent = hasData
     ? "試試其他關鍵字，或切換期刊與學會。"
-    : "文獻收錄後，會在這裡顯示。";
+    : "僅顯示已核實 JIF 嚴格大於 15，且符合頭痛、偏頭痛或三叉神經痛主題的文獻。";
   byId("clear-search").hidden = !hasData;
 }
 
@@ -328,15 +377,18 @@ async function loadPapers() {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 20000);
   try {
-    const response = await fetch("./data/headache_papers.json", {
-      cache: "no-store",
-      signal: controller.signal,
-    });
-    if (!response.ok)
-      throw new Error("資料暫時無法取得（HTTP " + response.status + "）。");
-    state.papers = validatePapers(await response.json());
+    const [response, metricsResponse] = await Promise.all(
+      ["./data/headache_papers.json", "./data/journal_metrics.json"].map((url) =>
+        fetch(url, { cache: "no-store", signal: controller.signal })),
+    );
+    if (!response.ok || !metricsResponse.ok)
+      throw new Error("文獻或 JIF 資料暫時無法取得，請稍後重試。");
+    state.policy = validateJournalPolicy(await metricsResponse.json());
+    state.papers = validatePapers(await response.json()).filter((paper) =>
+      eligibleMetric(paper.article_metadata.source_society_or_journal));
+    byId("jif-notice").textContent = `${state.policy.metric_year} 年兩年制 JIF > 15（JCR ${state.policy.jcr_release_year}）· 僅收錄已核實期刊；15、缺少數值或年度不符均不收錄。`;
     state.loaded = true;
-    state.cached = response.headers.get("X-Digest-Cache") === "offline";
+    state.cached = [response, metricsResponse].some((item) => item.headers.get("X-Digest-Cache") === "offline");
     byId("total-count").textContent =
       state.papers.length.toLocaleString("zh-TW");
     const dates = state.papers.map((paper) => paper.article_metadata.publication_date)

@@ -17,6 +17,7 @@ from pydantic import TypeAdapter, ValidationError
 
 from src.crawler import Crawler, DEFAULT_LOOKBACK_DAYS, DEFAULT_QUERY, is_headache_topic
 from src.models import Article, PaperRecord
+from src.journal_metrics import load_policy
 from src.summarizer import DEFAULT_MODEL, Summarizer, SummaryError, is_fallback
 
 LOGGER = logging.getLogger(__name__)
@@ -30,6 +31,8 @@ class RunStats:
     duplicates: int = 0
     skipped_no_text: int = 0
     skipped_off_topic: int = 0
+    skipped_jif: int = 0
+    removed_jif: int = 0
     deferred: int = 0
     saved: int = 0
     upgraded: int = 0
@@ -70,17 +73,24 @@ def run_pipeline(path=DEFAULT_DATA, *, crawler=None, summarizer=None, lookback_d
                  pubmed_limit=1000, max_new=None, query=DEFAULT_QUERY, fetch_only=False,
                  model=DEFAULT_MODEL, language="Traditional Chinese") -> RunStats:
     path = Path(path)
+    policy = load_policy()
     records = load_records(path)
+    eligible_records = [record for record in records if policy.eligible(record.article_metadata.source_society_or_journal)]
+    removed_jif = len(records) - len(eligible_records)
+    records = eligible_records
+    if removed_jif and not fetch_only:
+        save_records(path, records)
+        LOGGER.info("Removed %s records without verified %s JIF > 15", removed_jif, policy.metric_year)
     known = {record.article_metadata.pmid_or_id for record in records}
     result = (crawler or Crawler()).collect(lookback_days=lookback_days, pubmed_limit=pubmed_limit, query=query)
-    stats = RunStats(fetched=len(result.articles), source_failures=len(result.errors))
+    stats = RunStats(fetched=len(result.articles), source_failures=len(result.errors), removed_jif=removed_jif)
     if result.successful_sources == 0:
-        raise RuntimeError("PubMed is unavailable; existing JSON was preserved")
+        raise RuntimeError("PubMed is unavailable; eligible records were preserved (fetch-only leaves JSON unchanged)")
     if not fetch_only:
         summarizer = summarizer or Summarizer(model=model, language=language)
 
     # Upgrade saved fallback abstracts after a key is added, even outside the fetch
-    # window. Keep their original position and preserve curated seed records.
+    # window. The JIF gate also applies to historical and seed records.
     pending = []
     if not fetch_only and summarizer.uses_ai:
         for index, record in enumerate(records):
@@ -105,6 +115,9 @@ def run_pipeline(path=DEFAULT_DATA, *, crawler=None, summarizer=None, lookback_d
     additions = []
     attempts = 0
     for article, existing_index in pending:
+        if not policy.eligible(article.metadata.source_society_or_journal):
+            stats.skipped_jif += 1
+            continue
         # Apply the same screen to custom queries and old fallback upgrades,
         # before spending any model calls. Society membership never bypasses it.
         if not is_headache_topic(article.metadata.title, article.abstract):

@@ -1,0 +1,100 @@
+{
+  "metric": "Journal Impact Factor",
+  "metric_year": 2025,
+  "jcr_release_year": 2026,
+  "threshold_exclusive": 15,
+  "verified_on": "2026-10-17",
+  "journals": [
+    {
+      "journal": "The Lancet Neurology",
+      "aliases": [
+        "Lancet Neurol",
+        "The Lancet. Neurology"
+      ],
+      "jif": 54.6,
+      "metric_year": 2025,
+      "source_url": "https://info.thelancet.com/laneur/request-access"
+    },
+    {
+      "journal": "JAMA Neurology",
+      "aliases": [
+        "JAMA Neurol"
+      ],
+      "jif": 23.6,
+      "metric_year": 2025,
+      "source_url": "https://www.wolterskluwer.com/en/solutions/ovid/jama-neurology-262"
+    },
+    {
+      "journal": "Nature Reviews Neurology",
+      "aliases": [
+        "Nat Rev Neurol"
+      ],
+      "jif": 31.2,
+      "metric_year": 2025,
+      "source_url": "https://www.nature.com/nature-portfolio/about-journals/journal-metrics"
+    },
+    {
+      "journal": "Nature Neuroscience",
+      "aliases": [
+        "Nat Neurosci"
+      ],
+      "jif": 20.3,
+      "metric_year": 2025,
+      "source_url": "https://www.nature.com/nature-portfolio/about-journals/journal-metrics"
+    },
+    {
+      "journal": "Nature Medicine",
+      "aliases": [
+        "Nat Med"
+      ],
+      "jif": 52.5,
+      "metric_year": 2025,
+      "source_url": "https://journalcitationreports.zendesk.com/hc/en-gb/articles/47808147130129-2026"
+    },
+    {
+      "journal": "Nature Communications",
+      "aliases": [
+        "Nat Commun"
+      ],
+      "jif": 18.1,
+      "metric_year": 2025,
+      "source_url": "https://www.nature.com/ncomms/ncomms/journal-impact"
+    },
+    {
+      "journal": "Nature",
+      "aliases": [],
+      "jif": 56.1,
+      "metric_year": 2025,
+      "source_url": "https://www.nature.com/nature/journal-impact"
+    },
+    {
+      "journal": "The New England Journal of Medicine",
+      "aliases": [
+        "New England Journal of Medicine",
+        "N Engl J Med"
+      ],
+      "jif": 84.5,
+      "metric_year": 2025,
+      "source_url": "https://www.nejm.org/media-center/fact-sheet"
+    },
+    {
+      "journal": "JAMA",
+      "aliases": [
+        "JAMA : the journal of the American Medical Association"
+      ],
+      "jif": 65.4,
+      "metric_year": 2025,
+      "source_url": "https://jamanetwork.com/journals/jama/fullarticle/2854582"
+    },
+    {
+      "journal": "The BMJ",
+      "aliases": [
+        "BMJ",
+        "BMJ (Clinical research ed.)"
+      ],
+      "jif": 55.1,
+      "metric_year": 2025,
+      "source_url": "https://bmjgroup.com/about-us/"
+    }
+  ]
+}

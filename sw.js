@@ -2,7 +2,7 @@
 
 // Scope-specific cache names keep different GitHub Pages project sites isolated.
 const PREFIX = `headache-digest:${self.registration.scope}:`;
-const CACHE = `${PREFIX}v4`;
+const CACHE = `${PREFIX}v5`;
 const SHELL = [
   "./",
   "./index.html",
@@ -16,6 +16,7 @@ const SHELL = [
 ];
 const DATA_URL = new URL("./data/headache_papers.json", self.registration.scope)
   .href;
+const METRICS_URL = new URL("./data/journal_metrics.json", self.registration.scope).href;
 const SHELL_URLS = new Set(
   SHELL.map((path) => new URL(path, self.registration.scope).href),
 );
@@ -45,7 +46,7 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   const url = new URL(event.request.url);
-  const isData = url.href === DATA_URL;
+  const isData = url.href === DATA_URL || url.href === METRICS_URL;
   if (!isData && !SHELL_URLS.has(url.href)) return;
   event.respondWith(
     (async () => {
@@ -56,7 +57,8 @@ self.addEventListener("fetch", (event) => {
         if (!response.ok) throw new Error("Network response failed");
         if (isData) {
           const payload = await response.clone().json();
-          if (!Array.isArray(payload)) throw new Error("Invalid data response");
+          if (url.href === DATA_URL ? !Array.isArray(payload) : payload?.metric !== "Journal Impact Factor")
+            throw new Error("Invalid data response");
         }
         await cache.put(event.request, response.clone());
         return response;

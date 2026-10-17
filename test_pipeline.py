@@ -11,7 +11,7 @@ import requests
 from pydantic import ValidationError
 
 from src.crawler import (
-    Crawler, CrawlResult, DEFAULT_QUERY, SourceError, TARGET_JOURNALS,
+    Crawler, CrawlResult, DEFAULT_QUERY, SOCIETY_QUERY, SourceError, TARGET_JOURNALS,
     TARGET_SOCIETIES, classify_societies, is_headache_topic, parse_pubmed, parse_search,
 )
 from src.main import load_records, main, run_pipeline, save_records
@@ -49,7 +49,7 @@ def summary(**overrides):
 def article(pmid="12345", **overrides):
     values = dict(
         metadata=ArticleMetadata(pmid_or_id=pmid, doi="Not reported", title="A migraine trial",
-                                 source_society_or_journal="Cephalalgia", publication_date="2026-10-16",
+                                 source_society_or_journal="JAMA Neurology", publication_date="2026-10-16",
                                  study_design="Randomized Controlled Trial"),
         url=f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
         abstract="A randomized controlled trial abstract.", affiliations=[],
@@ -187,9 +187,9 @@ def test_fetch_xml_error_is_not_empty_success():
 def test_search_targets_all_requested_journals_and_societies():
     assert "migraine[Title/Abstract]" in DEFAULT_QUERY
     for journal in TARGET_JOURNALS:
-        assert f'"{journal}"[Journal]' in DEFAULT_QUERY
+        assert f'"{journal}"[Journal]' in SOCIETY_QUERY
     for society in TARGET_SOCIETIES:
-        assert f'"{society}"[Affiliation]' in DEFAULT_QUERY
+        assert f'"{society}"[Affiliation]' in SOCIETY_QUERY
 
 
 @patch("src.crawler.time.sleep")
@@ -197,7 +197,7 @@ def test_ncbi_requests_are_keyless_xml_and_paced(sleep):
     session = Mock()
     session.get.side_effect = [
         response(content=b"<eSearchResult><IdList><Id>12345</Id></IdList></eSearchResult>"),
-        response(content=PUBMED_XML),
+        response(content=PUBMED_XML.replace(b"<Title>Cephalalgia</Title>", b"<Title>JAMA Neurology</Title>")),
     ]
     result = Crawler(session=session).fetch_pubmed(date(2026, 10, 11), date(2026, 10, 17))
     assert len(result) == 1
@@ -414,12 +414,12 @@ def test_cli_no_key_succeeds_and_writes_fallback(tmp_path):
     assert is_fallback(load_records(path)[0])
 
 
-def test_repository_has_three_source_verified_seed_records():
+def test_historical_seed_fixtures_remain_source_verified():
     root = Path(__file__).parent
-    papers = load_records(root / "data/headache_papers.json")
+    papers = load_records(root / "tests/fixtures/historical_seeds.json")
     seed_ids = {"29471679", "24144382", "23390177"}
-    # The live archive grows after each successful sync; verify the curated
-    # seeds without treating newly fetched records as unexpected test data.
+    # Historical examples are retained only as test fixtures, never exempted
+    # from the production JIF rule.
     seeds = {paper.article_metadata.pmid_or_id: paper for paper in papers
              if paper.article_metadata.pmid_or_id in seed_ids}
     assert set(seeds) == seed_ids
@@ -443,9 +443,9 @@ def test_default_query_requires_topic_and_abstract_across_all_sources():
     assert DEFAULT_QUERY.endswith('AND hasabstract[text])')
     assert 'trigeminal[Title/Abstract]' not in DEFAULT_QUERY
     assert '"trigeminal neuralgia"[Title/Abstract]' in DEFAULT_QUERY
-    assert '("Japan"[Affiliation] AND (' in DEFAULT_QUERY
-    assert '"Japanese Headache Society"[Title/Abstract]' in DEFAULT_QUERY
-    assert '"Taiwan Headache Society"[Corporate Author]' in DEFAULT_QUERY
+    assert '"JAMA Neurology"[Journal]' in DEFAULT_QUERY
+    assert '"Cephalalgia"[Journal]' not in DEFAULT_QUERY
+    assert '"Japan"[Affiliation]' not in DEFAULT_QUERY
 
 
 
@@ -601,3 +601,141 @@ def test_xml_collective_society_author_retains_cross_group_mapping():
     xml = xml.replace(b"<Author>", b"<Author><CollectiveName>Taiwan Headache Society</CollectiveName>")
     source = parse_pubmed(xml)[0].metadata.source_society_or_journal
     assert source == "Cephalalgia | International Headache Society | Japanese Headache Society | Taiwan Headache Society"
+
+
+def test_jif_policy_is_strict_year_specific_and_uses_exact_aliases():
+    from src.journal_metrics import JournalPolicy, load_policy
+    policy = load_policy()
+    for value, expected in ((14.999, False), (15, False), (15.0001, True), (None, False)):
+        data = policy.model_dump(mode='json')
+        data['journals'][0]['jif'] = value
+        custom = JournalPolicy.model_validate(data)
+        assert custom.eligible(custom.journals[0].journal) is expected
+    assert policy.eligible('The Lancet. Neurology | Taiwan Headache Society')
+    assert policy.eligible('JAMA Neurol')
+    assert policy.eligible('BMJ (Clinical research ed.)')
+    for source in ('Neurology', 'Cephalalgia', 'JAMA Network Open', 'Nature unknown journal',
+                   'Headache | JAMA Neurology', 'Unknown | International Headache Society'):
+        assert not policy.eligible(source)
+    data = policy.model_dump(mode='json')
+    data['journals'][0]['metric_year'] -= 1
+    assert not JournalPolicy.model_validate(data).eligible(data['journals'][0]['journal'])
+
+
+@pytest.mark.parametrize('change', [
+    {'metric': 'CiteScore'}, {'metric': '5-year Journal Impact Factor'},
+    {'threshold_exclusive': 14}, {'jcr_release_year': 2025},
+])
+def test_invalid_jif_policy_fails_closed(change):
+    from src.journal_metrics import JournalPolicy, load_policy
+    data = load_policy().model_dump(mode='json')
+    data.update(change)
+    with pytest.raises(ValidationError):
+        JournalPolicy.model_validate(data)
+
+
+def test_jif_invalid_metrics_and_ambiguous_aliases_rejected():
+    from src.journal_metrics import JournalPolicy, load_policy
+    for value in ('NaN', 'Infinity', -1, 'unverified'):
+        data = load_policy().model_dump(mode='json')
+        data['journals'][0]['jif'] = value
+        with pytest.raises(ValidationError):
+            JournalPolicy.model_validate(data)
+    data = load_policy().model_dump(mode='json')
+    data['journals'][0]['aliases'].append(data['journals'][1]['journal'])
+    with pytest.raises(ValidationError, match='unambiguous'):
+        JournalPolicy.model_validate(data)
+
+
+def test_jif_empty_allowlist_cannot_turn_into_unrestricted_query():
+    from src.journal_metrics import JournalPolicy, load_policy
+    data = load_policy().model_dump(mode='json')
+    data['journals'] = []
+    assert JournalPolicy.model_validate(data).pubmed_clause() == '0[PMID]'
+
+
+@patch('src.crawler.time.sleep')
+def test_custom_query_and_society_cannot_bypass_jif_gate(sleep):
+    session = Mock()
+    session.get.side_effect = [response(content=b'<eSearchResult><IdList><Id>12345</Id></IdList></eSearchResult>'),
+                               response(content=PUBMED_XML)]
+    assert Crawler(session).fetch_pubmed(date(2026, 9, 18), date(2026, 10, 17), query='headache') == []
+    assert '(headache) AND (' in session.get.call_args_list[0].kwargs['params']['term']
+    assert '"JAMA Neurology"[Journal]' in session.get.call_args_list[0].kwargs['params']['term']
+
+
+def test_pipeline_removes_nonqualifying_archive_seeds_and_never_calls_ai(tmp_path):
+    path = tmp_path / 'papers.json'
+    low = article('29471679')
+    low.metadata.source_society_or_journal = 'Cephalalgia | International Headache Society'
+    save_records(path, [record(low), Summarizer().summarize(article('allowed'))])
+    ai = ai_summarizer()
+    stats = run_pipeline(path, crawler=mock_crawler([low]), summarizer=ai)
+    assert (stats.removed_jif, stats.skipped_jif, stats.upgraded) == (1, 1, 1)
+    assert [p.article_metadata.pmid_or_id for p in load_records(path)] == ['allowed']
+    assert ai.client.beta.chat.completions.parse.call_count == 1
+
+
+def test_jif_pruning_persists_even_without_new_papers_or_api_key(tmp_path):
+    low = article()
+    low.metadata.source_society_or_journal = 'Unknown journal'
+    path = tmp_path / 'papers.json'
+    save_records(path, [record(low)])
+    stats = run_pipeline(path, crawler=mock_crawler())
+    assert stats.removed_jif == 1
+    assert load_records(path) == []
+    assert path.read_text() == '[]\n'
+
+
+def test_fetch_only_preserves_ineligible_archive_without_ai_calls(tmp_path):
+    low = article()
+    low.metadata.source_society_or_journal = 'Headache'
+    path = tmp_path / 'papers.json'
+    save_records(path, [record(low)])
+    before = path.read_bytes()
+    with patch('src.main.Summarizer') as constructor:
+        stats = run_pipeline(path, crawler=mock_crawler([low]), fetch_only=True)
+        constructor.assert_not_called()
+    assert (stats.removed_jif, stats.skipped_jif) == (1, 1)
+    assert path.read_bytes() == before
+
+
+def test_jif_pruning_is_not_dependent_on_pubmed_availability(tmp_path):
+    low = article()
+    low.metadata.source_society_or_journal = 'Headache'
+    path = tmp_path / 'papers.json'
+    save_records(path, [record(low), record(article('keep'))])
+    with pytest.raises(RuntimeError):
+        run_pipeline(path, crawler=mock_crawler(successful=0, errors=['PubMed unavailable']))
+    assert [p.article_metadata.pmid_or_id for p in load_records(path)] == ['keep']
+
+
+def test_invalid_jif_registry_stops_before_network_or_json_changes(tmp_path):
+    path = tmp_path / 'papers.json'
+    save_records(path, [record()])
+    before = path.read_bytes()
+    crawler = mock_crawler()
+    with patch('src.main.load_policy', side_effect=ValueError('Invalid metrics')), pytest.raises(ValueError):
+        run_pipeline(path, crawler=crawler)
+    crawler.collect.assert_not_called()
+    assert path.read_bytes() == before
+
+
+def test_every_published_record_passes_current_jif_policy():
+    from src.journal_metrics import load_policy
+    policy = load_policy()
+    records = load_records(Path(__file__).parent / 'data/headache_papers.json')
+    assert all(policy.eligible(p.article_metadata.source_society_or_journal) for p in records)
+
+
+def test_migraine_therapy_class_safety_requires_explicit_indication():
+    title = "Early pregnancy use of anti-CGRP monoclonal antibodies and spontaneous abortion risk"
+    assert is_headache_topic(title, "IMPORTANCE: Anti-CGRP mAbs are effective for migraine prevention.\nOBJECTIVE: Evaluate pregnancy safety.")
+    assert not is_headache_topic(title, "OBJECTIVE: Evaluate CGRP signaling in placental development.")
+
+
+def test_jif_query_includes_indexed_aliases_for_full_titles():
+    from src.journal_metrics import load_policy
+    clause = load_policy().pubmed_clause()
+    assert '"BMJ"[Journal]' in clause
+    assert '"Lancet Neurol"[Journal]' in clause

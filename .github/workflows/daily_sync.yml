@@ -100,7 +100,7 @@ jobs:
           mkdir -p _site/data
           cp index.html manifest.webmanifest sw.js _site/
           cp -R assets _site/assets
-          cp data/headache_papers.json _site/data/
+          cp data/headache_papers.json data/journal_metrics.json _site/data/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

@@ -40,6 +40,8 @@ def no_network_or_keys(monkeypatch):
         monkeypatch.delenv(name, raising=False)
     monkeypatch.setattr(requests.Session, "request", Mock(side_effect=AssertionError("Tests must not use network")))
     monkeypatch.setattr("src.summarizer.OpenAI", Mock(side_effect=AssertionError("Use a mocked OpenAI client")))
+    monkeypatch.setattr("src.main.utc_today", lambda: date(2026, 10, 17))
+    monkeypatch.setattr("src.crawler.utc_today", lambda: date(2026, 10, 17))
 
 
 def summary(**overrides):
@@ -459,7 +461,9 @@ def test_default_window_is_thirty_calendar_days_inclusive():
     crawler = Crawler()
     with patch.object(crawler, "fetch_pubmed", return_value=[]) as fetch:
         crawler.collect(today=date(2026, 10, 17))
-    assert fetch.call_args.args[:2] == (date(2026, 9, 18), date(2026, 10, 17))
+    assert fetch.call_args_list[0].args[:2] == (date(2026, 9, 18), date(2026, 10, 17))
+    assert fetch.call_args_list[1].args[:2] == (date(2016, 10, 17), date(2026, 9, 17))
+    assert fetch.call_args_list[1].kwargs['trials_only'] is True
 
 
 def test_cli_passes_thirty_day_default(tmp_path):
@@ -467,6 +471,8 @@ def test_cli_passes_thirty_day_default(tmp_path):
     with patch("src.main.Crawler", return_value=crawler):
         assert main(["--output", str(tmp_path / "papers.json")]) == 0
     assert crawler.collect.call_args.kwargs["lookback_days"] == 30
+    assert crawler.collect.call_args.kwargs["trial_lookback_years"] == 10
+    assert crawler.collect.call_args.kwargs["pubmed_limit"] is None
 
 
 def test_utf8_persistence_has_exact_wire_shape(tmp_path):
@@ -612,7 +618,7 @@ def test_xml_collective_society_author_retains_cross_group_mapping():
 def test_jif_policy_is_strict_year_specific_and_uses_exact_aliases():
     from src.journal_metrics import JournalPolicy, load_policy
     policy = load_policy()
-    for value, expected in ((14.999, False), (15, False), (15.0001, True), (None, False)):
+    for value, expected in ((9.999, False), (10, False), (10.0001, True), (None, False)):
         data = policy.model_dump(mode='json')
         data['journals'][0]['jif'] = value
         custom = JournalPolicy.model_validate(data)
@@ -620,7 +626,7 @@ def test_jif_policy_is_strict_year_specific_and_uses_exact_aliases():
     assert policy.eligible('The Lancet. Neurology | Taiwan Headache Society')
     assert policy.eligible('JAMA Neurol')
     assert policy.eligible('BMJ (Clinical research ed.)')
-    for source in ('Neurology', 'Cephalalgia', 'JAMA Network Open', 'Nature unknown journal',
+    for source in ('Neurology', 'Cephalalgia', 'JAMA Cardiology', 'Nature unknown journal',
                    'Headache | JAMA Neurology', 'Unknown | International Headache Society'):
         assert not policy.eligible(source)
     data = policy.model_dump(mode='json')
@@ -778,8 +784,8 @@ def test_lower_jif_requires_exact_pubmed_clinical_trial_type(design, expected):
 
 
 @pytest.mark.parametrize('value,year,expected', [
-    (0, 2025, True), (14.999, 2025, True), (15, 2025, False),
-    (15.0001, 2025, True), (None, 2025, False), (5.8, 2024, False),
+    (0, 2025, True), (9.999, 2025, True), (10, 2025, False),
+    (10.0001, 2025, True), (None, 2025, False), (5.8, 2024, False),
 ])
 def test_trial_exception_never_bypasses_metric_verification(value, year, expected):
     from src.journal_metrics import JournalPolicy, load_policy
@@ -801,7 +807,7 @@ def test_pubmed_query_keeps_low_jif_and_trial_requirement_in_same_branch():
     assert clause.startswith('(("JAMA Neurology"[Journal] OR "JAMA Neurol"[Journal]) OR (("Neurology"[Journal]) AND (')
     assert '"Controlled Clinical Trial"[Publication Type]' in clause
     assert 'NOT ("Clinical Trial Protocol"[Publication Type]' in clause
-    data['journals'] = [dict(low, jif=15)]
+    data['journals'] = [dict(low, jif=10)]
     assert JournalPolicy.model_validate(data).pubmed_clause() == '0[PMID]'
 
 
@@ -949,3 +955,140 @@ def test_long_custom_search_is_sent_intact_in_post_body(sleep):
     assert request.args[0].endswith('/esearch.fcgi')
     assert '?' not in request.args[0]
     session.get.assert_not_called()
+
+
+def search_page(count, ids):
+    return response(content=(f'<eSearchResult><Count>{count}</Count><IdList>' +
+                    ''.join(f'<Id>{identity}</Id>' for identity in ids) + '</IdList></eSearchResult>').encode())
+
+
+@patch('src.crawler.time.sleep')
+def test_search_paginates_all_matches_without_silent_default_cap(sleep):
+    session = Mock()
+    session.post.side_effect = [search_page(5, ['1','2']), search_page(5, ['3','4']), search_page(5, ['5'])]
+    with patch('src.crawler.SEARCH_PAGE_SIZE', 2):
+        ids = Crawler(session).search_ids(date(2016,10,17), date(2026,10,17), 'migraine')
+    assert ids == ['1','2','3','4','5']
+    assert [c.kwargs['data']['retstart'] for c in session.post.call_args_list] == [0,2,4]
+    assert sleep.call_args_list == [call(0.4)] * 3
+
+
+@patch('src.crawler.time.sleep')
+def test_explicit_candidate_cap_is_bounded_and_reported(sleep, caplog):
+    session = Mock()
+    session.post.side_effect = [search_page(5, ['1','2']), search_page(5, ['3'])]
+    with patch('src.crawler.SEARCH_PAGE_SIZE', 2):
+        ids = Crawler(session).search_ids(date(2016,10,17), date(2026,10,17), 'migraine', limit=3)
+    assert ids == ['1','2','3']
+    assert [c.kwargs['data']['retmax'] for c in session.post.call_args_list] == [2,1]
+    assert '3/5' in caplog.text
+
+
+@patch('src.crawler.time.sleep')
+@pytest.mark.parametrize('last', [[], ['1','2']])
+def test_pagination_rejects_early_empty_or_repeated_pages(sleep, last):
+    session = Mock()
+    session.post.side_effect = [search_page(4, ['1','2']), search_page(4, last)]
+    with patch('src.crawler.SEARCH_PAGE_SIZE', 2), pytest.raises(SourceError):
+        Crawler(session).search_ids(date(2016,10,17), date(2026,10,17), 'migraine')
+
+
+@patch('src.crawler.time.sleep')
+def test_pubmed_ceiling_splits_date_ranges_without_overlap(sleep):
+    session = Mock()
+    session.post.side_effect = [search_page(10001, ['unused']), search_page(2,['new','overlap']), search_page(2,['overlap','old'])]
+    ids = Crawler(session).search_ids(date(2026,10,1), date(2026,10,4), 'migraine')
+    assert ids == ['new','overlap','old']
+    bounds = [(c.kwargs['data']['mindate'],c.kwargs['data']['maxdate']) for c in session.post.call_args_list]
+    assert bounds == [('2026/10/01','2026/10/04'),('2026/10/03','2026/10/04'),('2026/10/01','2026/10/02')]
+
+
+@patch('src.crawler.time.sleep')
+def test_pubmed_one_day_ceiling_fails_visibly(sleep):
+    session = Mock()
+    session.post.return_value = search_page(10001, ['1'])
+    with pytest.raises(SourceError, match='one day'):
+        Crawler(session).search_ids(date(2026,10,17),date(2026,10,17),'migraine')
+
+
+@patch('src.crawler.time.sleep')
+def test_historical_stream_rejects_high_jif_nontrial_even_for_custom_queries(sleep):
+    session = Mock()
+    session.post.return_value = search_page(1,['12345'])
+    session.get.return_value = response(content=PUBMED_XML.replace(b'<Title>Cephalalgia</Title>', b'<Title>JAMA Neurology</Title>').replace(b'Randomized Controlled Trial',b'Observational Study'))
+    assert Crawler(session).fetch_pubmed(date(2016,10,17),date(2026,9,17),query='migraine',trials_only=True) == []
+    assert session.post.call_args.kwargs['data']['term'].endswith('"Systematic Review"[Publication Type]))')
+
+
+def test_ten_year_collection_deduplicates_and_rechecks_electronic_dates():
+    recent = article('recent')
+    old = article('old'); old.metadata.publication_date='2018-04-12'
+    too_old = article('too-old'); too_old.metadata.publication_date='2016-10-16'
+    crawler = Crawler()
+    with patch.object(crawler,'fetch_pubmed',side_effect=[[recent],[recent,old,too_old]]) as fetch:
+        result = crawler.collect(today=date(2026,10,17))
+    assert result.successful_sources == 2
+    assert [a.metadata.pmid_or_id for a in result.articles] == ['recent','old']
+    assert fetch.call_args_list[1].kwargs['trials_only'] is True
+
+
+@pytest.mark.parametrize('failed_first', [True,False])
+def test_one_failed_time_window_preserves_other_results_and_reports_failure(failed_first):
+    crawler= Crawler()
+    outputs=[SourceError('unavailable'),[article()]] if failed_first else [[article()],SourceError('unavailable')]
+    with patch.object(crawler,'fetch_pubmed',side_effect=outputs):
+        result=crawler.collect(today=date(2026,10,17))
+    assert result.successful_sources==1 and len(result.errors)==1
+    assert len(result.articles)==1
+    assert ('recent:' if failed_first else 'historical trials:') in result.errors[0]
+
+
+@pytest.mark.parametrize('published,expected', [
+    ('2016-10-17',True),('2016-10-16',False),('2026-10-17',True),('2026-10-18',False),
+    ('Not reported',False),('2016',False),('2016-10',False),('2017',True),('2026-02-30',False),
+])
+def test_trial_publication_date_boundaries(published,expected):
+    from src.time_windows import trial_date_eligible
+    assert trial_date_eligible(published,date(2026,10,17)) is expected
+
+
+def test_ten_calendar_year_window_handles_leap_day():
+    from src.time_windows import years_before,trial_date_eligible
+    assert years_before(date(2024,2,29),10)==date(2014,2,28)
+    assert trial_date_eligible('2014-02-28',date(2024,2,29))
+    assert not trial_date_eligible('2014-02-27',date(2024,2,29))
+
+
+def test_old_trials_are_pruned_and_rejected_before_ai_but_other_archive_remains(tmp_path):
+    old=article('old');old.metadata.publication_date='2015-12-01'
+    other=article('other');other.metadata.study_design='Observational Study';other.metadata.publication_date='2025-01-01'
+    path=tmp_path/'papers.json';save_records(path,[record(old),record(other)])
+    ai=ai_summarizer()
+    stats=run_pipeline(path,crawler=mock_crawler([old]),summarizer=ai)
+    assert (stats.removed_trial_age,stats.skipped_trial_age)==(1,1)
+    assert [r.article_metadata.pmid_or_id for r in load_records(path)]==['other']
+    ai.client.beta.chat.completions.parse.assert_not_called()
+
+
+def test_trial_date_pruning_respects_fetch_only(tmp_path):
+    old=article('old');old.metadata.publication_date='2015-12-01'
+    path=tmp_path/'papers.json';save_records(path,[record(old)]);before=path.read_bytes()
+    stats=run_pipeline(path,crawler=mock_crawler([old]),fetch_only=True)
+    assert stats.removed_trial_age==1 and stats.skipped_trial_age==1
+    assert path.read_bytes()==before
+
+
+def test_cli_can_override_trial_years_without_changing_recent_days(tmp_path):
+    crawler=mock_crawler()
+    with patch('src.main.Crawler',return_value=crawler):
+        assert main(['--output',str(tmp_path/'papers.json'),'--trial-lookback-years','8'])==0
+    assert crawler.collect.call_args.kwargs['trial_lookback_years']==8
+    assert crawler.collect.call_args.kwargs['lookback_days']==30
+
+
+def test_verified_journals_between_ten_and_fifteen_admit_nontrials():
+    from src.journal_metrics import load_policy
+    policy=load_policy()
+    assert policy.eligible('Brain : a journal of neurology','Review')
+    assert policy.eligible('JAMA Netw Open','Observational Study')
+    assert not policy.eligible('Brain unknown journal','Clinical Trial')

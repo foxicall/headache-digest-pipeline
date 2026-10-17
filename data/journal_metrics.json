@@ -2,7 +2,7 @@
   "metric": "Journal Impact Factor",
   "metric_year": 2025,
   "jcr_release_year": 2026,
-  "threshold_exclusive": 15,
+  "threshold_exclusive": 10,
   "verified_on": "2026-10-17",
   "journals": [
     {
@@ -159,6 +159,24 @@
       "jif": 2.3,
       "metric_year": 2025,
       "source_url": "https://www.wolterskluwer.com/en/solutions/ovid/journal-of-the-chinese-medical-association-14834"
+    },
+    {
+      "journal": "Brain",
+      "aliases": [
+        "Brain : a journal of neurology"
+      ],
+      "jif": 12.6,
+      "metric_year": 2025,
+      "source_url": "https://academic.oup.com/brain/pages/About"
+    },
+    {
+      "journal": "JAMA Network Open",
+      "aliases": [
+        "JAMA Netw Open"
+      ],
+      "jif": 11.7,
+      "metric_year": 2025,
+      "source_url": "https://www.wolterskluwer.com/en/solutions/ovid/jama-network-open-14871"
     }
   ]
 }

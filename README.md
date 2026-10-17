@@ -1,6 +1,6 @@
 # Headache Digest
 
-A zero-database Python pipeline and responsive Tailwind CSS reader. Articles live in `data/headache_papers.json`. **A verified two-year Journal Impact Factor > 15 admits all study designs; JIF < 15 requires an indexed PubMed clinical trial.** Unknown, missing, stale-year, or boundary-value metrics are rejected.
+A zero-database Python pipeline and responsive Tailwind CSS reader. Articles live in `data/headache_papers.json`. **A verified two-year Journal Impact Factor > 10 admits all study designs; JIF < 10 requires an indexed PubMed clinical trial.** Unknown, missing, stale-year, or boundary-value metrics are rejected.
 
 ## Quick start
 
@@ -44,8 +44,10 @@ The policy is a versioned, manually verified snapshot of **2025 two-year JIF (20
 | Annals of Neurology | 7.5 | [Source](https://www.wolterskluwer.com/en/solutions/ovid/annals-of-neurology-2161) |
 | Internal Medicine | 1.0 | [Source](https://internmed.jp/modules/about/index.php?content_id=1) |
 | Journal of the Chinese Medical Association (Taiwan) | 2.3 | [Source](https://www.wolterskluwer.com/en/solutions/ovid/journal-of-the-chinese-medical-association-14834) |
+| Brain | 12.6 | [Source](https://academic.oup.com/brain/pages/About) |
+| JAMA Network Open | 11.7 | [Source](https://www.wolterskluwer.com/en/solutions/ovid/jama-network-open-14871) |
 
-The rule is **JIF > 15 OR (JIF < 15 AND PubMed clinical trial)**. Exactly 15 remains excluded. The backend uses decimal comparisons. Null/unknown metrics, unlisted journals and metric years different from the policy year fail closed. CiteScore, SJR, five-year JIF and values inferred by AI are never substitutes. Complete normalized title/alias matching prevents a journal from inheriting another journal's value by prefix or society tag.
+The rule is **JIF > 10 OR (JIF < 10 AND PubMed clinical trial)**. Exactly 10 remains excluded. The backend uses decimal comparisons. These pinned 2025 journal metrics apply to both recent papers and historical trials; they are not claims about a journal’s IF in each paper’s publication year. Null/unknown metrics, unlisted journals and metric years different from the policy year fail closed. CiteScore, SJR, five-year JIF and values inferred by AI are never substitutes. Complete normalized title/alias matching prevents a journal from inheriting another journal's value by prefix or society tag.
 
 Clinical trials are identified by exact PubMed publication types retained in `study_design`: Clinical Trial, phases I–IV, Controlled Clinical Trial, Randomized Controlled Trial, Pragmatic Clinical Trial, Adaptive Clinical Trial, and Equivalence Trial. This includes nonrandomized interventional trials. Protocols, veterinary trials, observational studies and reviews/meta-analyses do not qualify for the exception, even if conflicting trial tags are present. Title/abstract mentions, Clinical Study, Multicenter Study and AI-inferred labels are insufficient. See [NLM publication type definitions](https://www.nlm.nih.gov/mesh/pubtypes.html). Recently published trials awaiting indexing can be missed until PubMed adds a qualifying type.
 
@@ -85,7 +87,7 @@ The existing Traditional Chinese interface and summary language are retained, wi
 
 ## Historical test fixtures
 
-The original three historical examples are preserved in `tests/fixtures/historical_seeds.json`, with XML evidence in `tests/fixtures/seed_pubmed.xml`. They are not automatically restored to the published archive: seed status never bypasses the JIF/design policy or makes an old publication a recent query result. These fixtures do not represent recent query results or current recommendations.
+The original three historical examples are preserved in `tests/fixtures/historical_seeds.json`, with XML evidence in `tests/fixtures/seed_pubmed.xml`. They are not automatically restored to the published archive. A matching PMID may re-enter only through the live trial query and current admission rules; it is then displayed as an ordinary sourced record, not labeled a seed merely because of its PMID. These fixtures do not represent recent query results or current recommendations.
 
 | Coverage | Paper | Source |
 | --- | --- | --- |
@@ -103,7 +105,7 @@ Coverage includes migraine and its episodic syndromes, tension-type headache, TA
 
 Underlying diseases are not unconditional topic matches: CADASIL/MELAS need a headache focus, recurrent gastrointestinal disturbance needs migraine context, optic neuritis needs a pain focus, and central neuropathic/post-stroke pain needs craniofacial involvement. Generic stroke, infection, tumor, IIH/SIH, psychiatric illness and peripheral/limb neuropathic pain remain excluded without an included research focus. Named migraine-related episodic/appendix syndromes can be in scope without current head pain because the user explicitly included them. Inclusion is a literature-topic decision, not a diagnosis or proof that ICHD criteria were met.
 
-The expandable dashboard catalog supports code/name/Chinese chapter search and primary, secondary, cranial/other and appendix sections. It is independent of the article search and never fabricates a paper for a listed syndrome. Catalog fetch errors have their own retry and do not block the literature reader. All papers still pass the existing verified-JIF/clinical-trial policy; the clinical summary remains exactly seven fields. The default PubMed window remains 30 calendar days.
+The expandable dashboard catalog supports code/name/Chinese chapter search and primary, secondary, cranial/other and appendix sections. It is independent of the article search and never fabricates a paper for a listed syndrome. Catalog fetch errors have their own retry and do not block the literature reader. All papers still pass the existing verified-JIF/clinical-trial policy; the clinical summary remains exactly seven fields. The default PubMed windows are 30 days for other studies and ten calendar years for clinical trials.
 
 ## PubMed ingestion
 
@@ -125,19 +127,26 @@ This conservative lexical rule favors precision and may miss relevant papers wit
 
 ESearch uses a form-encoded POST body so the full syndrome query cannot exceed URL length limits; EFetch uses GET. Both return XML. Every request, including retries, is preceded by `time.sleep(0.4)`. Calls run sequentially with timeouts, bounded retries for transient failures and EFetch batches of 100 IDs. No NCBI API key is sent. PubMed query warnings are logged. Some journal names may be unmapped; indexed aliases are included in the allowlist query. Sources absent from PubMed cannot be retrieved by this pipeline. Affiliation searches depend on indexed author metadata and do not capture every society member's work.
 
-The default window is **30 calendar days including today**, using the UTC date to set PubMed publication-date (`pdat`) bounds (for example, September 18–October 17 inclusive). Up to 1,000 candidates are fetched per run. All unique candidates that pass both JIF and topic screening are processed unless an optional attempt cap is supplied. The displayed date prefers PubMed electronic publication date, which can differ from the search date indexed by PubMed. This is a recent-publication digest: delayed indexing may place older articles outside the window. Increase the lookback/candidate limit for backfills.
+The pipeline combines two PubMed `pdat` windows using the UTC date:
+
+- **Recent publications:** the last 30 calendar days including today (for example, September 18–October 17, 2026).
+- **Clinical trials:** the preceding ten-calendar-year anniversary through today (for example, October 17, 2016–October 17, 2026). The historical search ends the day before the recent window begins; recent trials are already included in the first search. The extra trial publication-type constraint is also checked after XML parsing, even for high-IF journals and custom queries. The February 29 anniversary clamps to February 28 in a non-leap target year.
+
+All matching IDs are paginated by default, with date-range subdivision when a PubMed search exceeds its 10,000-ID retrieval ceiling. An unresolvable single-day ceiling, missing page or repeated page fails visibly. `--pubmed-limit` is an optional diagnostic cap **per window**, with a logged truncation warning; ordinary scheduled runs have no candidate cap. PMIDs returned in both windows are deduplicated. A failed window is reported while successful results can still be saved.
+
+The displayed date prefers PubMed electronic publication date, which can precede the indexed issue date used by the search. Clinical trials additionally require this source date to lie within the ten-year window: older, future or unavailable dates are rejected before AI calls, existing trial records are pruned on normal runs, and the reader applies the same UTC age check. Partial year/month dates use the first day conservatively, so uncertain boundary dates may be excluded. Other study types remain subject to the 30-day **retrieval** window; their previously saved archive is retained. Trial backfills therefore cover the full requested period without expanding old observational studies or reviews to ten years.
 
 ```bash
 # Live source check without model calls or file writes.
 python src/main.py --fetch-only --pubmed-limit 3
 
 # Optional bounded backfill.
-python src/main.py --lookback-days 30 --pubmed-limit 200 --max-new 20
+python src/main.py --lookback-days 30 --trial-lookback-years 10 --pubmed-limit 200 --max-new 20
 ```
 
 Other options: `--output`, `--query`, `--model`, `--language`. OpenAI usage occurs only when a key is supplied; `--max-new` limits record attempts, including upgrades, rather than dollar spend.
 
-Existing JSON is validated before network work. Deduplication covers the saved archive and repeated IDs within a fetched batch. New records are prepended; existing records retain their order. Each success is checkpointed with `indent=2`, `ensure_ascii=False`, `fsync` and atomic replacement. Failures preserve eligible records. The JIF gate prunes ineligible records before fetching, even if PubMed subsequently fails; `--fetch-only` never changes the file. Invalid JSON or duplicate persisted IDs fail explicitly rather than resetting the archive. Unchanged runs do not rewrite the file. Use one local writer per JSON file; CI serializes runs.
+Existing JSON is validated before network work. Deduplication covers the saved archive and repeated IDs within a fetched batch. New records are prepended; existing records retain their order. Each success is checkpointed with `indent=2`, `ensure_ascii=False`, `fsync` and atomic replacement. Failures preserve eligible records. The JIF and trial-age gates prune ineligible records before fetching, even if PubMed subsequently fails; `--fetch-only` never changes the file. Invalid JSON or duplicate persisted IDs fail explicitly rather than resetting the archive. Unchanged runs do not rewrite the file. Use one local writer per JSON file; CI serializes runs.
 
 ## Daily GitHub Actions and Pages
 
@@ -153,7 +162,7 @@ Repository rules must permit bot commits; branch protection is not bypassed. Par
 
 ## Dashboard
 
-The viewer fetches both `./data/headache_papers.json` and `./data/journal_metrics.json`, validates the policy and filters again before displaying or counting papers. Invalid or unavailable metrics stop display instead of falling back to an unrestricted archive. Each card links its JIF value and year to the verified source. Lower-JIF cards also display a PubMed clinical-trial badge. Keyword search, date sorting, seven clinical fields and source/DOI links are retained. Chips show All, journals currently represented, and any society groups with matching records; a society match never bypasses JIF. Empty results are explicitly labeled as having no qualifying publications.
+The viewer fetches both `./data/headache_papers.json` and `./data/journal_metrics.json`, validates the policy and filters again before displaying or counting papers. Invalid or unavailable metrics stop display instead of falling back to an unrestricted archive. Each card links its JIF value and year to the verified source. All indexed clinical-trial cards display a PubMed clinical-trial badge, including those from journals above the IF threshold. Keyword search, date sorting, seven clinical fields and source/DOI links are retained. Chips show All, journals currently represented, and any society groups with matching records; a society match never bypasses JIF. Empty results are explicitly labeled as having no qualifying publications.
 
 Titles and abstracts are inserted as text, never HTML. Relative URLs work under GitHub Pages project paths. Loading, fetch errors, retries, empty results and cached/offline data are handled. The existing app manifest and service worker support installation/offline reading after an online visit; production requires HTTPS.
 
@@ -167,4 +176,4 @@ npm_config_cache=/tmp/headache-npm-cache npx --yes tailwindcss@3.4.17 \
 
 ## Verification
 
-Run `pytest`. Tests use `unittest.mock`, clear API-key environment variables, block real HTTP requests and prevent real OpenAI client creation. Coverage includes the exact schema, XML/DOI/date parsing, query coverage, rate limiting/retries, 30-day defaults and overrides, journal aliases and overlapping source groups, Taiwan classification, strict topic screening, all 368 catalog entries, underlying-disease exclusions, long-query POST transport and source-based regressions, mocked Structured Outputs, missing/blank keys, deduplication, prepending, upgrades, partial failures, atomic writes, historical seed fixtures, strict JIF boundaries, low-JIF clinical-trial exceptions and exclusions, unknown/wrong-year metrics, custom-query protection and archive pruning. Tests require no network access, external API key or billing.
+Run `pytest`. Tests use `unittest.mock`, clear API-key environment variables, block real HTTP requests and prevent real OpenAI client creation. Coverage includes the exact schema, XML/DOI/date parsing, query coverage, rate limiting/retries, 30-day/ten-year defaults and overrides, leap-year and electronic-date boundaries, pagination and PubMed ceiling splits, journal aliases and overlapping source groups, Taiwan classification, strict topic screening, all 368 catalog entries, underlying-disease exclusions, long-query POST transport and source-based regressions, mocked Structured Outputs, missing/blank keys, deduplication, prepending, upgrades, partial failures, atomic writes, historical seed fixtures, strict JIF boundaries, low-JIF clinical-trial exceptions and exclusions, unknown/wrong-year metrics, custom-query protection and archive pruning. Tests require no network access, external API key or billing.

@@ -15,9 +15,10 @@ if __package__ in {None, ""}:
 from openai import OpenAIError
 from pydantic import TypeAdapter, ValidationError
 
-from src.crawler import Crawler, DEFAULT_LOOKBACK_DAYS, DEFAULT_QUERY, is_headache_topic
+from src.crawler import Crawler, DEFAULT_LOOKBACK_DAYS, DEFAULT_TRIAL_LOOKBACK_YEARS, DEFAULT_QUERY, is_headache_topic
 from src.models import Article, PaperRecord
-from src.journal_metrics import load_policy
+from src.journal_metrics import is_clinical_trial, load_policy
+from src.time_windows import trial_date_eligible, utc_today
 from src.summarizer import DEFAULT_MODEL, Summarizer, SummaryError, is_fallback
 
 LOGGER = logging.getLogger(__name__)
@@ -33,6 +34,8 @@ class RunStats:
     skipped_off_topic: int = 0
     skipped_jif: int = 0
     removed_jif: int = 0
+    removed_trial_age: int = 0
+    skipped_trial_age: int = 0
     deferred: int = 0
     saved: int = 0
     upgraded: int = 0
@@ -70,7 +73,8 @@ def save_records(path: Path, records: list[PaperRecord]) -> None:
 
 
 def run_pipeline(path=DEFAULT_DATA, *, crawler=None, summarizer=None, lookback_days=DEFAULT_LOOKBACK_DAYS,
-                 pubmed_limit=1000, max_new=None, query=DEFAULT_QUERY, fetch_only=False,
+                 trial_lookback_years=DEFAULT_TRIAL_LOOKBACK_YEARS,
+                 pubmed_limit=None, max_new=None, query=DEFAULT_QUERY, fetch_only=False,
                  model=DEFAULT_MODEL, language="Traditional Chinese") -> RunStats:
     path = Path(path)
     policy = load_policy()
@@ -78,13 +82,19 @@ def run_pipeline(path=DEFAULT_DATA, *, crawler=None, summarizer=None, lookback_d
     eligible_records = [record for record in records if policy.eligible(
         record.article_metadata.source_society_or_journal, record.article_metadata.study_design)]
     removed_jif = len(records) - len(eligible_records)
-    records = eligible_records
-    if removed_jif and not fetch_only:
+    today = utc_today()
+    records = [record for record in eligible_records if not is_clinical_trial(record.article_metadata.study_design)
+               or trial_date_eligible(record.article_metadata.publication_date, today, trial_lookback_years)]
+    removed_trial_age = len(eligible_records) - len(records)
+    if (removed_jif or removed_trial_age) and not fetch_only:
         save_records(path, records)
         LOGGER.info("Removed %s records failing the %s JIF/clinical-trial policy", removed_jif, policy.metric_year)
+        LOGGER.info("Removed %s trials outside the %s-year window", removed_trial_age, trial_lookback_years)
     known = {record.article_metadata.pmid_or_id for record in records}
-    result = (crawler or Crawler()).collect(lookback_days=lookback_days, pubmed_limit=pubmed_limit, query=query)
-    stats = RunStats(fetched=len(result.articles), source_failures=len(result.errors), removed_jif=removed_jif)
+    result = (crawler or Crawler()).collect(lookback_days=lookback_days, trial_lookback_years=trial_lookback_years,
+                                           pubmed_limit=pubmed_limit, query=query)
+    stats = RunStats(fetched=len(result.articles), source_failures=len(result.errors), removed_jif=removed_jif,
+                     removed_trial_age=removed_trial_age)
     if result.successful_sources == 0:
         raise RuntimeError("PubMed is unavailable; eligible records were preserved (fetch-only leaves JSON unchanged)")
     if not fetch_only:
@@ -118,6 +128,10 @@ def run_pipeline(path=DEFAULT_DATA, *, crawler=None, summarizer=None, lookback_d
     for article, existing_index in pending:
         if not policy.eligible(article.metadata.source_society_or_journal, article.metadata.study_design):
             stats.skipped_jif += 1
+            continue
+        if is_clinical_trial(article.metadata.study_design) and not trial_date_eligible(
+                article.metadata.publication_date, today, trial_lookback_years):
+            stats.skipped_trial_age += 1
             continue
         # Apply the same screen to custom queries and old fallback upgrades,
         # before spending any model calls. Society membership never bypasses it.
@@ -163,7 +177,9 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=DEFAULT_DATA)
     parser.add_argument("--lookback-days", type=positive_int, default=DEFAULT_LOOKBACK_DAYS)
-    parser.add_argument("--pubmed-limit", type=positive_int, default=1000)
+    parser.add_argument("--trial-lookback-years", type=positive_int, default=DEFAULT_TRIAL_LOOKBACK_YEARS)
+    parser.add_argument("--pubmed-limit", type=positive_int, default=None,
+                        help="Optional candidate cap per window; omitted means all paginated matches")
     parser.add_argument("--max-new", type=positive_int, default=None, help="Optional cap on new-record/upgrade attempts per run")
     parser.add_argument("--query", default=DEFAULT_QUERY)
     parser.add_argument("--model", default=os.environ.get("OPENAI_MODEL") or DEFAULT_MODEL)
@@ -173,6 +189,7 @@ def main(argv=None):
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     try:
         stats = run_pipeline(args.output, lookback_days=args.lookback_days, pubmed_limit=args.pubmed_limit,
+                             trial_lookback_years=args.trial_lookback_years,
                              max_new=args.max_new, query=args.query, fetch_only=args.fetch_only,
                              model=args.model, language=args.language)
     except (OSError, ValueError, RuntimeError, OpenAIError) as exc:

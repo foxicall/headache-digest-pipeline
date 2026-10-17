@@ -2,7 +2,7 @@
 
 // Scope-specific cache names keep different GitHub Pages project sites isolated.
 const PREFIX = `headache-digest:${self.registration.scope}:`;
-const CACHE = `${PREFIX}v7`;
+const CACHE = `${PREFIX}v8`;
 const SHELL = [
   "./",
   "./index.html",

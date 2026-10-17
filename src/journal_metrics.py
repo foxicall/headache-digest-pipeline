@@ -9,7 +9,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, model_validator
 
 METRICS_PATH = Path(__file__).resolve().parents[1] / "data" / "journal_metrics.json"
-MINIMUM_JIF = Decimal("15")
+MINIMUM_JIF = Decimal("10")
 # NLM Publication Types, not title/abstract keywords or AI-inferred designs.
 # https://www.nlm.nih.gov/mesh/pubtypes.html
 CLINICAL_TRIAL_TYPES = frozenset({
@@ -28,6 +28,12 @@ def is_clinical_trial(study_design: str) -> bool:
     types = {" ".join(value.casefold().split()) for value in study_design.split(";")}
     return bool(types & {value.casefold() for value in CLINICAL_TRIAL_TYPES}) and not bool(
         types & {value.casefold() for value in NON_TRIAL_TYPES})
+
+
+def clinical_trial_clause() -> str:
+    trials = " OR ".join(f'"{name}"[Publication Type]' for name in sorted(CLINICAL_TRIAL_TYPES))
+    exclusions = " OR ".join(f'"{name}"[Publication Type]' for name in sorted(NON_TRIAL_TYPES))
+    return f"(({trials}) NOT ({exclusions}))"
 
 
 def normalize_journal(source: str) -> str:
@@ -52,7 +58,7 @@ class JournalPolicy(BaseModel):
     metric: Literal["Journal Impact Factor"]
     metric_year: int = Field(ge=2000)
     jcr_release_year: int
-    threshold_exclusive: Literal[15]
+    threshold_exclusive: Literal[10]
     verified_on: date
     journals: list[JournalMetric]
 
@@ -93,9 +99,7 @@ class JournalPolicy(BaseModel):
         low = [entry for entry in verified if entry.jif < MINIMUM_JIF]
         branches = [journal_clause(high)] if high else []
         if low:
-            trials = " OR ".join(f'"{name}"[Publication Type]' for name in sorted(CLINICAL_TRIAL_TYPES))
-            exclusions = " OR ".join(f'"{name}"[Publication Type]' for name in sorted(NON_TRIAL_TYPES))
-            branches.append(f"({journal_clause(low)} AND ({trials}) NOT ({exclusions}))")
+            branches.append(f"({journal_clause(low)} AND {clinical_trial_clause()})")
         # Do not turn an empty allowlist into an unrestricted query.
         return "(" + " OR ".join(branches) + ")" if branches else "0[PMID]"
 

@@ -40,7 +40,6 @@ const FILTERS = [
   ["jhs", "JHS · 日本頭痛學會"],
   ["ths", "THS · 台灣頭痛學會"],
 ];
-const SEED_IDS = new Set(["29471679", "24144382", "23390177"]);
 const FALLBACK_NOTICE = "Requires OPENAI_API_KEY for AI extraction";
 // Exact PubMed publication types, mirrored in src/journal_metrics.py.
 const CLINICAL_TRIAL_TYPES = new Set([
@@ -59,14 +58,13 @@ function isClinicalTrial(studyDesign) {
     !types.some((value) => NON_TRIAL_TYPES.has(value));
 }
 const MODES = {
-  seed: ["來源核對範例", "bg-amber-50 text-amber-900"],
   fallback: ["原始摘要 · 尚未 AI 擷取", "bg-sky-50 text-sky-900"],
   structured: ["臨床結構摘要", "bg-emerald-50 text-emerald-900"],
 };
 
 function recordMode(paper) {
   if (paper.structured_summary.number_of_inclusion === FALLBACK_NOTICE) return "fallback";
-  return SEED_IDS.has(paper.article_metadata.pmid_or_id) ? "seed" : "structured";
+  return "structured";
 }
 const byId = (id) => document.getElementById(id);
 const state = {
@@ -151,7 +149,7 @@ function normalizeJournal(source) {
 
 function validateJournalPolicy(policy) {
   const invalid = () => { throw new Error("期刊 JIF 資料無法核實，暫停顯示文獻。請稍後重試。"); };
-  if (policy?.metric !== "Journal Impact Factor" || policy.threshold_exclusive !== 15 ||
+  if (policy?.metric !== "Journal Impact Factor" || policy.threshold_exclusive !== 10 ||
       !Number.isInteger(policy.metric_year) || policy.metric_year < 2000 ||
       policy.jcr_release_year !== policy.metric_year + 1 ||
       !/^\d{4}-\d{2}-\d{2}$/.test(policy.verified_on) ||
@@ -178,10 +176,24 @@ function verifiedMetric(source) {
     typeof entry.jif === "number" ? entry : null;
 }
 
+function trialDateEligible(value, today = new Date()) {
+  const now = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
+  const cutoff = new Date(now);
+  cutoff.setUTCFullYear(cutoff.getUTCFullYear() - 10);
+  if (cutoff.getUTCMonth() !== now.getUTCMonth()) cutoff.setUTCDate(0); // Leap-day anniversary.
+  if (!/^\d{4}(-\d{2}(-\d{2})?)?$/.test(value)) return false;
+  const padded = value + ({4: "-01-01", 7: "-01", 10: ""}[value.length]);
+  const published = new Date(padded + "T00:00:00Z");
+  return Number.isFinite(published.getTime()) && published.toISOString().slice(0, 10) === padded &&
+    published >= cutoff && published <= now;
+}
+
 function eligiblePaper(paper) {
   const info = paper.article_metadata;
   const metric = verifiedMetric(info.source_society_or_journal);
-  return Boolean(metric && (metric.jif > 15 || (metric.jif < 15 && isClinicalTrial(info.study_design))));
+  const trial = isClinicalTrial(info.study_design);
+  return Boolean(metric && (metric.jif > 10 || (metric.jif < 10 && trial)) &&
+    (!trial || trialDateEligible(info.publication_date)));
 }
 
 function canonicalJournal(source) {
@@ -243,7 +255,7 @@ function paperCard(paper, index) {
     badge.rel = "noopener noreferrer";
     badge.title = "查看期刊 Impact Factor 來源";
     meta.append(badge);
-    if (metric.jif < 15) meta.append(element("span", "source-badge", "Clinical trial · PubMed 已標註"));
+    if (isClinicalTrial(info.study_design)) meta.append(element("span", "source-badge", "Clinical trial · PubMed 已標註"));
   }
   meta.append(element("span", "", info.publication_date || "發表日期未提供"));
   const [modeLabel, modeColor] = MODES[mode];
@@ -264,15 +276,7 @@ function paperCard(paper, index) {
     expand,
   );
   const body = element("div", "paper-content");
-  if (mode === "seed") {
-    body.append(
-      element(
-        "p",
-        "mb-4 rounded bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-900",
-        "歷史範例：依可核對的 PubMed 摘要整理，請依發表年份評估適用性。",
-      ),
-    );
-  } else if (mode === "fallback") {
+  if (mode === "fallback") {
     body.append(
       element(
         "p",
@@ -377,7 +381,7 @@ function render() {
     : "目前沒有符合收錄條件的文獻";
   byId("empty-message").textContent = hasData
     ? "試試其他關鍵字，或切換期刊與學會。"
-    : "收錄 JIF > 15 的文獻，或 JIF < 15 且 PubMed 已標註為 clinical trial 的文獻；皆須符合症候群目錄的研究主題範圍。";
+    : "收錄 JIF > 10 的文獻，或 JIF < 10 且 PubMed 已標註為 clinical trial 的文獻；皆須符合症候群目錄的研究主題範圍。";
   byId("clear-search").hidden = !hasData;
 }
 
@@ -408,7 +412,7 @@ async function loadPapers() {
       throw new Error("文獻或 JIF 資料暫時無法取得，請稍後重試。");
     state.policy = validateJournalPolicy(await metricsResponse.json());
     state.papers = validatePapers(await response.json()).filter(eligiblePaper);
-    byId("jif-notice").textContent = `${state.policy.metric_year} 年兩年制 JIF（JCR ${state.policy.jcr_release_year}）：> 15 可收錄；< 15 必須為 PubMed 已標註的 clinical trial。JIF = 15、未核實或年度不符均不收錄。`;
+    byId("jif-notice").textContent = `${state.policy.metric_year} 年兩年制 JIF（JCR ${state.policy.jcr_release_year}）：> 10 可收錄；< 10 必須為 PubMed 已標註的 clinical trial。JIF = 10、未核實或年度不符均不收錄。`;
     state.loaded = true;
     state.cached = [response, metricsResponse].some((item) => item.headers.get("X-Digest-Cache") === "offline");
     byId("total-count").textContent =
@@ -416,16 +420,12 @@ async function loadPapers() {
     const dates = state.papers.map((paper) => paper.article_metadata.publication_date)
       .filter((value) => value !== "Not reported").sort();
     byId("last-updated").textContent = dates.at(-1) || "尚無發表日期";
-    const seeds = state.papers.filter(
-      (paper) => recordMode(paper) === "seed",
-    ).length;
     const fallback = state.papers.filter(
       (paper) => recordMode(paper) === "fallback",
     ).length;
-    byId("mode-notice").hidden = !(seeds || fallback);
+    byId("mode-notice").hidden = !fallback;
     byId("mode-notice").textContent =
       [
-        seeds ? seeds + " 篇來源核對歷史範例，並非最新文獻" : "",
         fallback ? fallback + " 篇原始摘要，尚未 AI 擷取" : "",
       ]
         .filter(Boolean)

@@ -15,7 +15,7 @@ if __package__ in {None, ""}:
 from openai import OpenAIError
 from pydantic import TypeAdapter, ValidationError
 
-from src.crawler import Crawler, DEFAULT_QUERY
+from src.crawler import Crawler, DEFAULT_LOOKBACK_DAYS, DEFAULT_QUERY, is_headache_topic
 from src.models import Article, PaperRecord
 from src.summarizer import DEFAULT_MODEL, Summarizer, SummaryError, is_fallback
 
@@ -29,6 +29,7 @@ class RunStats:
     fetched: int = 0
     duplicates: int = 0
     skipped_no_text: int = 0
+    skipped_off_topic: int = 0
     deferred: int = 0
     saved: int = 0
     upgraded: int = 0
@@ -65,7 +66,7 @@ def save_records(path: Path, records: list[PaperRecord]) -> None:
             temporary.unlink(missing_ok=True)
 
 
-def run_pipeline(path=DEFAULT_DATA, *, crawler=None, summarizer=None, lookback_days=14,
+def run_pipeline(path=DEFAULT_DATA, *, crawler=None, summarizer=None, lookback_days=DEFAULT_LOOKBACK_DAYS,
                  pubmed_limit=1000, max_new=None, query=DEFAULT_QUERY, fetch_only=False,
                  model=DEFAULT_MODEL, language="Traditional Chinese") -> RunStats:
     path = Path(path)
@@ -104,6 +105,12 @@ def run_pipeline(path=DEFAULT_DATA, *, crawler=None, summarizer=None, lookback_d
     additions = []
     attempts = 0
     for article, existing_index in pending:
+        # Apply the same screen to custom queries and old fallback upgrades,
+        # before spending any model calls. Society membership never bypasses it.
+        if not is_headache_topic(article.metadata.title, article.abstract):
+            stats.skipped_off_topic += 1
+            LOGGER.info("Skipping off-topic PMID %s", article.metadata.pmid_or_id)
+            continue
         if fetch_only or (max_new is not None and attempts >= max_new):
             stats.deferred += 1
             continue
@@ -141,7 +148,7 @@ def positive_int(value):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=DEFAULT_DATA)
-    parser.add_argument("--lookback-days", type=positive_int, default=14)
+    parser.add_argument("--lookback-days", type=positive_int, default=DEFAULT_LOOKBACK_DAYS)
     parser.add_argument("--pubmed-limit", type=positive_int, default=1000)
     parser.add_argument("--max-new", type=positive_int, default=None, help="Optional cap on new-record/upgrade attempts per run")
     parser.add_argument("--query", default=DEFAULT_QUERY)

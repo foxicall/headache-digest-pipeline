@@ -65,15 +65,25 @@ Metadata and clinical claims were checked against keyless PubMed EFetch on **202
 
 ## PubMed ingestion
 
-The default query exactly follows the requested coverage:
+The default query in `src/crawler.py` combines the following source groups with headache/migraine, cephalalgia/hemicrania, trigeminal neuralgia, or trigeminal autonomic cephalalgia terms, and requires an abstract. Generic `trigeminal` alone is no longer a search term.
 
-```text
-(("Cephalalgia"[Journal] OR "The Journal of Headache and Pain"[Journal] OR "Headache"[Journal] OR "Neurology"[Journal] OR "Annals of Neurology"[Journal] OR "Acta Neurologica Taiwanica"[Journal] OR "Intern Med"[Journal] OR "Japanese Headache Society"[Affiliation] OR "Taiwan Headache Society"[Affiliation]) AND (migraine[Title/Abstract] OR headache[Title/Abstract] OR trigeminal[Title/Abstract]) AND hasabstract[text])
-```
+| Source group | Journals and additional evidence |
+| --- | --- |
+| IHS | *Cephalalgia*, *Cephalalgia Reports* |
+| EHF | *The Journal of Headache and Pain* / *J Headache Pain* |
+| ANA / AAN / AHS | *Annals of Neurology*, *Neurology*, *Headache*, respectively |
+| JHS / 日本頭痛學會 | *Japanese Journal of Headache*, *Neurology and Clinical Neuroscience*, *Internal Medicine* / *Intern Med*, *Rinsho Shinkeigaku*; explicit Japanese Headache Society affiliation, collective author, or title/abstract mention; Japan affiliation in *Cephalalgia*, *JHP*, or *Headache* |
+| THS / 台灣頭痛學會 | *Acta Neurologica Taiwanica* / *Acta Neurol Taiwan*, *Journal of the Chinese Medical Association* / *J Chin Med Assoc*; explicit Taiwan Headache Society affiliation, collective author, or title/abstract mention |
 
-ESearch and EFetch both use XML. Every request, including retries, is preceded by `time.sleep(0.4)`. Calls run sequentially with timeouts, bounded retries for transient failures and EFetch batches of 100 IDs. No NCBI API key is sent. PubMed query warnings are logged. Affiliation searches depend on indexed author metadata and do not capture every society member's work.
+These are requested journal/affiliation source groups, including associated journals; membership does not establish society authorship or endorsement. A paper can belong to multiple groups. The schema is unchanged: journal and ordered society tags share `source_society_or_journal`, separated by ` | `. *Journal of the Chinese Medical Association* is the formal English name of a **Taiwan journal**, displayed with `（台灣）`. Neither “Chinese” nor a China affiliation is treated as evidence of THS membership.
 
-The default window is **14 calendar days including today**, based on UTC publication dates (for example, October 4–17 inclusive). Up to 1,000 candidates are fetched per run. All unique candidates are processed unless an optional attempt cap is supplied. This is a recent-publication digest: delayed indexing may place older articles outside the window. Increase the lookback/candidate limit for backfills.
+**Topic screening:** after fetching XML, a deterministic screen requires a topic in the title, an explicit objective or primary outcome about headache/migraine/trigeminal neuralgia, or a sustained opening focus in an unstructured abstract. A named migraine-specific therapy study is also retained when its abstract explicitly identifies migraine treatment/prevention, cluster-headache treatment, or a migraine patient population (for example, galcanezumab pregnancy safety). Background-only mentions, symptom/adverse-event lists (including case-presentation titles), generic trigeminal anatomy and incidental headache in other diseases fail. A journal or affiliation never bypasses the screen. The pipeline repeats this check before any AI call, including custom queries and fallback upgrades.
+
+This conservative lexical rule favors precision and may miss relevant papers without explicit topic wording; it is not a clinical relevance classifier. SIH/IIH and other neurologic diseases are not automatically included without a headache study focus. The existing archive was audited against PubMed abstracts on 2026-10-17: five off-topic records were removed, 16 retained, and source tags refreshed. Verbatim excerpts for ambiguous cases are in `tests/fixtures/scope_pubmed.xml`; earlier records remain available in Git history. Future runs retain the archive and do not delete older papers merely because they fall outside the query window.
+
+ESearch and EFetch both use XML. Every request, including retries, is preceded by `time.sleep(0.4)`. Calls run sequentially with timeouts, bounded retries for transient failures and EFetch batches of 100 IDs. No NCBI API key is sent. PubMed query warnings are logged. Some requested full journal names or society phrases may be unmapped; the query retains them alongside indexed journal aliases. Sources absent from PubMed cannot be retrieved by this pipeline. Affiliation searches depend on indexed author metadata and do not capture every society member's work.
+
+The default window is **30 calendar days including today**, using the UTC date to set PubMed publication-date (`pdat`) bounds (for example, September 18–October 17 inclusive). Up to 1,000 candidates are fetched per run. All unique candidates that pass topic screening are processed unless an optional attempt cap is supplied. The displayed date prefers PubMed electronic publication date, which can differ from the search date indexed by PubMed. This is a recent-publication digest: delayed indexing may place older articles outside the window. Increase the lookback/candidate limit for backfills.
 
 ```bash
 # Live source check without model calls or file writes.
@@ -101,9 +111,7 @@ Repository rules must permit bot commits; branch protection is not bypassed. Par
 
 ## Dashboard
 
-The viewer fetches `./data/headache_papers.json` and supports keyword search, date sorting, all seven clinical fields, source/DOI links, and these filter chips: **All**, **IHS / Cephalalgia**, **EHF / JHP**, **AAN / ANA**, **JHS**, **THS**, and **Headache**.
-
-AAN / ANA groups *Neurology* and *Annals of Neurology*. THS includes *Acta Neurologica Taiwanica* as the requested regional journal grouping, without implying every paper is society-authored. JHS/THS also match explicit society affiliation tags retained in `source_society_or_journal`. *Intern Med* is searchable under All; it is not automatically labeled JHS solely because it is a Japanese journal.
+The viewer fetches `./data/headache_papers.json` and supports keyword search, date sorting, all seven clinical fields, source/DOI links, and these filter chips: **All**, **IHS / Cephalalgia**, **EHF / JHP**, **ANA / AAN / AHS**, **JHS · 日本頭痛學會**, and **THS · 台灣頭痛學會**. The groups and journal aliases match the source definitions above. *Headache* belongs to ANA / AAN / AHS; a Japanese-affiliated *Cephalalgia* paper can appear under both IHS and JHS, so group counts need not sum to the total.
 
 Titles and abstracts are inserted as text, never HTML. Relative URLs work under GitHub Pages project paths. Loading, fetch errors, retries, empty results and cached/offline data are handled. The existing app manifest and service worker support installation/offline reading after an online visit; production requires HTTPS.
 
@@ -117,4 +125,4 @@ npm_config_cache=/tmp/headache-npm-cache npx --yes tailwindcss@3.4.17 \
 
 ## Verification
 
-Run `pytest`. Tests use `unittest.mock`, clear API-key environment variables, block real HTTP requests and prevent real OpenAI client creation. Coverage includes the exact schema, XML/DOI/date parsing, query coverage, rate limiting/retries, 14-day defaults, mocked Structured Outputs, missing/blank keys, deduplication, prepending, upgrades, partial failures, atomic writes and three verified seeds. Tests require no network access, external API key or billing.
+Run `pytest`. Tests use `unittest.mock`, clear API-key environment variables, block real HTTP requests and prevent real OpenAI client creation. Coverage includes the exact schema, XML/DOI/date parsing, query coverage, rate limiting/retries, 30-day defaults and overrides, journal aliases and overlapping source groups, Taiwan classification, strict topic screening and source-based regressions, mocked Structured Outputs, missing/blank keys, deduplication, prepending, upgrades, partial failures, atomic writes and three verified seeds. Tests require no network access, external API key or billing.

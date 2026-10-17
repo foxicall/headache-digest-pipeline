@@ -12,7 +12,7 @@ from pydantic import ValidationError
 
 from src.crawler import (
     Crawler, CrawlResult, DEFAULT_QUERY, SourceError, TARGET_JOURNALS,
-    TARGET_SOCIETIES, parse_pubmed, parse_search,
+    TARGET_SOCIETIES, classify_societies, is_headache_topic, parse_pubmed, parse_search,
 )
 from src.main import load_records, main, run_pipeline, save_records
 from src.models import Article, ArticleMetadata, PaperRecord, StructuredSummary
@@ -136,7 +136,7 @@ def test_xml_metadata_abstract_study_design_and_affiliation():
     paper, = parse_pubmed(PUBMED_XML)
     assert paper.metadata.pmid_or_id == "12345"
     assert paper.metadata.title == "A migraine trial"
-    assert paper.metadata.source_society_or_journal == "Cephalalgia | Taiwan Headache Society"
+    assert paper.metadata.source_society_or_journal == "Cephalalgia | International Headache Society | Taiwan Headache Society"
     assert paper.metadata.publication_date == "2026-10"
     assert paper.metadata.study_design == "Randomized Controlled Trial"
     assert paper.metadata.doi == "10.1000/test"
@@ -437,23 +437,30 @@ def test_repository_has_three_source_verified_seed_records():
     assert "67" in seeds["23390177"].structured_summary.number_of_inclusion
 
 
-def test_default_query_matches_requested_coverage_exactly():
-    expected = '(("Cephalalgia"[Journal] OR "The Journal of Headache and Pain"[Journal] OR "Headache"[Journal] OR "Neurology"[Journal] OR "Annals of Neurology"[Journal] OR "Acta Neurologica Taiwanica"[Journal] OR "Intern Med"[Journal] OR "Japanese Headache Society"[Affiliation] OR "Taiwan Headache Society"[Affiliation]) AND (migraine[Title/Abstract] OR headache[Title/Abstract] OR trigeminal[Title/Abstract]) AND hasabstract[text])'
-    assert DEFAULT_QUERY == expected
+def test_default_query_requires_topic_and_abstract_across_all_sources():
+    assert DEFAULT_QUERY.startswith('((')
+    assert ') AND (migraine[Title/Abstract]' in DEFAULT_QUERY
+    assert DEFAULT_QUERY.endswith('AND hasabstract[text])')
+    assert 'trigeminal[Title/Abstract]' not in DEFAULT_QUERY
+    assert '"trigeminal neuralgia"[Title/Abstract]' in DEFAULT_QUERY
+    assert '("Japan"[Affiliation] AND (' in DEFAULT_QUERY
+    assert '"Japanese Headache Society"[Title/Abstract]' in DEFAULT_QUERY
+    assert '"Taiwan Headache Society"[Corporate Author]' in DEFAULT_QUERY
 
 
-def test_default_window_is_fourteen_calendar_days_inclusive():
+
+def test_default_window_is_thirty_calendar_days_inclusive():
     crawler = Crawler()
     with patch.object(crawler, "fetch_pubmed", return_value=[]) as fetch:
         crawler.collect(today=date(2026, 10, 17))
-    assert fetch.call_args.args[:2] == (date(2026, 10, 4), date(2026, 10, 17))
+    assert fetch.call_args.args[:2] == (date(2026, 9, 18), date(2026, 10, 17))
 
 
-def test_cli_passes_fourteen_day_default(tmp_path):
+def test_cli_passes_thirty_day_default(tmp_path):
     crawler = mock_crawler()
     with patch("src.main.Crawler", return_value=crawler):
         assert main(["--output", str(tmp_path / "papers.json")]) == 0
-    assert crawler.collect.call_args.kwargs["lookback_days"] == 14
+    assert crawler.collect.call_args.kwargs["lookback_days"] == 30
 
 
 def test_utf8_persistence_has_exact_wire_shape(tmp_path):
@@ -465,3 +472,132 @@ def test_utf8_persistence_has_exact_wire_shape(tmp_path):
     assert "偏頭痛研究結論" in text
     assert '\n  {\n    "article_metadata"' in text
     assert set(json.loads(text)[0]) == {"article_metadata", "structured_summary"}
+
+
+@pytest.mark.parametrize("journal,group", [
+    ("Cephalalgia Reports", "International Headache Society"),
+    ("Cephalalgia : an international journal of headache", "International Headache Society"),
+    ("J Headache Pain", "European Headache Federation"),
+    ("The Journal of Headache and Pain", "European Headache Federation"),
+    ("Headache", "American Headache Society"),
+    ("Annals of Neurology", "American Neurological Association"),
+    ("Neurology", "American Academy of Neurology"),
+    ("Japanese Journal of Headache", "Japanese Headache Society"),
+    ("Neurology and Clinical Neuroscience", "Japanese Headache Society"),
+    ("Intern Med", "Japanese Headache Society"),
+    ("Internal medicine (Tokyo, Japan)", "Japanese Headache Society"),
+    ("Rinsho shinkeigaku = Clinical neurology", "Japanese Headache Society"),
+    ("Acta Neurologica Taiwanica", "Taiwan Headache Society"),
+    ("Acta Neurol Taiwan", "Taiwan Headache Society"),
+    ("Journal of the Chinese Medical Association : JCMA", "Taiwan Headache Society"),
+    ("J Chin Med Assoc", "Taiwan Headache Society"),
+])
+def test_source_group_aliases(journal, group):
+    assert group in classify_societies(journal)
+
+
+@pytest.mark.parametrize("journal", ["Cephalalgia", "J Headache Pain", "Headache"])
+def test_japanese_affiliation_keeps_primary_and_jhs_group(journal):
+    groups = classify_societies(journal, affiliations=["Department of Neurology, Tokyo, Japan"])
+    assert "Japanese Headache Society" in groups
+    assert len(groups) == 2
+
+
+def test_society_evidence_in_title_abstract_and_collective_author():
+    for evidence in ({"title": "Japanese Headache Society recommendations"},
+                     {"abstract": "Prepared by the Japanese Headache Society."},
+                     {"authors": ["Japanese Headache Society"]}):
+        assert classify_societies("Unlisted journal", **evidence) == ["Japanese Headache Society"]
+    assert classify_societies("Unlisted journal", authors=["Taiwan Headache Society"]) == ["Taiwan Headache Society"]
+
+
+def test_china_or_chinese_does_not_imply_taiwan_society():
+    assert classify_societies("Chinese Medical Journal", affiliations=["Beijing, China"]) == []
+    assert classify_societies("Neurology", affiliations=["Japan"]) == ["American Academy of Neurology"]
+    assert "Japanese Headache Society" not in classify_societies("Headache", affiliations=["Japanology Center, USA"])
+
+
+@pytest.mark.parametrize("title,abstract", [
+    ("Trigeminal neuralgia-associated affective behavior", "A circuit study."),
+    ("Treatment of trigeminal-neuralgia", "A randomized trial."),
+    ("Hemicrania continua", "A clinical report."),
+    ("SUNCT management", "A review."),
+    ("Headaches after cardiac stress testing", "A study."),
+    ("A preventive treatment trial", "OBJECTIVE: To evaluate reduction of monthly migraine days.\nMETHODS: A trial."),
+    ("A preventive treatment trial", "BACKGROUND AND OBJECTIVES: Treatment is challenging. We aimed to compare migraine prevention strategies.\nMETHODS: A trial."),
+    ("Microemboli-induced spreading depolarization", "A woman developed daily episodes of migraine aura after surgery. Microemboli were detected. Spreading depolarization underlies migraine aura."),
+    ("Pregnancy outcomes following galcanezumab exposure", "OBJECTIVE: Describe pregnancy outcomes.\nBACKGROUND: Galcanezumab is indicated for the preventive treatment of migraine."),
+])
+def test_headache_and_trigeminal_neuralgia_topics_are_included(title, abstract):
+    assert is_headache_topic(title, abstract)
+
+
+@pytest.mark.parametrize("title,abstract", [
+    ("Trigeminal nerve anatomy", "We examined trigeminal sensory neurons."),
+    ("Dental pain and trigeminal neuropathy", "The trigeminal ganglion was studied."),
+    ("Cerebral involvement in NMOSD", "A woman developed acute headache, seizures, and aphasia. This case illustrates a rare cerebral manifestation of NMOSD."),
+    ("Viral infection outcomes", "OBJECTIVE: To evaluate infection outcomes.\nRESULTS: Symptoms included fever, headache, and fatigue."),
+    ("A cancer treatment trial", "OBJECTIVE: We evaluated adverse events including headache, nausea, and fatigue.\nCONCLUSION: Treatment was effective."),
+    ("A protein study in intracranial hypertension", "OBJECTIVE: Evaluate blood-brain barrier markers.\nRESULTS: Markers correlated with headache scores."),
+    ("Amyotrophy due to spinal CSF leaks", "BACKGROUND AND OBJECTIVES: CSF leaks cause headache. The objective of this study was to characterize amyotrophy.\nRESULTS: Some patients had a history of headache."),
+    ("An unrelated paper", ""),
+    ("Infection management", "Symptoms included fever and headache. Headache improved with treatment."),
+])
+def test_incidental_mentions_and_generic_trigeminal_are_excluded(title, abstract):
+    assert not is_headache_topic(title, abstract)
+
+
+def test_pubmed_objective_category_without_label_supports_scope_check():
+    xml = PUBMED_XML.replace(b'A <i>migraine</i> trial', b'A preventive treatment trial')
+    xml = xml.replace(b'Label="METHODS">Randomized <b>controlled</b> trial.',
+                      b'NlmCategory="OBJECTIVE">To evaluate migraine prevention.')
+    item = parse_pubmed(xml)[0]
+    assert item.abstract.startswith("OBJECTIVE:")
+    assert is_headache_topic(item.metadata.title, item.abstract)
+
+
+@patch("src.crawler.time.sleep")
+def test_custom_search_cannot_bypass_topic_screen(sleep):
+    session = Mock()
+    irrelevant = PUBMED_XML.replace(b'A <i>migraine</i> trial', b'Trigeminal nerve anatomy')
+    session.get.side_effect = [response(content=b'<eSearchResult><IdList><Id>12345</Id></IdList></eSearchResult>'),
+                               response(content=irrelevant)]
+    assert Crawler(session).fetch_pubmed(date(2026, 9, 18), date(2026, 10, 17), query="neurology") == []
+
+
+def test_pipeline_filters_before_ai_including_fallback_upgrades(tmp_path):
+    unrelated = article()
+    unrelated.metadata.title = "A cancer trial"
+    unrelated.abstract = "RESULTS: Adverse events included headache and nausea."
+    path = tmp_path / "papers.json"
+    save_records(path, [Summarizer().summarize(unrelated)])
+    new = unrelated.model_copy(deep=True)
+    new.metadata.pmid_or_id = "999"
+    ai = Mock(uses_ai=True)
+    stats = run_pipeline(path, crawler=mock_crawler([new]), summarizer=ai)
+    assert stats.skipped_off_topic == 2
+    assert stats.saved == stats.upgraded == 0
+    ai.summarize.assert_not_called()
+
+
+def test_pipeline_explicit_window_override(tmp_path):
+    crawler = mock_crawler()
+    with patch("src.main.Crawler", return_value=crawler):
+        assert main(["--output", str(tmp_path / "papers.json"), "--lookback-days", "45"]) == 0
+    assert crawler.collect.call_args.kwargs["lookback_days"] == 45
+
+
+def test_scope_regressions_against_verbatim_pubmed_abstracts():
+    source = parse_pubmed((Path(__file__).parent / "tests/fixtures/scope_pubmed.xml").read_bytes())
+    retained = {a.metadata.pmid_or_id for a in source if is_headache_topic(a.metadata.title, a.abstract)}
+    # Migraine-specific therapy safety and a migraine-aura case are in scope;
+    # myelopathy/NMOSD or generic SIH/IIH studies are not automatically so.
+    # Explicit primary headache outcomes qualify; a symptom-list case does not.
+    assert retained == {"42856055", "42664477", "42775430", "42768895", "42723270", "42619634"}
+
+
+def test_xml_collective_society_author_retains_cross_group_mapping():
+    xml = PUBMED_XML.replace(b"Taiwan Headache Society, Taipei", b"Tokyo, Japan")
+    xml = xml.replace(b"<Author>", b"<Author><CollectiveName>Taiwan Headache Society</CollectiveName>")
+    source = parse_pubmed(xml)[0].metadata.source_society_or_journal
+    assert source == "Cephalalgia | International Headache Society | Japanese Headache Society | Taiwan Headache Society"

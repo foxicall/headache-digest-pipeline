@@ -1,37 +1,10 @@
 [
   {
     "article_metadata": {
-      "pmid_or_id": "42886874",
-      "doi": "10.1212/wnl.0000000000218638",
-      "title": "Recommendations for the Management of Spontaneous Intracranial Hypotension With Spinal Longitudinal Epidural CSF Collection: A Delphi Study.",
-      "source_society_or_journal": "Neurology",
-      "publication_date": "2026-10-16",
-      "study_design": "Not reported"
-    },
-    "structured_summary": {
-      "methods": "國際多專科 Delphi 共識研究，於 2024 年 1 月至 2025 年 7 月進行，涵蓋神經內科、神經外科、放射科及麻醉科專家。以匿名線上問卷收集意見，各輪間提供前一輪回饋；依第三輪 5 點 Likert 量表，預先定義同意比例 ≥70% 為強共識、60%–69% 為部分共識、<60% 為無共識。",
-      "inclusion_criteria": [
-        "參與對象為神經內科、神經外科、放射科及麻醉科專家。",
-        "Not reported — 摘要未說明專家遴選的完整資格條件。"
-      ],
-      "exclusion_criteria": [
-        "Not reported"
-      ],
-      "number_of_inclusion": "邀請 14 位專家；第 1、2、3 輪分別有 10、9、9 位參與。這些是專家人數，並非患者人數。",
-      "mechanism_of_action_moa": "Not reported — 摘要討論硬膜外血液貼片（EBP）及相關處置，但未描述其詳細作用機轉。",
-      "conclusion": "本研究針對伴脊椎縱向硬膜外腦脊髓液積聚（SLEC）的自發性顱內低壓（SIH）提出共識。專家支持近期發病且有嚴重姿勢性頭痛者臥床休息（同意 88.9%）、半標靶 EBP 作為初始處置（70%），以及以動態 CT 脊髓攝影定位（70%）。臨床緩解與影像緩解定義的同意比例分別為 80% 與 90%；這些比例不是患者的治療成功率。對持續症狀、臨床改善但仍有積液，以及侵入性定位或手術前適當的 EBP 次數，仍有未達共識之處。",
-      "pitfalls_and_limitations": [
-        "作者指出：治療討論主要針對 SLEC 陽性且推定為腹側硬膜撕裂的情境；側方硬膜撕裂與腦脊髓液靜脈瘻仍需另行建立共識。",
-        "摘要閱讀限制：這是專家共識，不能將同意比例視為介入治療的療效證據。"
-      ]
-    }
-  },
-  {
-    "article_metadata": {
       "pmid_or_id": "42878096",
       "doi": "10.1111/head.70220",
       "title": "Subspecialty headache clinic visit reduced healthcare utilization in patients with migraine: Single institution retrospective cohort study.",
-      "source_society_or_journal": "Headache",
+      "source_society_or_journal": "Headache | American Headache Society",
       "publication_date": "2026-10-15",
       "study_design": "Not reported"
     },
@@ -54,36 +27,10 @@
   },
   {
     "article_metadata": {
-      "pmid_or_id": "42875206",
-      "doi": "10.2169/internalmedicine.7994-26",
-      "title": "Cerebral Attack With Cortical-Leptomeningeal Involvement and Seizures in AQP4-IgG-Positive Neuromyelitis Optica Spectrum Disorder.",
-      "source_society_or_journal": "Internal medicine (Tokyo, Japan)",
-      "publication_date": "2026-10-15",
-      "study_design": "Not reported"
-    },
-    "structured_summary": {
-      "methods": "病例報告：一位 47 歲、AQP4-IgG 陽性的視神經脊髓炎光譜疾病（NMOSD）女性出現急性頭痛、癲癇發作、運動性失語及右上肢無力惡化。腦部 MRI 顯示左額葉皮質及皮質下腫瘤樣病灶，伴軟腦膜增強；描述免疫治療後的臨床與影像變化。",
-      "inclusion_criteria": [
-        "Not applicable — 單一病例描述，未設定研究隊列的入組標準。"
-      ],
-      "exclusion_criteria": [
-        "Not applicable — 單一病例描述，未設定研究隊列的排除標準。"
-      ],
-      "number_of_inclusion": "1 位患者；摘要明確描述一位 47 歲女性。",
-      "mechanism_of_action_moa": "Not reported — 摘要未交代具體免疫治療藥物及其機轉。",
-      "conclusion": "免疫治療後臨床與影像異常改善。作者以此病例說明 AQP4-IgG 陽性 NMOSD 可罕見地呈現皮質與軟腦膜受累、癲癇發作及腫瘤樣病灶。",
-      "pitfalls_and_limitations": [
-        "摘要閱讀評析：單一病例不能估計此表現的發生率，亦不能比較治療效果。",
-        "摘要閱讀限制：具體免疫治療方案、劑量與長期追蹤未報告。"
-      ]
-    }
-  },
-  {
-    "article_metadata": {
       "pmid_or_id": "42867283",
       "doi": "10.1111/head.70193",
       "title": "Plasma amylin levels in migraine and after erenumab treatment: A REFORM study.",
-      "source_society_or_journal": "Headache",
+      "source_society_or_journal": "Headache | American Headache Society",
       "publication_date": "2026-10-13",
       "study_design": "Not reported"
     },
@@ -110,7 +57,7 @@
       "pmid_or_id": "42867168",
       "doi": "10.1111/head.70244",
       "title": "The MIND study: Design, feasibility, and baseline characteristics of a smartphone-based migraine cohort.",
-      "source_society_or_journal": "Headache",
+      "source_society_or_journal": "Headache | American Headache Society",
       "publication_date": "2026-10-13",
       "study_design": "Not reported"
     },
@@ -136,7 +83,7 @@
       "pmid_or_id": "42864875",
       "doi": "10.1111/head.70235",
       "title": "Headache disorders among Indigenous communities: A scoping review undertaken with knowledge keeper guidance.",
-      "source_society_or_journal": "Headache",
+      "source_society_or_journal": "Headache | American Headache Society",
       "publication_date": "2026-10-12",
       "study_design": "Review"
     },
@@ -163,7 +110,7 @@
       "pmid_or_id": "42856068",
       "doi": "10.1111/head.70208",
       "title": "Perceived headache responses to exercise in patients with migraine: A cross-sectional study.",
-      "source_society_or_journal": "Headache",
+      "source_society_or_journal": "Headache | American Headache Society",
       "publication_date": "2026-10-10",
       "study_design": "Not reported"
     },
@@ -189,7 +136,7 @@
       "pmid_or_id": "42856055",
       "doi": "10.1111/head.70242",
       "title": "Pregnancy outcomes following exposure to galcanezumab: Analysis of cases from the galcanezumab clinical trials and postmarketing database.",
-      "source_society_or_journal": "Headache",
+      "source_society_or_journal": "Headache | American Headache Society",
       "publication_date": "2026-10-10",
       "study_design": "Not reported"
     },
@@ -215,7 +162,7 @@
       "pmid_or_id": "42856050",
       "doi": "10.1111/head.70241",
       "title": "Opioid use, disability, and patient-reported cognitive impairment in migraine: Multi-country results from the Chronic Migraine Epidemiology and Outcomes-International Study.",
-      "source_society_or_journal": "Headache",
+      "source_society_or_journal": "Headache | American Headache Society | Japanese Headache Society",
       "publication_date": "2026-10-10",
       "study_design": "Not reported"
     },
@@ -242,7 +189,7 @@
       "pmid_or_id": "42847031",
       "doi": "10.1111/head.70221",
       "title": "Headache among patients undergoing cardiac stress testing: Prevalence, clinical characteristics, and identification of myocardial ischemia.",
-      "source_society_or_journal": "Headache",
+      "source_society_or_journal": "Headache | American Headache Society",
       "publication_date": "2026-10-08",
       "study_design": "Not reported"
     },
@@ -266,38 +213,10 @@
   },
   {
     "article_metadata": {
-      "pmid_or_id": "42845273",
-      "doi": "10.1111/head.70232",
-      "title": "Molecular evidence of aquaporin-4 dysregulation and neuroinflammatory stress underlying blood-brain barrier dysfunction in idiopathic intracranial hypertension: A case-control study.",
-      "source_society_or_journal": "Headache",
-      "publication_date": "2026-10-08",
-      "study_design": "Not reported"
-    },
-    "structured_summary": {
-      "methods": "2023 年 3 月至 2024 年 9 月於印度昌迪加爾進行病例對照研究，以橫斷面方式測量暴露。納入新診斷的特發性顱內高壓（IIH）患者、因非神經疾病接受脊椎麻醉且年齡／性別配對的麻醉對照（AC），及年齡／性別配對的健康對照（HC）。定量血液與腦脊髓液中的水通道蛋白，及 HSP、CD146 基因表現，並分析與臨床特徵、嚴重度的相關性。",
-      "inclusion_criteria": [
-        "新診斷的 IIH 患者。",
-        "AC：因非神經疾病接受脊椎麻醉、年齡與性別配對的對照者。",
-        "HC：年齡與性別配對的健康對照者。"
-      ],
-      "exclusion_criteria": [
-        "Not reported — 摘要未列出排除條件；非神經疾病接受麻醉者是對照組，並非排除對象。"
-      ],
-      "number_of_inclusion": "Not reported",
-      "mechanism_of_action_moa": "作者提出 AQP4 失調、血腦屏障功能異常與神經發炎可能參與 IIH 病理生理。摘要報告 AQP4、HSP 及 CD146 的分子差異與症狀相關性，未直接證明因果作用途徑。",
-      "conclusion": "IIH 組的腦脊髓液 AQP4 低於麻醉對照（p=0.016），血液 HSP70 與 CD146 基因表現高於比較組；部分指標與 HIT-6、MIDAS 分數正相關。作者將此解讀為血腦屏障異常與神經發炎相關的分子證據。",
-      "pitfalls_and_limitations": [
-        "Not reported — 摘要未報告各組或總受試者人數。",
-        "摘要閱讀評析：病例對照與橫斷面相關資料不能證明分子變化造成 IIH，也不能單憑此結果確立診斷用途。"
-      ]
-    }
-  },
-  {
-    "article_metadata": {
       "pmid_or_id": "42844591",
       "doi": "10.1186/s10194-026-02537-2",
       "title": "Interpreting the S1BF-ACC-LHb pathway in trigeminal neuralgia-associated affective behavior.",
-      "source_society_or_journal": "The journal of headache and pain",
+      "source_society_or_journal": "The journal of headache and pain | European Headache Federation",
       "publication_date": "2026-10-07",
       "study_design": "Letter"
     },
@@ -324,7 +243,7 @@
       "pmid_or_id": "42839265",
       "doi": "10.1186/s10194-026-02533-6",
       "title": "Multimodal convergence is needed before inferring neuroaxonal injury in migraine.",
-      "source_society_or_journal": "The journal of headache and pain",
+      "source_society_or_journal": "The journal of headache and pain | European Headache Federation",
       "publication_date": "2026-10-06",
       "study_design": "Letter"
     },
@@ -348,63 +267,10 @@
   },
   {
     "article_metadata": {
-      "pmid_or_id": "42727040",
-      "doi": "10.1212/wnl.0000000000218492",
-      "title": "Characteristics of Patients With Bibrachial Amyotrophy Due to Spontaneous Spinal CSF Leaks.",
-      "source_society_or_journal": "Neurology",
-      "publication_date": "2026-09-11",
-      "study_design": "Not reported"
-    },
-    "structured_summary": {
-      "methods": "病例對照研究，研究自發性脊椎腦脊髓液漏所致顱內低壓（SIH）合併雙上肢肌萎縮（BBA）的患者。每位病例依腦脊髓液漏型態（腹側或側方）及就診年份選取 2 位配對對照；評估期間為 2001 年 1 月 1 日至 2024 年 6 月 30 日，地點為第四級轉診中心。",
-      "inclusion_criteria": [
-        "患者被診斷為自發性脊髓腦脊液漏（SIH）並合併雙臂肌萎縮（BBA）"
-      ],
-      "exclusion_criteria": [
-        "Not reported"
-      ],
-      "number_of_inclusion": "25 位連續的 SIH 合併 BBA 病例；每位病例配置 2 位對照，但摘要未直接列出對照總人數。22 位病例接受腦脊髓液漏的手術閉合。",
-      "mechanism_of_action_moa": "Not reported — 摘要描述前方硬膜外腦脊髓液積聚與 BBA 的關聯，但未確立造成肌萎縮的完整作用途徑。",
-      "conclusion": "BBA 病例以男性較多，SIH 至 BBA 發病的平均間隔為 13.2 年；前方腦脊髓液積聚平均厚度為 6.3 mm，對照為 2.9 mm（p<0.0001）。BBA 發病後未滿 10 年接受修補者，18 位中有 13 位術後改善；超過 10 年接受修補的 4 位及未修補的 2 位均未改善，摘要報告 p=0.007。作者認為較早修補可能有利，但仍需更嚴謹研究。",
-      "pitfalls_and_limitations": [
-        "作者明示：需以更嚴謹的研究設計評估治療結果。",
-        "摘要閱讀評析：手術時機與改善的觀察性關聯不能單獨證明早期手術的因果效益；不宜將作者對安全性與持久性的描述視為已由對照試驗確立。",
-        "摘要閱讀限制：摘要各治療結果所列分母未完整交代所有 25 位病例的去向，不能自行補齊。"
-      ]
-    }
-  },
-  {
-    "article_metadata": {
-      "pmid_or_id": "42727039",
-      "doi": "10.1212/wnl.0000000000218525",
-      "title": "Clinical Reasoning: A 59-Year-Old Man With Delayed Electric Shock-Like Sensations After a Fall.",
-      "source_society_or_journal": "Neurology",
-      "publication_date": "2026-09-11",
-      "study_design": "Case Reports"
-    },
-    "structured_summary": {
-      "methods": "臨床推理病例報告：一位 59 歲男性於工作場所跌倒後約 3–4 週，出現頸部前屈誘發的電擊樣感覺。描述急性期與延遲症狀的時序、神經學檢查，以及腦部和連續頸／胸椎 MRI 評估；未報告治療介入試驗。",
-      "inclusion_criteria": [
-        "Not applicable — 單一病例描述，未設定隊列納入標準。"
-      ],
-      "exclusion_criteria": [
-        "Not applicable — 單一病例描述，未設定隊列排除標準。"
-      ],
-      "number_of_inclusion": "1 位患者；摘要明確描述一位 59 歲男性。",
-      "mechanism_of_action_moa": "Not reported — 摘要未確立此創傷後感覺現象的生理機轉。",
-      "conclusion": "數週後可重現的頸部前屈電擊感符合 Lhermitte sign；神經檢查沒有運動或感覺缺損，腦部 MRI 及連續脊椎 MRI 未見所述髓內異常。本病例示範對創傷後感覺現象進行有結構的臨床推理。",
-      "pitfalls_and_limitations": [
-        "摘要閱讀評析：單一病例不能估計創傷後此現象的頻率或推論所有患者的預後。",
-        "Not reported — 摘要未提供明確治療方案及長期追蹤結果。"
-      ]
-    }
-  },
-  {
-    "article_metadata": {
       "pmid_or_id": "42673560",
       "doi": "10.1212/wnl.0000000000214881",
       "title": "Pharmacologic Treatment for Migraine Prevention in Adults Practice Guideline Recommendations: Report of the AAN Guidelines Subcommittee and the American Headache Society.",
-      "source_society_or_journal": "Neurology",
+      "source_society_or_journal": "Neurology | American Academy of Neurology",
       "publication_date": "2026-08-31",
       "study_design": "Practice Guideline"
     },
@@ -430,7 +296,7 @@
       "pmid_or_id": "42673559",
       "doi": "10.1212/wnl.0000000000218112",
       "title": "Systematic Review of Pharmacologic Treatment for Migraine Prevention in Adults: Report of the AAN Guidelines Subcommittee and the American Headache Society.",
-      "source_society_or_journal": "Neurology",
+      "source_society_or_journal": "Neurology | American Academy of Neurology",
       "publication_date": "2026-08-31",
       "study_design": "Systematic Review"
     },
@@ -456,7 +322,7 @@
       "pmid_or_id": "42664477",
       "doi": "10.1212/wnl.0000000000218484",
       "title": "Bridging the Gap: Translating Microemboli-Induced Spreading Depolarization Into Clinical Practice.",
-      "source_society_or_journal": "Neurology",
+      "source_society_or_journal": "Neurology | American Academy of Neurology",
       "publication_date": "2026-08-28",
       "study_design": "Case Reports"
     },
@@ -482,7 +348,7 @@
       "pmid_or_id": "29471679",
       "doi": "10.1177/0333102418759786",
       "title": "ARISE: A Phase 3 randomized trial of erenumab for episodic migraine.",
-      "source_society_or_journal": "Cephalalgia : an international journal of headache",
+      "source_society_or_journal": "Cephalalgia : an international journal of headache | International Headache Society",
       "publication_date": "2018-02-22",
       "study_design": "Clinical Trial, Phase III; Randomized Controlled Trial"
     },
@@ -512,7 +378,7 @@
       "pmid_or_id": "24144382",
       "doi": "10.1186/1129-2377-14-86",
       "title": "Neuromodulation of chronic headaches: position statement from the European Headache Federation.",
-      "source_society_or_journal": "The journal of headache and pain",
+      "source_society_or_journal": "The journal of headache and pain | European Headache Federation",
       "publication_date": "2013-10-21",
       "study_design": "Practice Guideline"
     },
@@ -541,7 +407,7 @@
       "pmid_or_id": "23390177",
       "doi": "10.1212/wnl.0b013e3182825055",
       "title": "Migraine prevention with a supraorbital transcutaneous stimulator: a randomized controlled trial.",
-      "source_society_or_journal": "Neurology",
+      "source_society_or_journal": "Neurology | American Academy of Neurology",
       "publication_date": "2013-02-06",
       "study_design": "Multicenter Study; Randomized Controlled Trial"
     },

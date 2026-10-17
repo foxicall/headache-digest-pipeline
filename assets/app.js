@@ -9,23 +9,36 @@ const FIELDS = [
   ["conclusion", "Conclusion · 研究結論", "text"],
   ["pitfalls_and_limitations", "Pitfalls & Limitations · 研究限制", "list"],
 ];
+// Alias keys mirror the source groups in src/crawler.py. These are source
+// groupings; an associated journal does not imply society authorship.
 const JOURNALS = [
-  "Cephalalgia",
-  "The Journal of Headache and Pain",
-  "Headache",
-  "Neurology",
-  "Annals of Neurology",
-  "Acta Neurologica Taiwanica",
-  "Internal medicine",
+  ["Cephalalgia", "ihs", ["cephalalgia"]],
+  ["Cephalalgia Reports", "ihs", ["cephalalgia reports"]],
+  ["The Journal of Headache and Pain", "ehf", ["the journal of headache and pain", "j headache pain"]],
+  ["Annals of Neurology", "aan", ["annals of neurology", "ann neurol"]],
+  ["Neurology", "aan", ["neurology"]],
+  ["Headache", "aan", ["headache"]],
+  ["Japanese Journal of Headache", "jhs", ["japanese journal of headache"]],
+  ["Neurology and Clinical Neuroscience", "jhs", ["neurology and clinical neuroscience", "neurol clin neurosci"]],
+  ["Internal Medicine", "jhs", ["internal medicine", "intern med"]],
+  ["Rinsho Shinkeigaku", "jhs", ["rinsho shinkeigaku"]],
+  ["Acta Neurologica Taiwanica（台灣）", "ths", ["acta neurologica taiwanica", "acta neurol taiwan"]],
+  ["Journal of the Chinese Medical Association（台灣）", "ths", ["journal of the chinese medical association", "j chin med assoc"]],
 ];
+const SOCIETY_TAGS = {
+  ihs: ["international headache society"],
+  ehf: ["european headache federation"],
+  aan: ["american neurological association", "american academy of neurology", "american headache society"],
+  jhs: ["japanese headache society"],
+  ths: ["taiwan headache society"],
+};
 const FILTERS = [
   ["all", "All · 全部"],
   ["ihs", "IHS / Cephalalgia"],
   ["ehf", "EHF / JHP"],
-  ["aan", "AAN / ANA"],
-  ["jhs", "JHS"],
-  ["ths", "THS"],
-  ["headache", "Headache"],
+  ["aan", "ANA / AAN / AHS"],
+  ["jhs", "JHS · 日本頭痛學會"],
+  ["ths", "THS · 台灣頭痛學會"],
 ];
 const SEED_IDS = new Set(["29471679", "24144382", "23390177"]);
 const FALLBACK_NOTICE = "Requires OPENAI_API_KEY for AI extraction";
@@ -110,26 +123,21 @@ function validatePapers(data) {
   return data;
 }
 
-function canonicalJournal(name) {
-  // PubMed journal titles can include subtitles after a colon.
-  const journal = name.split("|", 1)[0].trim();
-  const short = journal.split(":", 1)[0].trim().toLowerCase();
-  return JOURNALS.find((item) => item.toLowerCase() === short) || journal;
+function journalDefinition(source) {
+  const key = source.split(/[|:(=]/, 1)[0].trim().toLowerCase();
+  return JOURNALS.find(([, , aliases]) => aliases.includes(key));
+}
+
+function canonicalJournal(source) {
+  return journalDefinition(source)?.[0] || source.split("|", 1)[0].trim();
 }
 
 function matchesFilter(paper, filter) {
   if (filter === "all") return true;
-  const source = paper.article_metadata.source_society_or_journal.toLowerCase();
-  const journal = canonicalJournal(source);
-  switch (filter) {
-    case "ihs": return journal === "Cephalalgia" || source.includes("international headache society");
-    case "ehf": return journal === "The Journal of Headache and Pain" || source.includes("european headache federation");
-    case "aan": return ["Neurology", "Annals of Neurology"].includes(journal) || /american (academy of neurology|neurological association)/.test(source);
-    case "jhs": return source.includes("japanese headache society");
-    case "ths": return journal === "Acta Neurologica Taiwanica" || source.includes("taiwan headache society");
-    case "headache": return journal === "Headache";
-    default: return false;
-  }
+  const source = paper.article_metadata.source_society_or_journal;
+  const tags = source.toLowerCase().split("|").map((tag) => tag.trim());
+  return journalDefinition(source)?.[1] === filter ||
+    (SOCIETY_TAGS[filter] || []).some((tag) => tags.includes(tag));
 }
 
 function renderFilters() {

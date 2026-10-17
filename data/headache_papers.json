@@ -1,0 +1,90 @@
+[
+  {
+    "article_metadata": {
+      "pmid_or_id": "29471679",
+      "doi": "10.1177/0333102418759786",
+      "title": "ARISE: A Phase 3 randomized trial of erenumab for episodic migraine.",
+      "source_society_or_journal": "Cephalalgia : an international journal of headache",
+      "publication_date": "2018-02-22",
+      "study_design": "Clinical Trial, Phase III; Randomized Controlled Trial"
+    },
+    "structured_summary": {
+      "methods": "ARISE 第 3 期隨機、雙盲、安慰劑對照研究：成人陣發性偏頭痛患者接受每月 erenumab 70 mg 或安慰劑；比較基線至第 3 個月的每月偏頭痛天數及其他預先指定終點。試驗登錄：NCT02483585。",
+      "inclusion_criteria": [
+        "成人。",
+        "陣發性偏頭痛。",
+        "Not reported — 摘要未列出更詳細的年齡界限或基線偏頭痛頻率門檻。"
+      ],
+      "exclusion_criteria": [
+        "Not reported — PubMed 摘要未列出排除條件。"
+      ],
+      "number_of_inclusion": "577 人隨機分派；570 人納入療效分析。摘要未列出各組人數。",
+      "mechanism_of_action_moa": "Erenumab 是抑制降鈣素基因相關胜肽（CGRP）受體的人類單株抗體。",
+      "conclusion": "第 3 個月每月偏頭痛天數的變化為 erenumab −2.9 天、安慰劑 −1.8 天；摘要報告的最小平方法平均治療差為 −1.0 天（95% CI −1.6 至 −0.5；p<0.001）。達到至少 50% 減少者為 39.7% 與 29.5%。整體安全性與不良事件概況相近；身體功能日誌兩個領域的至少 5 分改善比例未達統計顯著。",
+      "pitfalls_and_limitations": [
+        "摘要閱讀限制：僅依 PubMed 摘要整理；未核對完整試驗方法、全部排除條件或分組細節。",
+        "適用範圍：摘要的療效評估為第 3 個月，不能據此推定長期療效或罕見風險。",
+        "摘要明示由 Amgen 資助。",
+        "這是 2018 年的歷史範例，並非每日擷取的新文獻。"
+      ]
+    }
+  },
+  {
+    "article_metadata": {
+      "pmid_or_id": "24144382",
+      "doi": "10.1186/1129-2377-14-86",
+      "title": "Neuromodulation of chronic headaches: position statement from the European Headache Federation.",
+      "source_society_or_journal": "The journal of headache and pain",
+      "publication_date": "2013-10-21",
+      "study_design": "Practice Guideline"
+    },
+    "structured_summary": {
+      "methods": "歐洲頭痛聯盟（EHF）2013 年神經調控立場聲明，依各方法的理論背景、臨床資料及副作用提出共識。討論侵入性與非侵入性方法，包括深部腦刺激、枕神經刺激、蝶腭神經節刺激、迷走神經刺激及經顱刺激等；不是單一介入試驗。",
+      "inclusion_criteria": [
+        "Not applicable — 本文是立場聲明，沒有新招募的試驗隊列。",
+        "討論範圍而非入組標準：慢性原發性頭痛，以及保守治療確定無效的選定難治病例。"
+      ],
+      "exclusion_criteria": [
+        "Not applicable — 本文沒有試驗入組的排除條件。",
+        "原文建議脈絡：考慮神經調控前應排除藥物過度使用性頭痛；這不是本文的試驗排除標準。"
+      ],
+      "number_of_inclusion": "Not applicable — 立場聲明，沒有本文新納入的受試者人數。",
+      "mechanism_of_action_moa": "Not reported — 摘要列出多種神經刺激技術，但未逐項描述其作用機轉，不能以單一機轉概括。",
+      "conclusion": "作者指出當時適當的隨機對照試驗證據有限，需要更多受控研究。該 2013 年聲明主張在資料充分之前，神經刺激裝置應限於三級頭痛中心的藥物難治病例，並在有效研究計畫內使用，或選用已在受控研究中顯示療效且副作用可接受的方法。",
+      "pitfalls_and_limitations": [
+        "作者明示：RCT 證據有限，需要更多受控研究驗證神經刺激。",
+        "摘要閱讀限制：無法據此比較不同裝置的效果量、程序風險或長期效益。",
+        "這是 2013 年的歷史立場聲明；不能直接視為現行指引或所有裝置的最新建議。"
+      ]
+    }
+  },
+  {
+    "article_metadata": {
+      "pmid_or_id": "23390177",
+      "doi": "10.1212/wnl.0b013e3182825055",
+      "title": "Migraine prevention with a supraorbital transcutaneous stimulator: a randomized controlled trial.",
+      "source_society_or_journal": "Neurology",
+      "publication_date": "2013-02-06",
+      "study_design": "Multicenter Study; Randomized Controlled Trial"
+    },
+    "structured_summary": {
+      "methods": "雙盲、隨機、假刺激對照試驗，於比利時 5 家三級頭痛門診進行。經 1 個月基線觀察後，以 1:1 隨機分派接受真實或假刺激；每天使用眶上經皮刺激器 20 分鐘，共 3 個月。主要終點為每月偏頭痛天數的變化及至少 50% 反應率。",
+      "inclusion_criteria": [
+        "每月至少 2 次偏頭痛發作。",
+        "Not reported — 摘要未列出完整年齡界限或其他入組條件。"
+      ],
+      "exclusion_criteria": [
+        "Not reported — 摘要未列出排除條件。"
+      ],
+      "number_of_inclusion": "67 人隨機分派並納入意向治療分析；摘要未列出各組人數。",
+      "mechanism_of_action_moa": "摘要描述使用眶上經皮刺激器進行三叉神經刺激。Not reported — 更詳細的生物作用機轉未在摘要中說明。",
+      "conclusion": "第 3 個月，真實刺激組每月偏頭痛天數由 6.94 降至 4.88（組內 p=0.023），假刺激組由 6.54 降至 6.22（組內 p=0.608）。至少 50% 反應率為 38.1% 與 12.1%，組間 p=0.023。兩組均未報告不良事件。作者認為該裝置可用於偏頭痛預防，並將證據分級為 Class III。",
+      "pitfalls_and_limitations": [
+        "摘要閱讀限制：樣本為 67 人、療程 3 個月，不能據此確立長期效果或排除罕見不良事件。",
+        "統計判讀：天數變化所列 p 值為各組內比較；一組顯著、另一組不顯著本身不等於組間差異顯著。",
+        "作者明示：本研究提供 Class III 證據。",
+        "這是 2013 年的歷史範例，並非每日擷取的新文獻。"
+      ]
+    }
+  }
+]

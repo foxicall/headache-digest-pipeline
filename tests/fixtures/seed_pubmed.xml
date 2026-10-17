@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='utf-8'?>
+<PubmedArticleSet>
+  <PubmedArticle>
+    <MedlineCitation>
+      <PMID Version="1">29471679</PMID>
+      <Article>
+        <Journal>
+          <ISSN IssnType="Electronic">1468-2982</ISSN>
+          <JournalIssue CitedMedium="Internet">
+            <Volume>38</Volume>
+            <Issue>6</Issue>
+            <PubDate>
+              <Year>2018</Year>
+              <Month>May</Month>
+            </PubDate>
+          </JournalIssue>
+          <Title>Cephalalgia : an international journal of headache</Title>
+          <ISOAbbreviation>Cephalalgia</ISOAbbreviation>
+        </Journal>
+        <ArticleTitle>ARISE: A Phase 3 randomized trial of erenumab for episodic migraine.</ArticleTitle>
+        <Abstract>
+          <AbstractText>Background Calcitonin gene-related peptide plays an important role in migraine pathophysiology. Erenumab, a human monoclonal antibody that inhibits the calcitonin gene-related peptide receptor, is being evaluated for migraine prevention. Methods In this randomized, double-blind, placebo-controlled, phase 3 study, 577 adults with episodic migraine were randomized to placebo or 70 mg erenumab; 570 patients were included in efficacy analyses. Primary endpoint was change in monthly migraine days. Secondary endpoints were ≥50% reduction in monthly migraine days, change in acute migraine-specific medication treatment days, and ≥5-point reduction in Physical Impairment and Impact on Everyday Activities domain scores measured by the Migraine Physical Function Impact Diary. All endpoints assessed change from baseline at month 3. Results Patients receiving erenumab experienced -2.9 days change in monthly migraine days, compared with -1.8 days for placebo, least-squares mean (95% CI) treatment difference of -1.0 (-1.6, -0.5) ( p &lt; 0.001). A ≥ 50% reduction in monthly migraine days was achieved by 39.7% (erenumab) and 29.5% (placebo) of patients (OR:1.59 (95% CI: 1.12, 2.27) ( p = 0.010). Migraine-specific medication treatment days were reduced by -1.2 (erenumab) and -0.6 (placebo) days, a treatment difference of -0.6 (-1.0, -0.2) ( p = 0.002). The ≥5-point reduction rates in Migraine Physical Function Impact Diary - Physical Impairment were 33.0% and 27.1% (OR:1.33 (0.92, 1.90) ( p = 0.13) and in Migraine Physical Function Impact Diary - Everyday Activities were 40.4% and 35.8% (OR:1.22 (0.87, 1.71) ( p = 0.26). Safety and adverse event profiles of erenumab were similar to placebo. Most frequent adverse events were upper respiratory tract infection, injection site pain, and nasopharyngitis. Conclusions As a preventive treatment of episodic migraine, erenumab at a dosage of 70 mg monthly significantly reduced migraine frequency and acute migraine-specific medication use. (Funded by Amgen). Trial registration ClinicalTrials.gov, NCT02483585.</AbstractText>
+        </Abstract>
+        <PublicationTypeList>
+          <PublicationType UI="D017428">Clinical Trial, Phase III</PublicationType>
+          <PublicationType UI="D016428">Journal Article</PublicationType>
+          <PublicationType UI="D016449">Randomized Controlled Trial</PublicationType>
+        </PublicationTypeList>
+        <ArticleDate DateType="Electronic">
+          <Year>2018</Year>
+          <Month>02</Month>
+          <Day>22</Day>
+        </ArticleDate>
+      </Article>
+    </MedlineCitation>
+    <PubmedData>
+      <ArticleIdList>
+        <ArticleId IdType="pubmed">29471679</ArticleId>
+        <ArticleId IdType="doi">10.1177/0333102418759786</ArticleId>
+      </ArticleIdList>
+    </PubmedData>
+  </PubmedArticle>
+  <PubmedArticle>
+    <MedlineCitation>
+      <PMID Version="1">24144382</PMID>
+      <Article>
+        <Journal>
+          <ISSN IssnType="Electronic">1129-2377</ISSN>
+          <JournalIssue CitedMedium="Internet">
+            <Volume>14</Volume>
+            <Issue>1</Issue>
+            <PubDate>
+              <Year>2013</Year>
+              <Month>Oct</Month>
+              <Day>21</Day>
+            </PubDate>
+          </JournalIssue>
+          <Title>The journal of headache and pain</Title>
+          <ISOAbbreviation>J Headache Pain</ISOAbbreviation>
+        </Journal>
+        <ArticleTitle>Neuromodulation of chronic headaches: position statement from the European Headache Federation.</ArticleTitle>
+        <Abstract>
+          <AbstractText>The medical treatment of patients with chronic primary headache syndromes (chronic migraine, chronic tension-type headache, chronic cluster headache, hemicrania continua) is challenging as serious side effects frequently complicate the course of medical treatment and some patients may be even medically intractable. When a definitive lack of responsiveness to conservative treatments is ascertained and medication overuse headache is excluded, neuromodulation options can be considered in selected cases. Here, the various invasive and non-invasive approaches, such as hypothalamic deep brain stimulation, occipital nerve stimulation, stimulation of sphenopalatine ganglion, cervical spinal cord stimulation, vagus nerve stimulation, transcranial direct current stimulation, repetitive transcranial magnetic stimulation, and transcutaneous electrical nerve stimulation are extensively published although proper RCT-based evidence is limited. The European Headache Federation herewith provides a consensus statement on the clinical use of neuromodulation in headache, based on theoretical background, clinical data, and side effect of each method. This international consensus further gives recommendations for future studies on these new approaches. In spite of a growing field of stimulation devices in headaches treatment, further controlled studies to validate, strengthen and disseminate the use of neurostimulation are clearly warranted. Consequently, until these data are available any neurostimulation device should only be used in patients with medically intractable syndromes from tertiary headache centers either as part of a valid study or have shown to be effective in such controlled studies with an acceptable side effect profile.</AbstractText>
+        </Abstract>
+        <PublicationTypeList>
+          <PublicationType UI="D016428">Journal Article</PublicationType>
+          <PublicationType UI="D017065">Practice Guideline</PublicationType>
+        </PublicationTypeList>
+        <ArticleDate DateType="Electronic">
+          <Year>2013</Year>
+          <Month>10</Month>
+          <Day>21</Day>
+        </ArticleDate>
+      </Article>
+    </MedlineCitation>
+    <PubmedData>
+      <ArticleIdList>
+        <ArticleId IdType="pubmed">24144382</ArticleId>
+        <ArticleId IdType="pmc">PMC4231359</ArticleId>
+        <ArticleId IdType="doi">10.1186/1129-2377-14-86</ArticleId>
+        <ArticleId IdType="pii">1129-2377-14-86</ArticleId>
+      </ArticleIdList>
+    </PubmedData>
+  </PubmedArticle>
+  <PubmedArticle>
+    <MedlineCitation>
+      <PMID Version="1">23390177</PMID>
+      <Article>
+        <Journal>
+          <ISSN IssnType="Electronic">1526-632X</ISSN>
+          <JournalIssue CitedMedium="Internet">
+            <Volume>80</Volume>
+            <Issue>8</Issue>
+            <PubDate>
+              <Year>2013</Year>
+              <Month>Feb</Month>
+              <Day>19</Day>
+            </PubDate>
+          </JournalIssue>
+          <Title>Neurology</Title>
+          <ISOAbbreviation>Neurology</ISOAbbreviation>
+        </Journal>
+        <ArticleTitle>Migraine prevention with a supraorbital transcutaneous stimulator: a randomized controlled trial.</ArticleTitle>
+        <Abstract>
+          <AbstractText Label="OBJECTIVE" NlmCategory="OBJECTIVE">To assess efficacy and safety of trigeminal neurostimulation with a supraorbital transcutaneous stimulator (Cefaly, STX-Med., Herstal, Belgium) in migraine prevention.</AbstractText>
+          <AbstractText Label="METHODS" NlmCategory="METHODS">This was a double-blinded, randomized, sham-controlled trial conducted at 5 Belgian tertiary headache clinics. After a 1-month run-in, patients with at least 2 migraine attacks/month were randomized 1:1 to verum or sham stimulation, and applied the stimulator daily for 20 minutes during 3 months. Primary outcome measures were change in monthly migraine days and 50% responder rate.</AbstractText>
+          <AbstractText Label="RESULTS" NlmCategory="RESULTS">Sixty-seven patients were randomized and included in the intention-to-treat analysis. Between run-in and third month of treatment, the mean number of migraine days decreased significantly in the verum (6.94 vs 4.88; p = 0.023), but not in the sham group (6.54 vs 6.22; p = 0.608). The 50% responder rate was significantly greater (p = 0.023) in the verum (38.1%) than in the sham group (12.1%). Monthly migraine attacks (p = 0.044), monthly headache days (p = 0.041), and monthly acute antimigraine drug intake (p = 0.007) were also significantly reduced in the verum but not in the sham group. There were no adverse events in either group.</AbstractText>
+          <AbstractText Label="CONCLUSIONS" NlmCategory="CONCLUSIONS">Supraorbital transcutaneous stimulation with the device used in this trial is effective and safe as a preventive therapy for migraine. The therapeutic gain (26%) is within the range of those reported for other preventive drug and nondrug antimigraine treatments.</AbstractText>
+          <AbstractText Label="CLASSIFICATION OF EVIDENCE" NlmCategory="METHODS">This study provides Class III evidence that treatment with a supraorbital transcutaneous stimulator is effective and safe as a preventive therapy for migraine.</AbstractText>
+        </Abstract>
+        <PublicationTypeList>
+          <PublicationType UI="D016428">Journal Article</PublicationType>
+          <PublicationType UI="D016448">Multicenter Study</PublicationType>
+          <PublicationType UI="D016449">Randomized Controlled Trial</PublicationType>
+          <PublicationType UI="D013485">Research Support, Non-U.S. Gov't</PublicationType>
+        </PublicationTypeList>
+        <ArticleDate DateType="Electronic">
+          <Year>2013</Year>
+          <Month>02</Month>
+          <Day>06</Day>
+        </ArticleDate>
+      </Article>
+    </MedlineCitation>
+    <PubmedData>
+      <ArticleIdList>
+        <ArticleId IdType="pubmed">23390177</ArticleId>
+        <ArticleId IdType="doi">10.1212/WNL.0b013e3182825055</ArticleId>
+        <ArticleId IdType="pii">WNL.0b013e3182825055</ArticleId>
+      </ArticleIdList>
+    </PubmedData>
+  </PubmedArticle>
+</PubmedArticleSet>

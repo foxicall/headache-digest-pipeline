@@ -818,3 +818,25 @@ footer > span {
     transition: none !important;
   }
 }
+
+.syndrome-catalog {
+  margin: 20px 0 28px;
+  padding: 18px;
+  border: 1px solid var(--line, #cdd9d1);
+  border-radius: 12px;
+}
+.library .overview-note { color: var(--muted); font-size: 13px; line-height: 1.7; }
+.syndrome-catalog summary { cursor: pointer; line-height: 1.6; }
+.syndrome-catalog > summary { font-weight: 600; }
+.syndrome-catalog > summary span { display: inline-block; font-size: 12px; font-weight: 400; margin-left: 8px; }
+.catalog-controls { display: flex; flex-wrap: wrap; gap: 14px; margin: 18px 0; }
+.catalog-controls label { flex: 1 1 250px; min-width: 0; font-size: 12px; }
+.catalog-controls input, .catalog-controls select {
+  display: block; width: 100%; min-width: 0; margin-top: 8px; padding: 10px;
+  border: 1px solid var(--line, #cdd9d1); border-radius: 6px; color: inherit; background: transparent;
+  font-size: 16px;
+}
+.syndrome-group { padding: 10px 0; border-top: 1px solid var(--line, #cdd9d1); }
+.syndrome-list { list-style: none; padding: 0; margin: 10px 0; }
+.syndrome-entry { display: flex; align-items: baseline; gap: 10px; padding: 7px 0 7px calc(var(--depth) * 8px); font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+.syndrome-code { flex-shrink: 0; font-variant-numeric: tabular-nums; font-weight: 600; }

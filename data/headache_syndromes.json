@@ -1,0 +1,1953 @@
+{
+  "edition": "ICHD-3 beta (2013), user-supplied scope",
+  "source_url": "https://www.ichd-3.org/wp-content/uploads/2016/08/International-Headache-Classification-III-ICHD-III-2013-Beta-1.pdf",
+  "current_classification_url": "https://ichd-3.org/classification-outline/",
+  "groups": [
+    {
+      "code": "1",
+      "label": "偏頭痛"
+    },
+    {
+      "code": "2",
+      "label": "緊縮型頭痛"
+    },
+    {
+      "code": "3",
+      "label": "三叉自律神經頭痛"
+    },
+    {
+      "code": "4",
+      "label": "其他原發性頭痛疾患"
+    },
+    {
+      "code": "5",
+      "label": "外傷或傷害相關頭痛"
+    },
+    {
+      "code": "6",
+      "label": "血管疾患相關頭痛"
+    },
+    {
+      "code": "7",
+      "label": "非血管性顱內疾患相關頭痛"
+    },
+    {
+      "code": "8",
+      "label": "物質使用、過度用藥或戒斷相關頭痛"
+    },
+    {
+      "code": "9",
+      "label": "感染相關頭痛"
+    },
+    {
+      "code": "10",
+      "label": "體內恆定疾患相關頭痛"
+    },
+    {
+      "code": "11",
+      "label": "顱頸、眼耳鼻、口腔及顏面結構相關頭痛或顏面痛"
+    },
+    {
+      "code": "12",
+      "label": "精神疾患相關頭痛"
+    },
+    {
+      "code": "13",
+      "label": "疼痛性顱神經病變及其他顏面痛"
+    },
+    {
+      "code": "14",
+      "label": "其他頭痛疾患"
+    },
+    {
+      "code": "A1",
+      "label": "附錄 · 偏頭痛"
+    },
+    {
+      "code": "A2",
+      "label": "附錄 · 緊縮型頭痛"
+    },
+    {
+      "code": "A3",
+      "label": "附錄 · 三叉自律神經頭痛"
+    },
+    {
+      "code": "A4",
+      "label": "附錄 · 其他原發性頭痛疾患"
+    },
+    {
+      "code": "A5",
+      "label": "附錄 · 外傷或傷害相關頭痛"
+    },
+    {
+      "code": "A6",
+      "label": "附錄 · 血管疾患相關頭痛"
+    },
+    {
+      "code": "A7",
+      "label": "附錄 · 非血管性顱內疾患相關頭痛"
+    },
+    {
+      "code": "A8",
+      "label": "附錄 · 物質使用、過度用藥或戒斷相關頭痛"
+    },
+    {
+      "code": "A9",
+      "label": "附錄 · 感染相關頭痛"
+    },
+    {
+      "code": "A10",
+      "label": "附錄 · 體內恆定疾患相關頭痛"
+    },
+    {
+      "code": "A11",
+      "label": "附錄 · 顱頸、眼耳鼻、口腔及顏面結構相關頭痛或顏面痛"
+    },
+    {
+      "code": "A12",
+      "label": "附錄 · 精神疾患相關頭痛"
+    }
+  ],
+  "entries": [
+    {
+      "code": "1",
+      "name": "Migraine",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.1",
+      "name": "Migraine without aura",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.2",
+      "name": "Migraine with aura",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.2.1",
+      "name": "Migraine with typical aura",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.2.1.1",
+      "name": "Typical aura with headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.2.1.2",
+      "name": "Typical aura without headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.2.2",
+      "name": "Migraine with brainstem aura",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.2.3",
+      "name": "Hemiplegic migraine",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.2.3.1",
+      "name": "Familial hemiplegic migraine (FHM)",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.2.3.1.1",
+      "name": "Familial hemiplegic migraine type 1 (FHM1)",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.2.3.1.2",
+      "name": "Familial hemiplegic migraine type 2 (FHM2)",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.2.3.1.3",
+      "name": "Familial hemiplegic migraine type 3 (FHM3)",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.2.3.1.4",
+      "name": "Familial hemiplegic migraine, other loci",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.2.3.2",
+      "name": "Sporadic hemiplegic migraine",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.2.4",
+      "name": "Retinal migraine",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.3",
+      "name": "Chronic migraine",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.4",
+      "name": "Complications of migraine",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.4.1",
+      "name": "Status migrainosus",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.4.2",
+      "name": "Persistent aura without infarction",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.4.3",
+      "name": "Migrainous infarction",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.4.4",
+      "name": "Migraine aura-triggered seizure",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.5",
+      "name": "Probable migraine",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.5.1",
+      "name": "Probable migraine without aura",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.5.2",
+      "name": "Probable migraine with aura",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.6",
+      "name": "Episodic syndromes that may be associated with migraine",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.6.1",
+      "name": "Recurrent gastrointestinal disturbance",
+      "context": "migraine"
+    },
+    {
+      "code": "1.6.1.1",
+      "name": "Cyclical vomiting syndrome",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.6.1.2",
+      "name": "Abdominal migraine",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.6.2",
+      "name": "Benign paroxysmal vertigo",
+      "context": "syndrome"
+    },
+    {
+      "code": "1.6.3",
+      "name": "Benign paroxysmal torticollis",
+      "context": "syndrome"
+    },
+    {
+      "code": "2",
+      "name": "Tension-type headache (TTH)",
+      "context": "syndrome"
+    },
+    {
+      "code": "2.1",
+      "name": "Infrequent episodic tension-type headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "2.1.1",
+      "name": "Infrequent episodic tension-type headache associated with pericranial tenderness",
+      "context": "syndrome"
+    },
+    {
+      "code": "2.1.2",
+      "name": "Infrequent episodic tension-type headache not associated with pericranial tenderness",
+      "context": "syndrome"
+    },
+    {
+      "code": "2.2",
+      "name": "Frequent episodic tension-type headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "2.2.1",
+      "name": "Frequent episodic tension-type headache associated with pericranial tenderness",
+      "context": "syndrome"
+    },
+    {
+      "code": "2.2.2",
+      "name": "Frequent episodic tension-type headache not associated with pericranial tenderness",
+      "context": "syndrome"
+    },
+    {
+      "code": "2.3",
+      "name": "Chronic tension-type headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "2.3.1",
+      "name": "Chronic tension-type headache associated with pericranial tenderness",
+      "context": "syndrome"
+    },
+    {
+      "code": "2.3.2",
+      "name": "Chronic tension-type headache not associated with pericranial tenderness",
+      "context": "syndrome"
+    },
+    {
+      "code": "2.4",
+      "name": "Probable tension-type headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "2.4.1",
+      "name": "Probable infrequent episodic tension-type headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "2.4.2",
+      "name": "Probable frequent episodic tension-type headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "2.4.3",
+      "name": "Probable chronic tension-type headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "3",
+      "name": "Trigeminal autonomic cephalalgias (TACs)",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.1",
+      "name": "Cluster headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.1.1",
+      "name": "Episodic cluster headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.1.2",
+      "name": "Chronic cluster headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.2",
+      "name": "Paroxysmal hemicrania",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.2.1",
+      "name": "Episodic paroxysmal hemicrania",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.2.2",
+      "name": "Chronic paroxysmal hemicrania",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.3",
+      "name": "Short-lasting unilateral neuralgiform headache attacks",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.3.1",
+      "name": "Short-lasting unilateral neuralgiform headache attacks with conjunctival injection and tearing (SUNCT)",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.3.1.1",
+      "name": "Episodic SUNCT",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.3.1.2",
+      "name": "Chronic SUNCT",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.3.2",
+      "name": "Short-lasting unilateral neuralgiform headache attacks with cranial autonomic symptoms (SUNA)",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.3.2.1",
+      "name": "Episodic SUNA",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.3.2.2",
+      "name": "Chronic SUNA",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.4",
+      "name": "Hemicrania continua",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.4.1",
+      "name": "Hemicrania continua, remitting subtype",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.4.2",
+      "name": "Hemicrania continua, unremitting subtype",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.5",
+      "name": "Probable trigeminal autonomic cephalalgia",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.5.1",
+      "name": "Probable cluster headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.5.2",
+      "name": "Probable paroxysmal hemicrania",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.5.3",
+      "name": "Probable short-lasting unilateral neuralgiform headache attacks",
+      "context": "syndrome"
+    },
+    {
+      "code": "3.5.4",
+      "name": "Probable hemicrania continua",
+      "context": "syndrome"
+    },
+    {
+      "code": "4",
+      "name": "Other primary headache disorders",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.1",
+      "name": "Primary cough headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.1.1",
+      "name": "Probable primary cough headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.2",
+      "name": "Primary exercise headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.2.1",
+      "name": "Probable primary exercise headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.3",
+      "name": "Primary headache associated with sexual activity",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.3.1",
+      "name": "Probable primary headache associated with sexual activity",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.4",
+      "name": "Primary thunderclap headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.5",
+      "name": "Cold-stimulus headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.5.1",
+      "name": "Headache attributed to external application of a cold stimulus",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.5.2",
+      "name": "Headache attributed to ingestion or inhalation of a cold stimulus",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.5.3",
+      "name": "Probable cold-stimulus headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.5.3.1",
+      "name": "Headache probably attributed to external application of a cold stimulus",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.5.3.2",
+      "name": "Headache probably attributed to ingestion or inhalation of a cold stimulus",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.6",
+      "name": "External-pressure headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.6.1",
+      "name": "External-compression headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.6.2",
+      "name": "External-traction headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.6.3",
+      "name": "Probable external-pressure headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.6.3.1",
+      "name": "Probable external-compression headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.6.3.2",
+      "name": "Probable external-traction headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.7",
+      "name": "Primary stabbing headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.7.1",
+      "name": "Probable primary stabbing headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.8",
+      "name": "Nummular headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.8.1",
+      "name": "Probable nummular headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.9",
+      "name": "Hypnic headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.9.1",
+      "name": "Probable hypnic headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.10",
+      "name": "New daily persistent headache (NDPH)",
+      "context": "syndrome"
+    },
+    {
+      "code": "4.10.1",
+      "name": "Probable new daily persistent headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "5",
+      "name": "Headache attributed to trauma or injury to the head and/or neck",
+      "context": "syndrome"
+    },
+    {
+      "code": "5.1",
+      "name": "Acute headache attributed to traumatic injury to the head",
+      "context": "syndrome"
+    },
+    {
+      "code": "5.1.1",
+      "name": "Acute headache attributed to moderate or severe traumatic injury to the head",
+      "context": "syndrome"
+    },
+    {
+      "code": "5.1.2",
+      "name": "Acute headache attributed to mild traumatic injury to the head",
+      "context": "syndrome"
+    },
+    {
+      "code": "5.2",
+      "name": "Persistent headache attributed to traumatic injury to the head",
+      "context": "syndrome"
+    },
+    {
+      "code": "5.2.1",
+      "name": "Persistent headache attributed to moderate or severe traumatic injury to the head",
+      "context": "syndrome"
+    },
+    {
+      "code": "5.2.2",
+      "name": "Persistent headache attributed to mild traumatic injury to the head",
+      "context": "syndrome"
+    },
+    {
+      "code": "5.3",
+      "name": "Acute headache attributed to whiplash",
+      "context": "syndrome"
+    },
+    {
+      "code": "5.4",
+      "name": "Persistent headache attributed to whiplash",
+      "context": "syndrome"
+    },
+    {
+      "code": "5.5",
+      "name": "Acute headache attributed to craniotomy",
+      "context": "syndrome"
+    },
+    {
+      "code": "5.6",
+      "name": "Persistent headache attributed to craniotomy",
+      "context": "syndrome"
+    },
+    {
+      "code": "6",
+      "name": "Headache attributed to cranial or cervical vascular disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.1",
+      "name": "Headache attributed to ischaemic stroke or transient ischaemic attack",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.1.1",
+      "name": "Headache attributed to ischaemic stroke (cerebral infarction)",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.1.2",
+      "name": "Headache attributed to transient ischaemic attack (TIA)",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.2",
+      "name": "Headache attributed to non-traumatic intracranial haemorrhage",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.2.1",
+      "name": "Headache attributed to non-traumatic intracerebral haemorrhage",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.2.2",
+      "name": "Headache attributed to non-traumatic subarachnoid haemorrhage (SAH)",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.2.3",
+      "name": "Headache attributed to non-traumatic acute subdural haemorrhage (ASDH)",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.3",
+      "name": "Headache attributed to unruptured vascular malformation",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.3.1",
+      "name": "Headache attributed to unruptured saccular aneurysm",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.3.2",
+      "name": "Headache attributed to arteriovenous malformation (AVM)",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.3.3",
+      "name": "Headache attributed to dural arteriovenous fistula (DAVF)",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.3.4",
+      "name": "Headache attributed to cavernous angioma",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.3.5",
+      "name": "Headache attributed to encephalotrigeminal or leptomeningeal angiomatosis (Sturge Weber syndrome)",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.4",
+      "name": "Headache attributed to arteritis",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.4.1",
+      "name": "Headache attributed to giant cell arteritis (GCA)",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.4.2",
+      "name": "Headache attributed to primary angiitis of the central nervous system (PACNS)",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.4.3",
+      "name": "Headache attributed to secondary angiitis of the central nervous system (SACNS)",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.5",
+      "name": "Headache attributed to cervical carotid or vertebral artery disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.5.1",
+      "name": "Headache or facial or neck pain attributed to cervical carotid or vertebral artery dissection",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.5.2",
+      "name": "Post-endarterectomy headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.5.3",
+      "name": "Headache attributed to carotid or vertebral angioplasty",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.6",
+      "name": "Headache attributed to cerebral venous thrombosis (CVT)",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.7",
+      "name": "Headache attributed to other acute intracranial arterial disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.7.1",
+      "name": "Headache attributed to an intracranial endovascular procedure",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.7.2",
+      "name": "Angiography headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.7.3",
+      "name": "Headache attributed to reversible cerebral vasoconstriction syndrome (RCVS)",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.7.3.1",
+      "name": "Headache probably attributed to reversible cerebral vasoconstriction syndrome (RCVS)",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.7.4",
+      "name": "Headache attributed to intracranial arterial dissection",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.8",
+      "name": "Headache attributed to genetic vasculopathy",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.8.1",
+      "name": "Cerebral Autosomal Dominant Arteriopathy with Subcortical Infarcts and Leukoencephalopathy (CADASIL)",
+      "context": "headache"
+    },
+    {
+      "code": "6.8.2",
+      "name": "Mitochondrial Encephalopathy, Lactic Acidosis and Stroke-like episodes (MELAS)",
+      "context": "headache"
+    },
+    {
+      "code": "6.8.3",
+      "name": "Headache attributed to another genetic vasculopathy",
+      "context": "syndrome"
+    },
+    {
+      "code": "6.9",
+      "name": "Headache attributed to pituitary apoplexy",
+      "context": "syndrome"
+    },
+    {
+      "code": "7",
+      "name": "Headache attributed to non-vascular intracranial disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.1",
+      "name": "Headache attributed to increased cerebrospinal fluid pressure",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.1.1",
+      "name": "Headache attributed to idiopathic intracranial hypertension (IIH)",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.1.2",
+      "name": "Headache attributed to intracranial hypertension secondary to metabolic, toxic or hormonal causes",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.1.3",
+      "name": "Headache attributed to intracranial hypertension secondary to hydrocephalus",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.2",
+      "name": "Headache attributed to low cerebrospinal fluid pressure",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.2.1",
+      "name": "Post-dural puncture headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.2.2",
+      "name": "CSF fistula headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.2.3",
+      "name": "Headache attributed to spontaneous intracranial hypotension",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.3",
+      "name": "Headache attributed to non-infectious inflammatory intracranial disease",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.3.1",
+      "name": "Headache attributed to neurosarcoidosis",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.3.2",
+      "name": "Headache attributed to aseptic (non-infectious) meningitis",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.3.3",
+      "name": "Headache attributed to other non-infectious inflammatory intracranial disease",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.3.4",
+      "name": "Headache attributed to lymphocytic hypophysitis",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.3.5",
+      "name": "Syndrome of transient Headache and Neurological Deficits with cerebrospinal fluid Lymphocytosis (HaNDL)",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.4",
+      "name": "Headache attributed to intracranial neoplasia",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.4.1",
+      "name": "Headache attributed to intracranial neoplasm",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.4.1.1",
+      "name": "Headache attributed to colloid cyst of the third ventricle",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.4.2",
+      "name": "Headache attributed to carcinomatous meningitis",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.4.3",
+      "name": "Headache attributed to hypothalamic or pituitary hyper- or hyposecretion",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.5",
+      "name": "Headache attributed to intrathecal injection",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.6",
+      "name": "Headache attributed to epileptic seizure",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.6.1",
+      "name": "Hemicrania epileptica",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.6.2",
+      "name": "Post-ictal headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.7",
+      "name": "Headache attributed to Chiari malformation type I (CM1)",
+      "context": "syndrome"
+    },
+    {
+      "code": "7.8",
+      "name": "Headache attributed to other non-vascular intracranial disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "8",
+      "name": "Headache attributed to a substance or its withdrawal",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1",
+      "name": "Headache attributed to use of or exposure to a substance",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.1",
+      "name": "Nitric oxide (NO) donor-induced headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.1.1",
+      "name": "Immediate NO donor-induced headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.1.2",
+      "name": "Delayed NO donor-induced headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.2",
+      "name": "Phosphodiesterase (PDE) inhibitor-induced headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.3",
+      "name": "Carbon monoxide (CO)-induced headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.4",
+      "name": "Alcohol-induced headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.4.1",
+      "name": "Immediate alcohol-induced headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.4.2",
+      "name": "Delayed alcohol-induced headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.5",
+      "name": "Headache induced by food and/or additive",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.5.1",
+      "name": "Monosodium glutamate (MSG)-induced headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.6",
+      "name": "Cocaine-induced headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.7",
+      "name": "Histamine-induced headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.7.1",
+      "name": "Immediate histamine-induced headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.7.2",
+      "name": "Delayed histamine-induced headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.8",
+      "name": "Calcitonin gene-related peptide (CGRP)-induced headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.8.1",
+      "name": "Immediate CGRP-induced headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.8.2",
+      "name": "Delayed CGRP-induced headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.9",
+      "name": "Headache attributed to exogenous acute pressor agent",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.10",
+      "name": "Headache attributed to occasional use of non-headache medication",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.11",
+      "name": "Headache attributed to long-term use of non-headache medication",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.12",
+      "name": "Headache attributed to exogenous hormone",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.1.13",
+      "name": "Headache attributed to use of or exposure to other substance",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.2",
+      "name": "Medication-overuse headache (MOH)",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.2.1",
+      "name": "Ergotamine-overuse headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.2.2",
+      "name": "Triptan-overuse headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.2.3",
+      "name": "Simple analgesic-overuse headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.2.3.1",
+      "name": "Paracetamol (acetaminophen)-overuse headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.2.3.2",
+      "name": "Acetylsalicylic acid-overuse headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.2.3.3",
+      "name": "Other non-steroidal anti-inflammatory drug (NSAID)-overuse headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.2.4",
+      "name": "Opioid-overuse headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.2.5",
+      "name": "Combination-analgesic-overuse headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.2.6",
+      "name": "Medication-overuse headache attributed to multiple drug classes not individually overused",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.2.7",
+      "name": "Medication-overuse headache attributed to unverified overuse of multiple drug classes",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.2.8",
+      "name": "Medication-overuse headache attributed to other medication",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.3",
+      "name": "Headache attributed to substance withdrawal",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.3.1",
+      "name": "Caffeine-withdrawal headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.3.2",
+      "name": "Opioid-withdrawal headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.3.3",
+      "name": "Oestrogen-withdrawal headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "8.3.4",
+      "name": "Headache attributed to withdrawal from chronic use of other substance",
+      "context": "syndrome"
+    },
+    {
+      "code": "9",
+      "name": "Headache attributed to infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.1",
+      "name": "Headache attributed to intracranial infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.1.1",
+      "name": "Headache attributed to bacterial meningitis or meningoencephalitis",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.1.1.1",
+      "name": "Acute headache attributed to bacterial meningitis or meningoencephalitis",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.1.1.2",
+      "name": "Chronic headache attributed to bacterial meningitis or meningoencephalitis",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.1.1.3",
+      "name": "Persistent headache attributed to past bacterial meningitis or meningoencephalitis",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.1.2",
+      "name": "Headache attributed to viral meningitis or encephalitis",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.1.2.1",
+      "name": "Headache attributed to viral meningitis",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.1.2.2",
+      "name": "Headache attributed to viral encephalitis",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.1.3",
+      "name": "Headache attributed to intracranial fungal or other parasitic infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.1.3.1",
+      "name": "Acute headache attributed to intracranial fungal or other parasitic infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.1.3.2",
+      "name": "Chronic headache attributed to intracranial fungal or other parasitic infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.1.4",
+      "name": "Headache attributed to brain abscess",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.1.5",
+      "name": "Headache attributed to subdural empyema",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.2",
+      "name": "Headache attributed to systemic infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.2.1",
+      "name": "Headache attributed to systemic bacterial infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.2.1.1",
+      "name": "Acute headache attributed to systemic bacterial infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.2.1.2",
+      "name": "Chronic headache attributed to systemic bacterial infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.2.2",
+      "name": "Headache attributed to systemic viral infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.2.2.1",
+      "name": "Acute headache attributed to systemic viral infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.2.2.2",
+      "name": "Chronic headache attributed to systemic viral infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.2.3",
+      "name": "Headache attributed to other systemic infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.2.3.1",
+      "name": "Acute headache attributed to other systemic infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "9.2.3.2",
+      "name": "Chronic headache attributed to other systemic infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "10",
+      "name": "Headache attributed to disorder of homoeostasis",
+      "context": "syndrome"
+    },
+    {
+      "code": "10.1",
+      "name": "Headache attributed to hypoxia and/or hypercapnia",
+      "context": "syndrome"
+    },
+    {
+      "code": "10.1.1",
+      "name": "High-altitude headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "10.1.2",
+      "name": "Headache attributed to aeroplane travel",
+      "context": "syndrome"
+    },
+    {
+      "code": "10.1.3",
+      "name": "Diving headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "10.1.4",
+      "name": "Sleep apnoea headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "10.2",
+      "name": "Dialysis headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "10.3",
+      "name": "Headache attributed to arterial hypertension",
+      "context": "syndrome"
+    },
+    {
+      "code": "10.3.1",
+      "name": "Headache attributed to phaeochromocytoma",
+      "context": "syndrome"
+    },
+    {
+      "code": "10.3.2",
+      "name": "Headache attributed to hypertensive crisis without hypertensive encephalopathy",
+      "context": "syndrome"
+    },
+    {
+      "code": "10.3.3",
+      "name": "Headache attributed to hypertensive encephalopathy",
+      "context": "syndrome"
+    },
+    {
+      "code": "10.3.4",
+      "name": "Headache attributed to pre-eclampsia or eclampsia",
+      "context": "syndrome"
+    },
+    {
+      "code": "10.3.5",
+      "name": "Headache attributed to autonomic dysreflexia",
+      "context": "syndrome"
+    },
+    {
+      "code": "10.4",
+      "name": "Headache attributed to hypothyroidism",
+      "context": "syndrome"
+    },
+    {
+      "code": "10.5",
+      "name": "Headache attributed to fasting",
+      "context": "syndrome"
+    },
+    {
+      "code": "10.6",
+      "name": "Cardiac cephalalgia",
+      "context": "syndrome"
+    },
+    {
+      "code": "10.7",
+      "name": "Headache attributed to other disorder of homoeostasis",
+      "context": "syndrome"
+    },
+    {
+      "code": "11",
+      "name": "Headache or facial pain attributed to disorder of the cranium, neck, eyes, ears, nose, sinuses, teeth, mouth or other facial or cervical structure",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.1",
+      "name": "Headache attributed to disorder of cranial bone",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.2",
+      "name": "Headache attributed to disorder of the neck",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.2.1",
+      "name": "Cervicogenic headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.2.2",
+      "name": "Headache attributed to retropharyngeal tendonitis",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.2.3",
+      "name": "Headache attributed to craniocervical dystonia",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.3",
+      "name": "Headache attributed to disorder of the eyes",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.3.1",
+      "name": "Headache attributed to acute glaucoma",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.3.2",
+      "name": "Headache attributed to refractive error",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.3.3",
+      "name": "Headache attributed to heterophoria or heterotropia (latent or persistent squint)",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.3.4",
+      "name": "Headache attributed to ocular inflammatory disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.3.5",
+      "name": "Headache attributed to trochleitis",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.4",
+      "name": "Headache attributed to disorder of the ears",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.5",
+      "name": "Headache attributed to disorder of the nose or paranasal sinuses",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.5.1",
+      "name": "Headache attributed to acute rhinosinusitis",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.5.2",
+      "name": "Headache attributed to chronic or recurring rhinosinusitis",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.6",
+      "name": "Headache attributed to disorder of the teeth or jaw",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.7",
+      "name": "Headache attributed to temporomandibular disorder (TMD)",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.8",
+      "name": "Head or facial pain attributed to inflammation of the stylohyoid ligament",
+      "context": "syndrome"
+    },
+    {
+      "code": "11.9",
+      "name": "Headache or facial pain attributed to other disorder of cranium, neck, eyes, ears, nose, sinuses, teeth, mouth or other facial or cervical structure",
+      "context": "syndrome"
+    },
+    {
+      "code": "12",
+      "name": "Headache attributed to psychiatric disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "12.1",
+      "name": "Headache attributed to somatization disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "12.2",
+      "name": "Headache attributed to psychotic disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "13",
+      "name": "Painful cranial neuropathies and other facial pains",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.1",
+      "name": "Trigeminal neuralgia",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.1.1",
+      "name": "Classical trigeminal neuralgia",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.1.1.1",
+      "name": "Classical trigeminal neuralgia, purely paroxysmal",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.1.1.2",
+      "name": "Classical trigeminal neuralgia with concomitant persistent facial pain",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.1.2",
+      "name": "Painful trigeminal neuropathy",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.1.2.1",
+      "name": "Painful trigeminal neuropathy attributed to acute Herpes zoster",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.1.2.2",
+      "name": "Post-herpetic trigeminal neuropathy",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.1.2.3",
+      "name": "Painful post-traumatic trigeminal neuropathy",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.1.2.4",
+      "name": "Painful trigeminal neuropathy attributed to multiple sclerosis (MS) plaque",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.1.2.5",
+      "name": "Painful trigeminal neuropathy attributed to space-occupying lesion",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.1.2.6",
+      "name": "Painful trigeminal neuropathy attributed to other disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.2",
+      "name": "Glossopharyngeal neuralgia",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.3",
+      "name": "Nervus intermedius (facial nerve) neuralgia",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.3.1",
+      "name": "Classical nervus intermedius neuralgia",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.3.2",
+      "name": "Nervus intermedius neuropathy attributed to Herpes zoster",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.4",
+      "name": "Occipital neuralgia",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.5",
+      "name": "Optic neuritis",
+      "context": "ocular_pain"
+    },
+    {
+      "code": "13.6",
+      "name": "Headache attributed to ischaemic ocular motor nerve palsy",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.7",
+      "name": "Tolosa-Hunt syndrome",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.8",
+      "name": "Paratrigeminal oculosympathetic (Raeder’s) syndrome",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.9",
+      "name": "Recurrent painful ophthalmoplegic neuropathy",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.10",
+      "name": "Burning mouth syndrome (BMS)",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.11",
+      "name": "Persistent idiopathic facial pain (PIFP)",
+      "context": "syndrome"
+    },
+    {
+      "code": "13.12",
+      "name": "Central neuropathic pain",
+      "context": "craniofacial_pain"
+    },
+    {
+      "code": "13.12.1",
+      "name": "Central neuropathic pain attributed to multiple sclerosis (MS)",
+      "context": "craniofacial_pain"
+    },
+    {
+      "code": "13.12.2",
+      "name": "Central post-stroke pain (CPSP)",
+      "context": "craniofacial_pain"
+    },
+    {
+      "code": "14",
+      "name": "Other headache disorders",
+      "context": "syndrome"
+    },
+    {
+      "code": "14.1",
+      "name": "Headache not elsewhere classified",
+      "context": "syndrome"
+    },
+    {
+      "code": "14.2",
+      "name": "Headache unspecified",
+      "context": "syndrome"
+    },
+    {
+      "code": "A1",
+      "name": "Migraine",
+      "context": "syndrome"
+    },
+    {
+      "code": "A1.1",
+      "name": "Migraine without aura",
+      "context": "syndrome"
+    },
+    {
+      "code": "A1.1.1",
+      "name": "Pure menstrual migraine without aura",
+      "context": "syndrome"
+    },
+    {
+      "code": "A1.1.2",
+      "name": "Menstrually related migraine without aura",
+      "context": "syndrome"
+    },
+    {
+      "code": "A1.1.3",
+      "name": "Non-menstrual migraine without aura",
+      "context": "syndrome"
+    },
+    {
+      "code": "A1.2",
+      "name": "Migraine with aura (alternative criteria)",
+      "context": "syndrome"
+    },
+    {
+      "code": "A1.2.1",
+      "name": "Migraine with typical aura (alternative criteria)",
+      "context": "syndrome"
+    },
+    {
+      "code": "A1.3",
+      "name": "Chronic migraine (alternative criteria)",
+      "context": "syndrome"
+    },
+    {
+      "code": "A1.3.1",
+      "name": "Chronic migraine with pain-free periods",
+      "context": "syndrome"
+    },
+    {
+      "code": "A1.3.2",
+      "name": "Chronic migraine with continuous pain",
+      "context": "syndrome"
+    },
+    {
+      "code": "A1.4",
+      "name": "Complications of migraine",
+      "context": "syndrome"
+    },
+    {
+      "code": "A1.4.5",
+      "name": "Migraine aura status",
+      "context": "syndrome"
+    },
+    {
+      "code": "A1.6",
+      "name": "Episodic syndromes that may be associated with migraine",
+      "context": "syndrome"
+    },
+    {
+      "code": "A1.6.4",
+      "name": "Infantile colic",
+      "context": "syndrome"
+    },
+    {
+      "code": "A1.6.5",
+      "name": "Alternating hemiplegia of childhood",
+      "context": "syndrome"
+    },
+    {
+      "code": "A1.6.6",
+      "name": "Vestibular migraine",
+      "context": "syndrome"
+    },
+    {
+      "code": "A2",
+      "name": "Tension-type headache (alternative criteria)",
+      "context": "syndrome"
+    },
+    {
+      "code": "A2.1",
+      "name": "Infrequent episodic tension-type headache (alternative criteria)",
+      "context": "syndrome"
+    },
+    {
+      "code": "A2.2",
+      "name": "Frequent episodic tension-type headache (alternative criteria)",
+      "context": "syndrome"
+    },
+    {
+      "code": "A2.3",
+      "name": "Chronic tension-type headache (alternative criteria)",
+      "context": "syndrome"
+    },
+    {
+      "code": "A3",
+      "name": "Trigeminal-autonomic cephalalgias (TACs)",
+      "context": "syndrome"
+    },
+    {
+      "code": "A3.6",
+      "name": "Undifferentiated trigeminal autonomic cephalalgia",
+      "context": "syndrome"
+    },
+    {
+      "code": "A4",
+      "name": "Other primary headache disorders",
+      "context": "syndrome"
+    },
+    {
+      "code": "A4.11",
+      "name": "Epicrania fugax",
+      "context": "syndrome"
+    },
+    {
+      "code": "A5",
+      "name": "Headache attributed to trauma or injury to the head and/or neck",
+      "context": "syndrome"
+    },
+    {
+      "code": "A5.1",
+      "name": "Acute headache attributed to traumatic injury to the head",
+      "context": "syndrome"
+    },
+    {
+      "code": "A5.1.1.1",
+      "name": "Delayed-onset acute headache attributed to moderate or severe traumatic injury to the head",
+      "context": "syndrome"
+    },
+    {
+      "code": "A5.1.2.1",
+      "name": "Delayed-onset acute headache attributed to mild traumatic injury to the head",
+      "context": "syndrome"
+    },
+    {
+      "code": "A5.2",
+      "name": "Persistent headache attributed to traumatic injury to the head",
+      "context": "syndrome"
+    },
+    {
+      "code": "A5.2.1.1",
+      "name": "Delayed-onset persistent headache attributed to moderate or severe traumatic injury to the head",
+      "context": "syndrome"
+    },
+    {
+      "code": "A5.2.2.1",
+      "name": "Delayed-onset persistent headache attributed to mild traumatic injury to the head",
+      "context": "syndrome"
+    },
+    {
+      "code": "A5.7",
+      "name": "Headache attributed to radiosurgery of the brain",
+      "context": "syndrome"
+    },
+    {
+      "code": "A5.8",
+      "name": "Acute headache attributed to other trauma or injury to the head and/or neck",
+      "context": "syndrome"
+    },
+    {
+      "code": "A5.9",
+      "name": "Persistent headache attributed to other trauma or injury to the head and/or neck",
+      "context": "syndrome"
+    },
+    {
+      "code": "A6",
+      "name": "Headache attributed to cranial or cervical vascular disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "A6.10",
+      "name": "Persistent headache attributed to past cranial or cervical vascular disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "A7",
+      "name": "Headache attributed to non-vascular intracranial disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "A7.6",
+      "name": "Headache attributed to epileptic seizure",
+      "context": "syndrome"
+    },
+    {
+      "code": "A7.6.3",
+      "name": "Post-electroconvulsive therapy (ECT) headache",
+      "context": "syndrome"
+    },
+    {
+      "code": "A7.9",
+      "name": "Persistent headache attributed to past non-vascular intracranial disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "A8",
+      "name": "Headache attributed to a substance or its withdrawal",
+      "context": "syndrome"
+    },
+    {
+      "code": "A8.4",
+      "name": "Persistent headache attributed to past use of or exposure to a substance",
+      "context": "syndrome"
+    },
+    {
+      "code": "A9",
+      "name": "Headache attributed to infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "A9.1",
+      "name": "Headache attributed to intracranial infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "A9.1.3.3",
+      "name": "Persistent headache attributed to past intracranial fungal or other parasitic infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "A9.1.6",
+      "name": "Headache attributed to other infective space-occupying lesion",
+      "context": "syndrome"
+    },
+    {
+      "code": "A9.3",
+      "name": "Headache attributed to human immunodeficiency virus (HIV) infection",
+      "context": "syndrome"
+    },
+    {
+      "code": "A10",
+      "name": "Headache attributed to disorder of homoeostasis",
+      "context": "syndrome"
+    },
+    {
+      "code": "A10.7",
+      "name": "Head and/or neck pain attributed to orthostatic (postural) hypotension",
+      "context": "syndrome"
+    },
+    {
+      "code": "A10.8",
+      "name": "Headache attributed to other disorder of homeostasis",
+      "context": "syndrome"
+    },
+    {
+      "code": "A10.8.1",
+      "name": "Headache attributed to travel in space",
+      "context": "syndrome"
+    },
+    {
+      "code": "A10.8.2",
+      "name": "Headache attributed to other metabolic or systemic disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "A10.9",
+      "name": "Persistent headache attributed to past disorder of homoeostasis",
+      "context": "syndrome"
+    },
+    {
+      "code": "A11",
+      "name": "Headache or facial pain attributed to disorder of the cranium, neck, eyes, ears, nose, sinuses, teeth, mouth or other facial or cervical structure",
+      "context": "syndrome"
+    },
+    {
+      "code": "A11.2",
+      "name": "Headache attributed to disorder of the neck",
+      "context": "syndrome"
+    },
+    {
+      "code": "A11.2.4",
+      "name": "Headache attributed to upper cervical radiculopathy",
+      "context": "syndrome"
+    },
+    {
+      "code": "A11.2.5",
+      "name": "Headache attributed to cervical myofascial pain",
+      "context": "syndrome"
+    },
+    {
+      "code": "A11.5",
+      "name": "Headache attributed to disorder of the nose or paranasal sinuses",
+      "context": "syndrome"
+    },
+    {
+      "code": "A11.5.3",
+      "name": "Headache attributed to disorder of the nasal mucosa, turbinates or septum",
+      "context": "syndrome"
+    },
+    {
+      "code": "A12",
+      "name": "Headache attributed to psychiatric disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "A12.3",
+      "name": "Headache attributed to depressive disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "A12.4",
+      "name": "Headache attributed to separation anxiety disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "A12.5",
+      "name": "Headache attributed to panic disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "A12.6",
+      "name": "Headache attributed to specific phobia",
+      "context": "syndrome"
+    },
+    {
+      "code": "A12.7",
+      "name": "Headache attributed to social anxiety disorder (social phobia)",
+      "context": "syndrome"
+    },
+    {
+      "code": "A12.8",
+      "name": "Headache attributed to generalized anxiety disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "A12.9",
+      "name": "Headache attributed to post-traumatic stress disorder",
+      "context": "syndrome"
+    },
+    {
+      "code": "A12.10",
+      "name": "Headache attributed to acute stress disorder",
+      "context": "syndrome"
+    }
+  ]
+}

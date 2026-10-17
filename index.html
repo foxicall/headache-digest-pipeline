@@ -83,7 +83,26 @@
           <span class="section-aside">每日回查近 30 天 · 循證閱讀</span>
         </div>
         <p id="jif-notice" class="overview-note">已核實 JIF > 15 可收錄；JIF < 15 必須為 PubMed 已標註的 clinical trial。</p>
-        <p class="overview-note">收錄頭痛、偏頭痛及三叉神經痛主題。期刊與學會分類不豁免 JIF 門檻；THS 為台灣頭痛學會。</p>
+        <p class="overview-note">收錄原發性與次發性頭痛、疼痛性顱神經病變、顏面痛及所列附錄症候群。皆須通過 JIF／clinical trial 條件；THS 為台灣頭痛學會。</p>
+        <details id="syndrome-catalog" class="syndrome-catalog">
+          <summary>收錄症候群目錄 <span>ICHD-3 beta · 含附錄</span></summary>
+          <p class="overview-note">依提供的 ICHD-3 beta（2013）清單列出收錄範圍，保留原編碼；與 2018 正式版編碼不同。目錄項目不代表已有符合條件的近期文獻，也不代表文章已完成診斷分類。</p>
+          <p class="overview-note">次發性頭痛須以頭痛為研究主題；視神經炎須涉及疼痛，中樞神經痛須涉及顱顏面區域。一般中風、感染、腫瘤或其他疾病研究不會因病名相符就收錄。</p>
+          <div class="catalog-controls">
+            <label for="syndrome-search">搜尋症候群或編碼<input id="syndrome-search" type="search" placeholder="例如：13.4、occipital、偏頭痛" /></label>
+            <label for="syndrome-part">分類範圍<select id="syndrome-part">
+              <option value="all">全部分類</option>
+              <option value="primary">原發性頭痛 · 1–4</option>
+              <option value="secondary">次發性頭痛 · 5–12</option>
+              <option value="cranial">顱神經病變、顏面痛及其他頭痛 · 13–14</option>
+              <option value="appendix">附錄研究診斷分類 · A1–A12</option>
+            </select></label>
+          </div>
+          <p id="syndrome-status" class="overview-note" role="status">正在讀取症候群目錄…</p>
+          <button id="syndrome-retry" class="subtle-button" hidden>重新載入目錄</button>
+          <div id="syndrome-groups"></div>
+          <p class="overview-note">參考：<a href="https://ichd-3.org/classification-outline/" target="_blank" rel="noopener noreferrer">ICHD-3 正式版分類 ↗</a></p>
+        </details>
         <div class="toolbar">
           <label class="search-wrap"
             ><span aria-hidden="true">⌕</span

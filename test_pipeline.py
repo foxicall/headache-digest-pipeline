@@ -2,6 +2,7 @@
 
 from datetime import date
 import json
+import re
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock, call, patch
@@ -14,6 +15,7 @@ from src.crawler import (
     Crawler, CrawlResult, DEFAULT_QUERY, SOCIETY_QUERY, SourceError, TARGET_JOURNALS,
     TARGET_SOCIETIES, classify_societies, is_headache_topic, parse_pubmed, parse_search,
 )
+from src.headache_scope import CATALOG, HEADACHE_QUERY, SEARCH_TERMS, SyndromeCatalog
 from src.main import load_records, main, run_pipeline, save_records
 from src.models import Article, ArticleMetadata, PaperRecord, StructuredSummary
 from src.summarizer import DEFAULT_MODEL, FALLBACK_NOTICE, Summarizer, SummaryError, is_fallback
@@ -195,24 +197,25 @@ def test_search_targets_all_requested_journals_and_societies():
 @patch("src.crawler.time.sleep")
 def test_ncbi_requests_are_keyless_xml_and_paced(sleep):
     session = Mock()
-    session.get.side_effect = [
-        response(content=b"<eSearchResult><IdList><Id>12345</Id></IdList></eSearchResult>"),
-        response(content=PUBMED_XML.replace(b"<Title>Cephalalgia</Title>", b"<Title>JAMA Neurology</Title>")),
-    ]
+    session.post.return_value = response(content=b"<eSearchResult><IdList><Id>12345</Id></IdList></eSearchResult>")
+    session.get.return_value = response(content=PUBMED_XML.replace(b"<Title>Cephalalgia</Title>", b"<Title>JAMA Neurology</Title>"))
     result = Crawler(session=session).fetch_pubmed(date(2026, 10, 11), date(2026, 10, 17))
     assert len(result) == 1
     assert sleep.call_args_list == [call(0.4), call(0.4)]
-    for request in session.get.call_args_list:
-        assert request.kwargs["params"]["retmode"] == "xml"
-        assert "api_key" not in request.kwargs["params"]
+    for request in [session.post.call_args, session.get.call_args]:
+        params = request.kwargs.get("data", request.kwargs.get("params"))
+        assert params["retmode"] == "xml"
+        assert "api_key" not in params
         assert request.kwargs["timeout"] == (10, 45)
-    assert session.get.call_args_list[0].kwargs["params"]["datetype"] == "pdat"
+    assert session.post.call_args.kwargs["data"]["datetype"] == "pdat"
+    assert session.post.call_args.args[0].endswith('/esearch.fcgi')
+    assert 'params' not in session.post.call_args.kwargs
 
 
 @patch("src.crawler.time.sleep")
 def test_retry_requests_also_obey_rate_limit(sleep):
     session = Mock()
-    session.get.side_effect = [
+    session.post.side_effect = [
         response(status=429, headers={"Retry-After": "3"}),
         response(content=b"<eSearchResult><IdList/></eSearchResult>"),
     ]
@@ -223,15 +226,15 @@ def test_retry_requests_also_obey_rate_limit(sleep):
 @patch("src.crawler.time.sleep")
 def test_network_retries_bounded_and_permanent_denial_not_retried(sleep):
     session = Mock()
-    session.get.side_effect = requests.Timeout("timeout")
+    session.post.side_effect = requests.Timeout("timeout")
     with pytest.raises(SourceError):
-        Crawler(session=session)._get("esearch.fcgi", params={})
-    assert session.get.call_count == 3
-    session.get.reset_mock(side_effect=True)
-    session.get.return_value = response(status=403)
+        Crawler(session=session)._request("esearch.fcgi", params={})
+    assert session.post.call_count == 3
+    session.post.reset_mock(side_effect=True)
+    session.post.return_value = response(status=403)
     with pytest.raises(SourceError):
-        Crawler(session=session)._get("esearch.fcgi", params={})
-    assert session.get.call_count == 1
+        Crawler(session=session)._request("esearch.fcgi", params={})
+    assert session.post.call_count == 1
 
 
 @pytest.mark.parametrize("key", [None, "", " ", "\n\t"])
@@ -441,7 +444,9 @@ def test_default_query_requires_topic_and_abstract_across_all_sources():
     assert DEFAULT_QUERY.startswith('((')
     assert ') AND (migraine[Title/Abstract]' in DEFAULT_QUERY
     assert DEFAULT_QUERY.endswith('AND hasabstract[text])')
-    assert 'trigeminal[Title/Abstract]' not in DEFAULT_QUERY
+    # Generic trigeminal appears only as a craniofacial-location qualifier for
+    # central neuropathic pain, never as an independent topic branch.
+    assert 'OR trigeminal[Title/Abstract])))' in DEFAULT_QUERY
     assert '"trigeminal neuralgia"[Title/Abstract]' in DEFAULT_QUERY
     assert '"JAMA Neurology"[Journal]' in DEFAULT_QUERY
     assert '"Cephalalgia"[Journal]' in DEFAULT_QUERY
@@ -561,8 +566,8 @@ def test_pubmed_objective_category_without_label_supports_scope_check():
 def test_custom_search_cannot_bypass_topic_screen(sleep):
     session = Mock()
     irrelevant = PUBMED_XML.replace(b'A <i>migraine</i> trial', b'Trigeminal nerve anatomy')
-    session.get.side_effect = [response(content=b'<eSearchResult><IdList><Id>12345</Id></IdList></eSearchResult>'),
-                               response(content=irrelevant)]
+    session.post.return_value = response(content=b'<eSearchResult><IdList><Id>12345</Id></IdList></eSearchResult>')
+    session.get.return_value = response(content=irrelevant)
     assert Crawler(session).fetch_pubmed(date(2026, 9, 18), date(2026, 10, 17), query="neurology") == []
 
 
@@ -658,11 +663,11 @@ def test_jif_empty_allowlist_cannot_turn_into_unrestricted_query():
 @patch('src.crawler.time.sleep')
 def test_custom_query_and_society_cannot_bypass_jif_gate(sleep):
     session = Mock()
-    session.get.side_effect = [response(content=b'<eSearchResult><IdList><Id>12345</Id></IdList></eSearchResult>'),
-                               response(content=PUBMED_XML.replace(b"Randomized Controlled Trial", b"Observational Study"))]
+    session.post.return_value = response(content=b'<eSearchResult><IdList><Id>12345</Id></IdList></eSearchResult>')
+    session.get.return_value = response(content=PUBMED_XML.replace(b"Randomized Controlled Trial", b"Observational Study"))
     assert Crawler(session).fetch_pubmed(date(2026, 9, 18), date(2026, 10, 17), query='headache') == []
-    assert '(headache) AND (' in session.get.call_args_list[0].kwargs['params']['term']
-    assert '"JAMA Neurology"[Journal]' in session.get.call_args_list[0].kwargs['params']['term']
+    assert '(headache) AND (' in session.post.call_args.kwargs['data']['term']
+    assert '"JAMA Neurology"[Journal]' in session.post.call_args.kwargs['data']['term']
 
 
 def test_pipeline_removes_nonqualifying_archive_seeds_and_never_calls_ai(tmp_path):
@@ -803,12 +808,12 @@ def test_pubmed_query_keeps_low_jif_and_trial_requirement_in_same_branch():
 @patch('src.crawler.time.sleep')
 def test_crawler_retains_verified_lower_jif_trial(sleep):
     session = Mock()
-    session.get.side_effect = [response(content=b'<eSearchResult><IdList><Id>12345</Id></IdList></eSearchResult>'),
-                               response(content=PUBMED_XML)]
+    session.post.return_value = response(content=b'<eSearchResult><IdList><Id>12345</Id></IdList></eSearchResult>')
+    session.get.return_value = response(content=PUBMED_XML)
     fetched = Crawler(session).fetch_pubmed(date(2026, 9, 18), date(2026, 10, 17))
     assert len(fetched) == 1
     assert fetched[0].metadata.study_design == 'Randomized Controlled Trial'
-    term = session.get.call_args_list[0].kwargs['params']['term']
+    term = session.post.call_args.kwargs['data']['term']
     assert term.count('"JAMA Neurology"[Journal]') == 1
 
 
@@ -838,3 +843,109 @@ def test_low_jif_trial_must_still_pass_topic_gate_before_ai(tmp_path):
     stats = run_pipeline(tmp_path / 'papers.json', crawler=mock_crawler([trial]), summarizer=ai)
     assert (stats.skipped_off_topic, stats.saved) == (1, 0)
     ai.client.beta.chat.completions.parse.assert_not_called()
+
+
+# Scope fixtures describe research topics, not patient diagnosis criteria.
+
+
+@pytest.mark.parametrize('entry', CATALOG.entries, ids=lambda entry: entry.code)
+def test_every_supplied_syndrome_can_be_retrieved_with_appropriate_context(entry):
+    context = {'migraine': 'Migraine-related ', 'headache': 'Headache in ',
+               'ocular_pain': 'Ocular pain in ', 'craniofacial_pain': 'Facial pain in ',
+               'syndrome': ''}[entry.context]
+    title = context + entry.name + ': diagnosis and treatment'
+    assert is_headache_topic(title, 'METHODS: We reviewed the clinical evidence.')
+    # Every catalog item has a lexical route into the search, independently of
+    # the post-fetch screen. PubMed ultimately decides indexed word matching.
+    normalized = re.sub(r'[^a-z0-9*]+', ' ', title.lower()).strip()
+    patterns = [r'\b' + re.escape(re.sub(r'[^a-z0-9*]+', ' ', term.lower())).replace(r'\*', r'\w*') + r'\b'
+                for term in SEARCH_TERMS]
+    lexical_route = any(re.search(pattern, normalized) for pattern in patterns)
+    if entry.context == 'ocular_pain':
+        lexical_route = 'optic neuritis' in normalized and 'pain' in normalized
+        assert '"optic neuritis"[Title/Abstract]' in HEADACHE_QUERY
+        assert 'AND pain*[Title/Abstract]' in HEADACHE_QUERY
+    assert lexical_route, entry.code
+
+
+def test_syndrome_catalog_preserves_user_beta_version_and_all_groups():
+    assert len(CATALOG.entries) == 368
+    assert len(CATALOG.groups) == 26
+    assert {g.code for g in CATALOG.groups} == {str(i) for i in range(1, 15)} | {'A'+str(i) for i in range(1, 13)}
+    entries = {entry.code: entry for entry in CATALOG.entries}
+    assert entries['13.5'].name == 'Optic neuritis'  # Beta, not final ICHD-3's numbering.
+    assert entries['A12.10'].name == 'Headache attributed to acute stress disorder'
+    assert entries['A1.6.6'].name == 'Vestibular migraine'
+    assert '[span_' not in CATALOG.model_dump_json()
+    data = CATALOG.model_dump(mode='json')
+    data['entries'].append(data['entries'][0])
+    with pytest.raises(ValidationError, match='unique'):
+        SyndromeCatalog.model_validate(data)
+
+
+@pytest.mark.parametrize('title,abstract', [
+    ('Glossopharyngeal neuralgia treatment', 'A clinical trial.'),
+    ('Painful post-traumatic trigeminal neuropathy', 'A clinical trial.'),
+    ('Occipital neuralgia', 'A clinical trial.'),
+    ('Burning mouth syndrome', 'A clinical trial.'),
+    ('Tolosa–Hunt syndrome', 'A clinical report.'),
+    ("Raeder’s syndrome", 'A clinical report.'),
+    ('Status migrainosus', 'A clinical trial.'),
+    ('Epicrania fugax', 'A clinical report.'),
+    ('Cyclic vomiting syndrome', 'A clinical trial.'),
+    ('Infantile colic', 'A clinical trial.'),
+    ('Alternating hemiplegia of childhood', 'A clinical trial.'),
+    ('Central post-stroke pain affecting the face', 'A clinical study.'),
+    ('Analgesia in optic neuritis', 'A clinical trial.'),
+    ('A preventive intervention', 'OBJECTIVE: To reduce post-dural puncture headache.'),
+    ('A neuroimmunology study', 'OBJECTIVES: To assess ocular pain in optic neuritis.'),
+    ('A behavioral intervention', 'PURPOSE: To assess persistent idiopathic facial pain.'),
+    ('A headache study', 'OBJECTIVE: Assess headache attributed to psychiatric disorder.'),
+])
+def test_expanded_scope_accepts_named_syndromes_and_focused_objectives(title, abstract):
+    assert is_headache_topic(title, abstract)
+
+
+@pytest.mark.parametrize('title,abstract', [
+    ('Stroke thrombectomy outcomes', 'OBJECTIVE: To evaluate functional recovery.\nRESULTS: Symptoms included headache.'),
+    ('Optic neuritis visual recovery', 'OBJECTIVE: To assess visual acuity.\nRESULTS: Some patients reported ocular pain.'),
+    ('Central post-stroke pain in the lower limb', 'OBJECTIVE: To assess foot pain.'),
+    ('CADASIL genetics', 'OBJECTIVE: To identify mutations.\nBACKGROUND: Migraine is common in CADASIL.'),
+    ('MELAS outcomes', 'OBJECTIVE: To assess survival.\nBACKGROUND: Headache may occur.'),
+    ('Recurrent gastrointestinal disturbance', 'OBJECTIVE: To assess infectious diarrhea.'),
+    ('Benign paroxysmal positional vertigo', 'OBJECTIVE: To assess repositioning maneuvers.'),
+    ('Infant feeding', 'RESULTS: Adverse events included infantile colic and diarrhea.'),
+    ('Facial nerve anatomy', 'A study of trigeminal ganglion neurons.'),
+    ('A cancer trial', 'OBJECTIVE: To evaluate adverse events including burning mouth syndrome.'),
+])
+def test_expanded_scope_does_not_admit_underlying_diseases_or_incidental_symptoms(title, abstract):
+    assert not is_headache_topic(title, abstract)
+
+
+@pytest.mark.parametrize('journal,design,accepted', [
+    ('Headache', 'Clinical Trial', True), ('Headache', 'Observational Study', False),
+    ('JAMA Neurology', 'Observational Study', True), ('Unknown journal', 'Clinical Trial', False),
+])
+def test_expanded_scope_still_obeys_jif_and_trial_policy(tmp_path, journal, design, accepted):
+    source = article()
+    source.metadata.title = 'Treatment of burning mouth syndrome'
+    source.metadata.source_society_or_journal = journal
+    source.metadata.study_design = design
+    ai = ai_summarizer()
+    stats = run_pipeline(tmp_path/'papers.json', crawler=mock_crawler([source]), summarizer=ai)
+    assert stats.saved == int(accepted)
+    assert ai.client.beta.chat.completions.parse.call_count == int(accepted)
+
+
+@patch('src.crawler.time.sleep')
+def test_long_custom_search_is_sent_intact_in_post_body(sleep):
+    session = Mock()
+    session.post.return_value = response(content=b'<eSearchResult><IdList/></eSearchResult>')
+    query = '(' + ' OR '.join(f'"headache syndrome {n}"[Title/Abstract]' for n in range(300)) + ')'
+    assert Crawler(session).fetch_pubmed(date.today(), date.today(), query=query) == []
+    request = session.post.call_args
+    assert query in request.kwargs['data']['term']
+    assert len(request.kwargs['data']['term']) > 10000
+    assert request.args[0].endswith('/esearch.fcgi')
+    assert '?' not in request.args[0]
+    session.get.assert_not_called()

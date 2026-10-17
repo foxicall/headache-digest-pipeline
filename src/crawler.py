@@ -11,15 +11,12 @@ import requests
 
 from src.models import Article, ArticleMetadata
 from src.journal_metrics import load_policy
+from src.headache_scope import HEADACHE_QUERY, is_headache_topic
 
 LOGGER = logging.getLogger(__name__)
 EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 DEFAULT_LOOKBACK_DAYS = 30
-HEADACHE_QUERY = ('(migraine[Title/Abstract] OR headache[Title/Abstract] '
-                  'OR cephalalgia[Title/Abstract] OR hemicrania[Title/Abstract] '
-                  'OR "trigeminal neuralgia"[Title/Abstract] '
-                  'OR "trigeminal autonomic cephalalgias"[Title/Abstract] '
-                  'OR SUNCT[Title/Abstract] OR SUNA[Title/Abstract])')
+
 TARGET_JOURNALS = (
     "Cephalalgia", "Cephalalgia Reports", "The Journal of Headache and Pain", "J Headache Pain",
     "Annals of Neurology", "Neurology", "Headache", "Japanese Journal of Headache",
@@ -38,7 +35,7 @@ SOCIETY_QUERY = "((" + " OR ".join(
     + [JAPAN_AFFILIATION_QUERY]
 ) + ") AND " + HEADACHE_QUERY + " AND hasabstract[text])"
 # The strict JIF requirement supersedes the old journal-only source restriction.
-# Society grouping is retained, but cannot grant admission to a lower-JIF source.
+# Society grouping is retained; lower-JIF sources still require a clinical trial.
 DEFAULT_QUERY = "(" + load_policy().pubmed_clause() + " AND " + HEADACHE_QUERY + " AND hasabstract[text])"
 
 # These are requested source groups, not claims that every associated journal
@@ -72,60 +69,6 @@ def classify_societies(journal: str, title="", abstract="", affiliations=(), aut
         groups.add("Japanese Headache Society")
     # Country words such as Chinese/China never establish Taiwan affiliation.
     return [name for name in JOURNAL_GROUPS if name in groups]
-
-
-TOPIC = re.compile(r"\b(?:migrain(?:e|es|ous)|headaches?|cephalalgias?|hemicrania|"
-                   r"trigeminal[-\s]+neuralgia|trigeminal autonomic cephalalgias?|SUNCT|SUNA)\b", re.I)
-INCIDENTAL = re.compile(r"(?:symptoms?|side effects?|adverse (?:events?|effects?|reactions?))\s+"
-                        r"(?:\w+\s+){0,3}(?:included?|including|such as|were|are|:)", re.I)
-GOAL = re.compile(r"\b(?:we (?:aim(?:ed)?|sought)|(?:this|the) study (?:aim(?:s|ed)?|sought)|"
-                  r"(?:our |the )?(?:objectives?|aims?|purposes?) (?:of [^.!?]{0,100}? )?(?:was|were|is|are)|"
-                  r"we (?:investigated|evaluated|examined|assessed|compared|studied))\b", re.I)
-PRIMARY_OUTCOME = re.compile(r"\bprimary (?:outcomes?|endpoints?)\b", re.I)
-MIGRAINE_THERAPY = re.compile(r"\b(?:erenumab|fremanezumab|galcanezumab|eptinezumab|"
-                              r"rimegepant|ubrogepant|atogepant|zavegepant|lasmiditan|"
-                              r"anti[- ]CGRP|CGRP[- ](?:monoclonal antibodies|mAbs))\b", re.I)
-MIGRAINE_CONTEXT = re.compile(r"(?:treatment|prevention) of (?:migraine|cluster headache)|"
-                              r"migraine (?:prevention|treatment)|"
-                              r"patients? with (?:(?:episodic|chronic) )?migraine", re.I)
-
-
-def is_headache_topic(title: str, abstract: str) -> bool:
-    """Conservative, keyless topic screen; journal and affiliations are not evidence.
-
-    Accept a title topic, an explicit study objective/primary outcome, or a
-    sustained unstructured focus. Named migraine therapies need migraine context.
-    Generic trigeminal anatomy and isolated symptom/adverse-event mentions fail.
-    This transparent lexical screen favors precision over exhaustive retrieval.
-    """
-    # Clinical-reasoning titles often enumerate symptoms of an unrelated disease.
-    symptom_list_title = bool(re.search(r"\b(?:man|woman|boy|girl|patient|child) with\b", title, re.I)
-                              and ("," in title or re.search(r"\band\b", title, re.I)))
-    if TOPIC.search(title) and not INCIDENTAL.search(title) and not symptom_list_title:
-        return True
-    therapy = MIGRAINE_THERAPY.search(title)
-    if therapy and MIGRAINE_CONTEXT.search(abstract):
-        return True
-    sections = abstract.splitlines()
-    structured = any(re.match(r"^[A-Z][A-Z /&-]+:", section) for section in sections)
-    for section in sections:
-        label, separator, body = section.partition(":")
-        if separator and re.fullmatch(r"(?:OBJECTIVES?|AIMS?|PURPOSE)", label, re.I):
-            if any(TOPIC.search(sentence) and not INCIDENTAL.search(sentence)
-                   for sentence in re.split(r"(?<=[.!?])\s+", body)):
-                return True
-        for sentence in re.split(r"(?<=[.!?])\s+", section):
-            goal = GOAL.search(sentence) or PRIMARY_OUTCOME.search(sentence)
-            if goal and TOPIC.search(sentence[goal.start():]) and not INCIDENTAL.search(sentence):
-                return True
-    if not structured:
-        sentences = re.split(r"(?<=[.!?])\s+", abstract)
-        focused = [sentence for sentence in sentences if TOPIC.search(sentence) and not INCIDENTAL.search(sentence)]
-        # A single symptom in a case report is insufficient. The opening topic
-        # must be developed again, e.g. migraine aura and its pathophysiology.
-        return bool(sentences and TOPIC.search(sentences[0])
-                    and not INCIDENTAL.search(sentences[0]) and len(focused) >= 2)
-    return False
 
 
 class SourceError(RuntimeError):
@@ -236,12 +179,17 @@ class Crawler:
         self.policy = policy or load_policy()
         self.session.headers.update({"User-Agent": "HeadacheDigest/2.0 (keyless literature reader)"})
 
-    def _get(self, endpoint, *, params):
+    def _request(self, endpoint, *, params):
         for attempt in range(3):
             # Every E-utilities request, including retries, stays below 3/sec.
             time.sleep(0.4)
             try:
-                response = self.session.get(EUTILS + endpoint, params=params, timeout=(10, 45))
+                # ESearch uses form POST so the complete syndrome query is not
+                # truncated by URL/proxy length limits. EFetch remains GET.
+                if endpoint == "esearch.fcgi":
+                    response = self.session.post(EUTILS + endpoint, data=params, timeout=(10, 45))
+                else:
+                    response = self.session.get(EUTILS + endpoint, params=params, timeout=(10, 45))
                 response.raise_for_status()
                 return response
             except requests.RequestException as exc:
@@ -263,7 +211,7 @@ class Crawler:
         if query == DEFAULT_QUERY:
             query = f"{HEADACHE_QUERY} AND hasabstract[text]"
         restricted_query = f"({query}) AND {self.policy.pubmed_clause()}"
-        ids = parse_search(self._get("esearch.fcgi", params={
+        ids = parse_search(self._request("esearch.fcgi", params={
             "db": "pubmed", "term": restricted_query, "retmode": "xml", "retmax": limit,
             "sort": "pub_date", "datetype": "pdat", "mindate": since.strftime("%Y/%m/%d"),
             "maxdate": today.strftime("%Y/%m/%d"), "tool": "headache_digest",
@@ -279,7 +227,7 @@ class Crawler:
         """Fetch source evidence without filtering, also useful for archive audits."""
         articles = []
         for offset in range(0, len(ids), 100):
-            payload = self._get("efetch.fcgi", params={
+            payload = self._request("efetch.fcgi", params={
                 "db": "pubmed", "id": ",".join(ids[offset:offset + 100]),
                 "retmode": "xml", "tool": "headache_digest",
             }).content

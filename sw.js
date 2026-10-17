@@ -2,7 +2,7 @@
 
 // Scope-specific cache names keep different GitHub Pages project sites isolated.
 const PREFIX = `headache-digest:${self.registration.scope}:`;
-const CACHE = `${PREFIX}v6`;
+const CACHE = `${PREFIX}v7`;
 const SHELL = [
   "./",
   "./index.html",
@@ -17,6 +17,7 @@ const SHELL = [
 const DATA_URL = new URL("./data/headache_papers.json", self.registration.scope)
   .href;
 const METRICS_URL = new URL("./data/journal_metrics.json", self.registration.scope).href;
+const SYNDROMES_URL = new URL("./data/headache_syndromes.json", self.registration.scope).href;
 const SHELL_URLS = new Set(
   SHELL.map((path) => new URL(path, self.registration.scope).href),
 );
@@ -46,7 +47,7 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   const url = new URL(event.request.url);
-  const isData = url.href === DATA_URL || url.href === METRICS_URL;
+  const isData = [DATA_URL, METRICS_URL, SYNDROMES_URL].includes(url.href);
   if (!isData && !SHELL_URLS.has(url.href)) return;
   event.respondWith(
     (async () => {
@@ -57,7 +58,9 @@ self.addEventListener("fetch", (event) => {
         if (!response.ok) throw new Error("Network response failed");
         if (isData) {
           const payload = await response.clone().json();
-          if (url.href === DATA_URL ? !Array.isArray(payload) : payload?.metric !== "Journal Impact Factor")
+          if (url.href === DATA_URL ? !Array.isArray(payload)
+              : url.href === METRICS_URL ? payload?.metric !== "Journal Impact Factor"
+              : !Array.isArray(payload?.entries) || !Array.isArray(payload?.groups))
             throw new Error("Invalid data response");
         }
         await cache.put(event.request, response.clone());

@@ -377,7 +377,7 @@ function render() {
     : "目前沒有符合收錄條件的文獻";
   byId("empty-message").textContent = hasData
     ? "試試其他關鍵字，或切換期刊與學會。"
-    : "收錄 JIF > 15 的文獻，或 JIF < 15 且 PubMed 已標註為 clinical trial 的文獻；皆須符合頭痛、偏頭痛或三叉神經痛主題。";
+    : "收錄 JIF > 15 的文獻，或 JIF < 15 且 PubMed 已標註為 clinical trial 的文獻；皆須符合症候群目錄的研究主題範圍。";
   byId("clear-search").hidden = !hasData;
 }
 
@@ -449,6 +449,86 @@ async function loadPapers() {
   }
 }
 
+let syndromeCatalog = null;
+let syndromeCached = false;
+
+function validateSyndromes(data) {
+  const invalid = () => { throw new Error("症候群目錄格式有誤，請稍後重試。"); };
+  if (data?.edition !== "ICHD-3 beta (2013), user-supplied scope" ||
+      !Array.isArray(data.entries) || !data.entries.length || !Array.isArray(data.groups) || !data.groups.length) invalid();
+  const groups = new Set();
+  for (const group of data.groups) {
+    if (!/^A?(?:[1-9]|1[0-4])$/.test(group.code) || !validText(group.label) || groups.has(group.code)) invalid();
+    groups.add(group.code);
+  }
+  const ids = new Set();
+  for (const entry of data.entries) {
+    if (!/^A?(?:[1-9]|1[0-4])(?:\.\d+)*$/.test(entry.code) || !validText(entry.name) ||
+        !["syndrome", "migraine", "headache", "ocular_pain", "craniofacial_pain"].includes(entry.context) ||
+        ids.has(entry.code) || !groups.has(entry.code.split(".")[0])) invalid();
+    ids.add(entry.code);
+  }
+  if ([...groups].some((code) => !ids.has(code))) invalid();
+  return data;
+}
+
+function renderSyndromes() {
+  if (!syndromeCatalog) return;
+  const query = byId("syndrome-search").value.trim().toLowerCase();
+  const part = byId("syndrome-part").value;
+  let count = 0;
+  const sections = [];
+  for (const group of syndromeCatalog.groups) {
+    const appendix = group.code.startsWith("A");
+    const number = Number(group.code);
+    const groupPart = appendix ? "appendix" : number <= 4 ? "primary" : number <= 12 ? "secondary" : "cranial";
+    if (part !== "all" && part !== groupPart) continue;
+    const entries = syndromeCatalog.entries.filter((entry) => entry.code.split(".")[0] === group.code &&
+      (!query || `${entry.code} ${entry.name} ${group.label}`.toLowerCase().includes(query)));
+    if (!entries.length) continue;
+    count += entries.length;
+    const section = element("details", "syndrome-group");
+    section.open = Boolean(query);
+    section.append(element("summary", "", `${group.code} · ${group.label}（${entries.length}）`));
+    const list = element("ul", "syndrome-list");
+    for (const entry of entries) {
+      const row = element("li", "syndrome-entry");
+      row.dataset.code = entry.code;
+      row.style.setProperty("--depth", Math.min(entry.code.split(".").length - 1, 4));
+      row.append(element("span", "syndrome-code", entry.code), element("span", "", entry.name));
+      list.append(row);
+    }
+    section.append(list);
+    sections.push(section);
+  }
+  byId("syndrome-groups").replaceChildren(...sections);
+  byId("syndrome-status").textContent = `${count} / ${syndromeCatalog.entries.length} 個分類條目（含主分類與附錄；非文獻篇數）` +
+    (count ? "" : " · 找不到符合的症候群") + (syndromeCached ? " · 裝置快取" : "");
+}
+
+async function loadSyndromes() {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 20000);
+  byId("syndrome-retry").hidden = true;
+  try {
+    const response = await fetch("./data/headache_syndromes.json", { cache: "no-store", signal: controller.signal });
+    if (!response.ok) throw new Error("症候群目錄暫時無法取得。文獻書架仍可使用。");
+    syndromeCatalog = validateSyndromes(await response.json());
+    syndromeCached = response.headers.get("X-Digest-Cache") === "offline";
+    renderSyndromes();
+  } catch (error) {
+    syndromeCatalog = null;
+    byId("syndrome-groups").replaceChildren();
+    byId("syndrome-status").textContent = error.name === "AbortError" ? "讀取目錄逾時，請重試。" : error.message;
+    byId("syndrome-retry").hidden = false;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+byId("syndrome-search").addEventListener("input", renderSyndromes);
+byId("syndrome-part").addEventListener("change", renderSyndromes);
+byId("syndrome-retry").addEventListener("click", loadSyndromes);
 byId("search").addEventListener("input", () => {
   state.visible = 20;
   render();
@@ -501,6 +581,6 @@ async function boot() {
       /* The online reader also works without service worker support. */
     }
   }
-  await loadPapers();
+  await Promise.all([loadPapers(), loadSyndromes()]);
 }
 boot();

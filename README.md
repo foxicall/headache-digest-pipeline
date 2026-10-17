@@ -89,15 +89,15 @@ Existing JSON is validated before network work. Deduplication covers the saved a
 
 ## Daily GitHub Actions and Pages
 
-After merging the workflow to `main`, the daily schedule is `0 0 * * *`: **00:00 UTC / 08:00 Asia/Taipei**. Manual `workflow_dispatch` is also supported.
+Every push to `main`, manual `workflow_dispatch`, and daily schedule runs tests, fetches/summarizes papers, commits updated JSON, and deploys GitHub Pages. The daily schedule is `0 0 * * *`: **00:00 UTC / 08:00 Asia/Taipei**.
 
 1. Open **Actions → Daily headache digest → Run workflow** on `main` to run immediately.
 2. No secret is required for fallback mode. Later, add the repository Actions secret **OPENAI_API_KEY** to enable extraction.
 3. The `sync` job grants **contents: write** and uses the automatic `GITHUB_TOKEN` to commit only changed `data/headache_papers.json` back to `main`.
 
-Repository rules must permit bot commits; branch protection is not bypassed. Partial successes are committed before extraction failures are surfaced, with a seven-day recovery artifact. Tests run without secrets on pull requests, main pushes and scheduled/manual runs. Ordinary pushes only test/deploy and do not call PubMed or OpenAI. GitHub schedules may be delayed or disabled for inactive public repositories.
+Repository rules must permit bot commits; branch protection is not bypassed. Partial successes are committed before extraction failures are surfaced, with a seven-day recovery artifact. Tests run without secrets before each sync. Automated data commits include `[skip ci]` to prevent recursive runs, in addition to GitHub's normal suppression of workflows triggered by `GITHUB_TOKEN`. GitHub schedules may be delayed or disabled for inactive public repositories.
 
-**Optional Pages deployment:** set **Settings → Pages → Source** to **GitHub Actions**, then create repository Actions **variable** `DEPLOY_PAGES=true`. A separate job publishes the static assets and latest JSON after successful tests/sync. Data sync works independently of Pages setup. Explicit deployment avoids relying on bot commits to trigger another workflow. The site can also be deployed to any static host.
+**Pages setup:** set **Settings → Pages → Source** to **GitHub Actions**. The deployment job automatically publishes the static assets and latest JSON after successful tests/sync; no `DEPLOY_PAGES` variable is required. Explicit deployment in the same run avoids relying on bot commits to trigger another workflow. Pipeline or deployment failures remain visible rather than being suppressed to make a run appear successful.
 
 ## Dashboard
 

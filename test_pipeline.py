@@ -417,8 +417,12 @@ def test_cli_no_key_succeeds_and_writes_fallback(tmp_path):
 def test_repository_has_three_source_verified_seed_records():
     root = Path(__file__).parent
     papers = load_records(root / "data/headache_papers.json")
-    seeds = {paper.article_metadata.pmid_or_id: paper for paper in papers}
-    assert set(seeds) == {"29471679", "24144382", "23390177"}
+    seed_ids = {"29471679", "24144382", "23390177"}
+    # The live archive grows after each successful sync; verify the curated
+    # seeds without treating newly fetched records as unexpected test data.
+    seeds = {paper.article_metadata.pmid_or_id: paper for paper in papers
+             if paper.article_metadata.pmid_or_id in seed_ids}
+    assert set(seeds) == seed_ids
     source = {item.metadata.pmid_or_id: item for item in parse_pubmed(
         (root / "tests/fixtures/seed_pubmed.xml").read_bytes())}
     for pmid, seed in seeds.items():

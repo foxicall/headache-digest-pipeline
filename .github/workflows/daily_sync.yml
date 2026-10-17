@@ -7,14 +7,13 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 permissions:
   contents: read
 
 concurrency:
-  group: headache-digest-${{ github.ref }}
+  # Every supported event updates main and deploys the same Pages site.
+  group: headache-digest-main
   cancel-in-progress: false
 
 jobs:
@@ -32,7 +31,6 @@ jobs:
 
   sync:
     needs: test
-    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
@@ -61,7 +59,9 @@ jobs:
         run: |
           git add -- data/headache_papers.json
           if ! git diff --cached --quiet -- data/headache_papers.json; then
-            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'data: update headache literature digest'
+            # GITHUB_TOKEN pushes do not trigger another run; the skip marker
+            # also prevents loops if the push token is changed in the future.
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'data: update headache literature digest [skip ci]'
             git push origin HEAD:main
           fi
       - name: Preserve a recovery copy
@@ -79,12 +79,6 @@ jobs:
 
   deploy:
     needs: [test, sync]
-    # Data sync works without Pages. Opt in after enabling Pages in Settings.
-    if: >-
-      always() && needs.test.result == 'success' &&
-      (needs.sync.result == 'success' || needs.sync.result == 'skipped') &&
-      github.event_name != 'pull_request' && github.ref == 'refs/heads/main' &&
-      vars.DEPLOY_PAGES == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:

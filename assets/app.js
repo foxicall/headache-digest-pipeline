@@ -42,6 +42,22 @@ const FILTERS = [
 ];
 const SEED_IDS = new Set(["29471679", "24144382", "23390177"]);
 const FALLBACK_NOTICE = "Requires OPENAI_API_KEY for AI extraction";
+// Exact PubMed publication types, mirrored in src/journal_metrics.py.
+const CLINICAL_TRIAL_TYPES = new Set([
+  "clinical trial", "clinical trial, phase i", "clinical trial, phase ii",
+  "clinical trial, phase iii", "clinical trial, phase iv", "controlled clinical trial",
+  "randomized controlled trial", "pragmatic clinical trial", "adaptive clinical trial", "equivalence trial",
+]);
+const NON_TRIAL_TYPES = new Set([
+  "clinical trial protocol", "clinical trial, veterinary", "observational study",
+  "review", "systematic review", "meta-analysis",
+]);
+
+function isClinicalTrial(studyDesign) {
+  const types = studyDesign.split(";").map((value) => value.trim().toLowerCase().replace(/\s+/g, " "));
+  return types.some((value) => CLINICAL_TRIAL_TYPES.has(value)) &&
+    !types.some((value) => NON_TRIAL_TYPES.has(value));
+}
 const MODES = {
   seed: ["來源核對範例", "bg-amber-50 text-amber-900"],
   fallback: ["原始摘要 · 尚未 AI 擷取", "bg-sky-50 text-sky-900"],
@@ -156,20 +172,26 @@ function validateJournalPolicy(policy) {
   return { ...policy, aliases };
 }
 
-function eligibleMetric(source) {
+function verifiedMetric(source) {
   const entry = state.policy?.aliases.get(normalizeJournal(source));
   return entry && entry.metric_year === state.policy.metric_year &&
-    typeof entry.jif === "number" && entry.jif > 15 ? entry : null;
+    typeof entry.jif === "number" ? entry : null;
+}
+
+function eligiblePaper(paper) {
+  const info = paper.article_metadata;
+  const metric = verifiedMetric(info.source_society_or_journal);
+  return Boolean(metric && (metric.jif > 15 || (metric.jif < 15 && isClinicalTrial(info.study_design))));
 }
 
 function canonicalJournal(source) {
-  return eligibleMetric(source)?.journal || journalDefinition(source)?.[0] || source.split("|", 1)[0].trim();
+  return journalDefinition(source)?.[0] || verifiedMetric(source)?.journal || source.split("|", 1)[0].trim();
 }
 
 function matchesFilter(paper, filter) {
   if (filter === "all") return true;
   const source = paper.article_metadata.source_society_or_journal;
-  if (filter.startsWith("journal:")) return eligibleMetric(source)?.journal === filter.slice(8);
+  if (filter.startsWith("journal:")) return verifiedMetric(source)?.journal === filter.slice(8);
   const tags = source.toLowerCase().split("|").map((tag) => tag.trim());
   return journalDefinition(source)?.[1] === filter ||
     (SOCIETY_TAGS[filter] || []).some((tag) => tags.includes(tag));
@@ -177,8 +199,8 @@ function matchesFilter(paper, filter) {
 
 function renderFilters() {
   const filters = FILTERS.filter(([key]) => key === "all" || state.papers.some((paper) => matchesFilter(paper, key)));
-  const journals = [...new Set(state.papers.map((paper) => eligibleMetric(paper.article_metadata.source_society_or_journal)?.journal).filter(Boolean))].sort();
-  filters.push(...journals.map((journal) => ["journal:" + journal, journal]));
+  const journals = [...new Set(state.papers.map((paper) => verifiedMetric(paper.article_metadata.source_society_or_journal)?.journal).filter(Boolean))].sort();
+  filters.push(...journals.map((journal) => ["journal:" + journal, canonicalJournal(journal)]));
   if (!filters.some(([key]) => key === state.filter)) state.filter = "all";
   byId("journal-filters").replaceChildren(
     ...filters.map(([key, label]) => {
@@ -213,7 +235,7 @@ function paperCard(paper, index) {
   const content = element("div");
   const meta = element("div", "paper-meta");
   meta.append(element("span", "source-badge", canonicalJournal(info.source_society_or_journal)));
-  const metric = eligibleMetric(info.source_society_or_journal);
+  const metric = verifiedMetric(info.source_society_or_journal);
   if (metric) {
     const badge = element("a", "source-badge", `JIF ${metric.jif} · ${state.policy.metric_year}`);
     badge.href = metric.source_url;
@@ -221,6 +243,7 @@ function paperCard(paper, index) {
     badge.rel = "noopener noreferrer";
     badge.title = "查看期刊 Impact Factor 來源";
     meta.append(badge);
+    if (metric.jif < 15) meta.append(element("span", "source-badge", "Clinical trial · PubMed 已標註"));
   }
   meta.append(element("span", "", info.publication_date || "發表日期未提供"));
   const [modeLabel, modeColor] = MODES[mode];
@@ -314,7 +337,7 @@ function render() {
   const query = byId("search").value.trim().toLocaleLowerCase();
   const filtered = state.papers.filter(
     (paper) =>
-      eligibleMetric(paper.article_metadata.source_society_or_journal) &&
+      eligiblePaper(paper) &&
       matchesFilter(paper, state.filter) &&
       (!query ||
         [
@@ -351,10 +374,10 @@ function render() {
   const hasData = state.papers.length > 0;
   byId("empty-title").textContent = hasData
     ? "找不到符合的文獻"
-    : "目前沒有符合 JIF > 15 的文獻";
+    : "目前沒有符合收錄條件的文獻";
   byId("empty-message").textContent = hasData
     ? "試試其他關鍵字，或切換期刊與學會。"
-    : "僅顯示已核實 JIF 嚴格大於 15，且符合頭痛、偏頭痛或三叉神經痛主題的文獻。";
+    : "收錄 JIF > 15 的文獻，或 JIF < 15 且 PubMed 已標註為 clinical trial 的文獻；皆須符合頭痛、偏頭痛或三叉神經痛主題。";
   byId("clear-search").hidden = !hasData;
 }
 
@@ -384,9 +407,8 @@ async function loadPapers() {
     if (!response.ok || !metricsResponse.ok)
       throw new Error("文獻或 JIF 資料暫時無法取得，請稍後重試。");
     state.policy = validateJournalPolicy(await metricsResponse.json());
-    state.papers = validatePapers(await response.json()).filter((paper) =>
-      eligibleMetric(paper.article_metadata.source_society_or_journal));
-    byId("jif-notice").textContent = `${state.policy.metric_year} 年兩年制 JIF > 15（JCR ${state.policy.jcr_release_year}）· 僅收錄已核實期刊；15、缺少數值或年度不符均不收錄。`;
+    state.papers = validatePapers(await response.json()).filter(eligiblePaper);
+    byId("jif-notice").textContent = `${state.policy.metric_year} 年兩年制 JIF（JCR ${state.policy.jcr_release_year}）：> 15 可收錄；< 15 必須為 PubMed 已標註的 clinical trial。JIF = 15、未核實或年度不符均不收錄。`;
     state.loaded = true;
     state.cached = [response, metricsResponse].some((item) => item.headers.get("X-Digest-Cache") === "offline");
     byId("total-count").textContent =

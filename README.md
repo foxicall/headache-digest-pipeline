@@ -1,6 +1,6 @@
 # Headache Digest
 
-A zero-database Python pipeline and responsive Tailwind CSS reader. Articles live in `data/headache_papers.json`. **Only publications from journals with a verified two-year Journal Impact Factor strictly greater than 15 are published.** Unknown, missing, stale-year, or boundary-value metrics are rejected.
+A zero-database Python pipeline and responsive Tailwind CSS reader. Articles live in `data/headache_papers.json`. **A verified two-year Journal Impact Factor > 15 admits all study designs; JIF < 15 requires an indexed PubMed clinical trial.** Unknown, missing, stale-year, or boundary-value metrics are rejected.
 
 ## Quick start
 
@@ -23,7 +23,7 @@ Open <http://localhost:8000>. Use HTTP rather than `file://`, which cannot relia
 
 ## Strict Journal Impact Factor policy
 
-The policy is a versioned, manually verified snapshot of **2025 two-year JIF (2026 JCR release)**, checked on **2026-10-17**. It is maintained in `data/journal_metrics.json`, independent of the unchanged seven-field clinical summary schema. This is a curated list of verified journals, not an exhaustive list of all journals with JIF > 15.
+The policy is a versioned, manually verified snapshot of **2025 two-year JIF (2026 JCR release)**, checked on **2026-10-17**. It is maintained in `data/journal_metrics.json`, independent of the unchanged seven-field clinical summary schema. This is a curated list of verified journals, not an exhaustive JCR catalog.
 
 | Journal | 2025 JIF | Evidence |
 | --- | ---: | --- |
@@ -37,10 +37,19 @@ The policy is a versioned, manually verified snapshot of **2025 two-year JIF (20
 | The New England Journal of Medicine | 84.5 | [Source](https://www.nejm.org/media-center/fact-sheet) |
 | JAMA | 65.4 | [Source](https://jamanetwork.com/journals/jama/fullarticle/2854582) |
 | The BMJ | 55.1 | [Source](https://bmjgroup.com/about-us/) |
+| Cephalalgia | 5.8 | [Source](https://www.wolterskluwer.com/en/solutions/ovid/cephalalgia-1040) |
+| The Journal of Headache and Pain | 8.7 | [Source](https://link.springer.com/journal/10194) |
+| Headache | 3.9 | [Source](https://www.wolterskluwer.com/en/solutions/ovid/headache-the-journal-of-head-and-face-pain-992) |
+| Neurology | 8.9 | [Source](https://www.wolterskluwer.com/en/solutions/ovid/neurology-288) |
+| Annals of Neurology | 7.5 | [Source](https://www.wolterskluwer.com/en/solutions/ovid/annals-of-neurology-2161) |
+| Internal Medicine | 1.0 | [Source](https://internmed.jp/modules/about/index.php?content_id=1) |
+| Journal of the Chinese Medical Association (Taiwan) | 2.3 | [Source](https://www.wolterskluwer.com/en/solutions/ovid/journal-of-the-chinese-medical-association-14834) |
 
-The rule is **JIF > 15**, not ≥ 15. The backend uses decimal comparisons. Null/unknown metrics, unlisted journals and metric years different from the policy year fail closed. CiteScore, SJR, five-year JIF and values inferred by AI are never substitutes. Complete normalized title/alias matching prevents a journal from inheriting another journal's value by prefix or society tag.
+The rule is **JIF > 15 OR (JIF < 15 AND PubMed clinical trial)**. Exactly 15 remains excluded. The backend uses decimal comparisons. Null/unknown metrics, unlisted journals and metric years different from the policy year fail closed. CiteScore, SJR, five-year JIF and values inferred by AI are never substitutes. Complete normalized title/alias matching prevents a journal from inheriting another journal's value by prefix or society tag.
 
-The gate is applied in the PubMed query, to fetched metadata, to every new-record/upgrade attempt, to the existing archive on every normal run, and again in the reader. Custom queries, society affiliations and historical seeds cannot bypass it. All 48 records from the preceding archive were removed when this policy was introduced because none passed the verified list; their history remains in Git. An empty archive is valid and is not filled with nonqualifying examples.
+Clinical trials are identified by exact PubMed publication types retained in `study_design`: Clinical Trial, phases I–IV, Controlled Clinical Trial, Randomized Controlled Trial, Pragmatic Clinical Trial, Adaptive Clinical Trial, and Equivalence Trial. This includes nonrandomized interventional trials. Protocols, veterinary trials, observational studies and reviews/meta-analyses do not qualify for the exception, even if conflicting trial tags are present. Title/abstract mentions, Clinical Study, Multicenter Study and AI-inferred labels are insufficient. See [NLM publication type definitions](https://www.nlm.nih.gov/mesh/pubtypes.html). Recently published trials awaiting indexing can be missed until PubMed adds a qualifying type.
+
+The gate is applied in the PubMed query, to fetched metadata, to every new-record/upgrade attempt, to the existing archive on every normal run, and again in the reader. Custom queries, society affiliations and historical seeds cannot bypass it. Previously excluded papers can be fetched again if they meet the revised rule within the publication window; old examples are not restored automatically. An empty archive is valid and is not filled with nonqualifying examples.
 
 To update after a new JCR release, verify **two-year** values and the metric year against Clarivate or publisher sources, update the year/release/verification date and each entry's value, year, aliases and evidence URL, then run tests and the pipeline. New and updated entries require review; the nightly job does not scrape or guess JIF values. The pinned year remains visible until a verified update is committed. Journal-level JIF is an admission criterion, not a quality score for an individual article.
 
@@ -76,7 +85,7 @@ The existing Traditional Chinese interface and summary language are retained, wi
 
 ## Historical test fixtures
 
-The original three historical examples are preserved in `tests/fixtures/historical_seeds.json`, with XML evidence in `tests/fixtures/seed_pubmed.xml`. They no longer appear in the published archive: seed status never bypasses the JIF threshold. These fixtures do not represent recent query results or current recommendations.
+The original three historical examples are preserved in `tests/fixtures/historical_seeds.json`, with XML evidence in `tests/fixtures/seed_pubmed.xml`. They are not automatically restored to the published archive: seed status never bypasses the JIF/design policy or makes an old publication a recent query result. These fixtures do not represent recent query results or current recommendations.
 
 | Coverage | Paper | Source |
 | --- | --- | --- |
@@ -88,7 +97,7 @@ Metadata and clinical claims were checked against keyless PubMed EFetch on **202
 
 ## PubMed ingestion
 
-The default query in `src/crawler.py` combines the verified JIF allowlist with headache/migraine, cephalalgia/hemicrania, trigeminal neuralgia, or trigeminal autonomic cephalalgia terms, and requires an abstract. The prior society journal restriction is superseded by the JIF allowlist. The following source classifications remain available for metadata and filters, but confer no exception to the threshold. Generic `trigeminal` alone is no longer a search term.
+The default query in `src/crawler.py` combines the verified JIF allowlist with headache/migraine, cephalalgia/hemicrania, trigeminal neuralgia, or trigeminal autonomic cephalalgia terms, and requires an abstract. The prior society journal restriction is superseded by the JIF allowlist. The following source classifications remain available for metadata and filters, but never bypass the JIF/design policy. Lower-JIF journals are queried only in conjunction with clinical-trial publication types. Original target journals without a verified metric for the policy year remain excluded, including Cephalalgia Reports, Acta Neurologica Taiwanica, Japanese Journal of Headache, Neurology and Clinical Neuroscience and Rinsho Shinkeigaku. Generic `trigeminal` alone is no longer a search term.
 
 | Source group | Journals and additional evidence |
 | --- | --- |
@@ -134,7 +143,7 @@ Repository rules must permit bot commits; branch protection is not bypassed. Par
 
 ## Dashboard
 
-The viewer fetches both `./data/headache_papers.json` and `./data/journal_metrics.json`, validates the policy and filters again before displaying or counting papers. Invalid or unavailable metrics stop display instead of falling back to an unrestricted archive. Each card links its JIF value and year to the verified source. Keyword search, date sorting, seven clinical fields and source/DOI links are retained. Chips show All, journals currently represented, and any society groups with matching records; a society match never bypasses JIF. Empty results are explicitly labeled as having no qualifying publications.
+The viewer fetches both `./data/headache_papers.json` and `./data/journal_metrics.json`, validates the policy and filters again before displaying or counting papers. Invalid or unavailable metrics stop display instead of falling back to an unrestricted archive. Each card links its JIF value and year to the verified source. Lower-JIF cards also display a PubMed clinical-trial badge. Keyword search, date sorting, seven clinical fields and source/DOI links are retained. Chips show All, journals currently represented, and any society groups with matching records; a society match never bypasses JIF. Empty results are explicitly labeled as having no qualifying publications.
 
 Titles and abstracts are inserted as text, never HTML. Relative URLs work under GitHub Pages project paths. Loading, fetch errors, retries, empty results and cached/offline data are handled. The existing app manifest and service worker support installation/offline reading after an online visit; production requires HTTPS.
 
@@ -148,4 +157,4 @@ npm_config_cache=/tmp/headache-npm-cache npx --yes tailwindcss@3.4.17 \
 
 ## Verification
 
-Run `pytest`. Tests use `unittest.mock`, clear API-key environment variables, block real HTTP requests and prevent real OpenAI client creation. Coverage includes the exact schema, XML/DOI/date parsing, query coverage, rate limiting/retries, 30-day defaults and overrides, journal aliases and overlapping source groups, Taiwan classification, strict topic screening and source-based regressions, mocked Structured Outputs, missing/blank keys, deduplication, prepending, upgrades, partial failures, atomic writes, historical seed fixtures, strict JIF boundaries, unknown/wrong-year metrics, custom-query protection and archive pruning. Tests require no network access, external API key or billing.
+Run `pytest`. Tests use `unittest.mock`, clear API-key environment variables, block real HTTP requests and prevent real OpenAI client creation. Coverage includes the exact schema, XML/DOI/date parsing, query coverage, rate limiting/retries, 30-day defaults and overrides, journal aliases and overlapping source groups, Taiwan classification, strict topic screening and source-based regressions, mocked Structured Outputs, missing/blank keys, deduplication, prepending, upgrades, partial failures, atomic writes, historical seed fixtures, strict JIF boundaries, low-JIF clinical-trial exceptions and exclusions, unknown/wrong-year metrics, custom-query protection and archive pruning. Tests require no network access, external API key or billing.

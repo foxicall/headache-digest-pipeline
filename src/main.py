@@ -75,12 +75,13 @@ def run_pipeline(path=DEFAULT_DATA, *, crawler=None, summarizer=None, lookback_d
     path = Path(path)
     policy = load_policy()
     records = load_records(path)
-    eligible_records = [record for record in records if policy.eligible(record.article_metadata.source_society_or_journal)]
+    eligible_records = [record for record in records if policy.eligible(
+        record.article_metadata.source_society_or_journal, record.article_metadata.study_design)]
     removed_jif = len(records) - len(eligible_records)
     records = eligible_records
     if removed_jif and not fetch_only:
         save_records(path, records)
-        LOGGER.info("Removed %s records without verified %s JIF > 15", removed_jif, policy.metric_year)
+        LOGGER.info("Removed %s records failing the %s JIF/clinical-trial policy", removed_jif, policy.metric_year)
     known = {record.article_metadata.pmid_or_id for record in records}
     result = (crawler or Crawler()).collect(lookback_days=lookback_days, pubmed_limit=pubmed_limit, query=query)
     stats = RunStats(fetched=len(result.articles), source_failures=len(result.errors), removed_jif=removed_jif)
@@ -115,7 +116,7 @@ def run_pipeline(path=DEFAULT_DATA, *, crawler=None, summarizer=None, lookback_d
     additions = []
     attempts = 0
     for article, existing_index in pending:
-        if not policy.eligible(article.metadata.source_society_or_journal):
+        if not policy.eligible(article.metadata.source_society_or_journal, article.metadata.study_design):
             stats.skipped_jif += 1
             continue
         # Apply the same screen to custom queries and old fallback upgrades,

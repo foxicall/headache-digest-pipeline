@@ -258,6 +258,10 @@ class Crawler:
 
     def fetch_pubmed(self, since: date, today: date, limit=1000, query=DEFAULT_QUERY):
         # Apply to custom queries too, then independently check fetched metadata.
+        # Build the default from the current policy once: repeating a growing
+        # registry can exceed the E-utilities URL limit (HTTP 414).
+        if query == DEFAULT_QUERY:
+            query = f"{HEADACHE_QUERY} AND hasabstract[text]"
         restricted_query = f"({query}) AND {self.policy.pubmed_clause()}"
         ids = parse_search(self._get("esearch.fcgi", params={
             "db": "pubmed", "term": restricted_query, "retmode": "xml", "retmax": limit,
@@ -266,9 +270,9 @@ class Crawler:
         }).content)
         candidates = self.fetch_by_ids(ids)
         articles = [article for article in candidates
-                    if self.policy.eligible(article.metadata.source_society_or_journal)
+                    if self.policy.eligible(article.metadata.source_society_or_journal, article.metadata.study_design)
                     and is_headache_topic(article.metadata.title, article.abstract)]
-        LOGGER.info("JIF > 15 and topic screens retained %s/%s PubMed candidates", len(articles), len(candidates))
+        LOGGER.info("JIF/clinical-trial and topic screens retained %s/%s PubMed candidates", len(articles), len(candidates))
         return articles
 
     def fetch_by_ids(self, ids: list[str]) -> list[Article]:

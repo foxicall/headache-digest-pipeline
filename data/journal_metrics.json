@@ -95,6 +95,70 @@
       "jif": 55.1,
       "metric_year": 2025,
       "source_url": "https://bmjgroup.com/about-us/"
+    },
+    {
+      "journal": "Cephalalgia",
+      "aliases": [
+        "Cephalalgia : an international journal of headache"
+      ],
+      "jif": 5.8,
+      "metric_year": 2025,
+      "source_url": "https://www.wolterskluwer.com/en/solutions/ovid/cephalalgia-1040"
+    },
+    {
+      "journal": "The Journal of Headache and Pain",
+      "aliases": [
+        "Journal of Headache and Pain",
+        "J Headache Pain"
+      ],
+      "jif": 8.7,
+      "metric_year": 2025,
+      "source_url": "https://link.springer.com/journal/10194"
+    },
+    {
+      "journal": "Headache",
+      "aliases": [
+        "Headache: The Journal of Head and Face Pain"
+      ],
+      "jif": 3.9,
+      "metric_year": 2025,
+      "source_url": "https://www.wolterskluwer.com/en/solutions/ovid/headache-the-journal-of-head-and-face-pain-992"
+    },
+    {
+      "journal": "Neurology",
+      "aliases": [],
+      "jif": 8.9,
+      "metric_year": 2025,
+      "source_url": "https://www.wolterskluwer.com/en/solutions/ovid/neurology-288"
+    },
+    {
+      "journal": "Annals of Neurology",
+      "aliases": [
+        "Ann Neurol"
+      ],
+      "jif": 7.5,
+      "metric_year": 2025,
+      "source_url": "https://www.wolterskluwer.com/en/solutions/ovid/annals-of-neurology-2161"
+    },
+    {
+      "journal": "Internal Medicine",
+      "aliases": [
+        "Intern Med",
+        "Internal medicine (Tokyo, Japan)"
+      ],
+      "jif": 1.0,
+      "metric_year": 2025,
+      "source_url": "https://internmed.jp/modules/about/index.php?content_id=1"
+    },
+    {
+      "journal": "Journal of the Chinese Medical Association",
+      "aliases": [
+        "J Chin Med Assoc",
+        "Journal of the Chinese Medical Association : JCMA"
+      ],
+      "jif": 2.3,
+      "metric_year": 2025,
+      "source_url": "https://www.wolterskluwer.com/en/solutions/ovid/journal-of-the-chinese-medical-association-14834"
     }
   ]
 }

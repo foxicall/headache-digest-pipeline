@@ -444,7 +444,8 @@ def test_default_query_requires_topic_and_abstract_across_all_sources():
     assert 'trigeminal[Title/Abstract]' not in DEFAULT_QUERY
     assert '"trigeminal neuralgia"[Title/Abstract]' in DEFAULT_QUERY
     assert '"JAMA Neurology"[Journal]' in DEFAULT_QUERY
-    assert '"Cephalalgia"[Journal]' not in DEFAULT_QUERY
+    assert '"Cephalalgia"[Journal]' in DEFAULT_QUERY
+    assert '"Clinical Trial"[Publication Type]' in DEFAULT_QUERY
     assert '"Japan"[Affiliation]' not in DEFAULT_QUERY
 
 
@@ -658,7 +659,7 @@ def test_jif_empty_allowlist_cannot_turn_into_unrestricted_query():
 def test_custom_query_and_society_cannot_bypass_jif_gate(sleep):
     session = Mock()
     session.get.side_effect = [response(content=b'<eSearchResult><IdList><Id>12345</Id></IdList></eSearchResult>'),
-                               response(content=PUBMED_XML)]
+                               response(content=PUBMED_XML.replace(b"Randomized Controlled Trial", b"Observational Study"))]
     assert Crawler(session).fetch_pubmed(date(2026, 9, 18), date(2026, 10, 17), query='headache') == []
     assert '(headache) AND (' in session.get.call_args_list[0].kwargs['params']['term']
     assert '"JAMA Neurology"[Journal]' in session.get.call_args_list[0].kwargs['params']['term']
@@ -668,6 +669,7 @@ def test_pipeline_removes_nonqualifying_archive_seeds_and_never_calls_ai(tmp_pat
     path = tmp_path / 'papers.json'
     low = article('29471679')
     low.metadata.source_society_or_journal = 'Cephalalgia | International Headache Society'
+    low.metadata.study_design = 'Observational Study'
     save_records(path, [record(low), Summarizer().summarize(article('allowed'))])
     ai = ai_summarizer()
     stats = run_pipeline(path, crawler=mock_crawler([low]), summarizer=ai)
@@ -690,6 +692,7 @@ def test_jif_pruning_persists_even_without_new_papers_or_api_key(tmp_path):
 def test_fetch_only_preserves_ineligible_archive_without_ai_calls(tmp_path):
     low = article()
     low.metadata.source_society_or_journal = 'Headache'
+    low.metadata.study_design = 'Observational Study'
     path = tmp_path / 'papers.json'
     save_records(path, [record(low)])
     before = path.read_bytes()
@@ -703,6 +706,7 @@ def test_fetch_only_preserves_ineligible_archive_without_ai_calls(tmp_path):
 def test_jif_pruning_is_not_dependent_on_pubmed_availability(tmp_path):
     low = article()
     low.metadata.source_society_or_journal = 'Headache'
+    low.metadata.study_design = 'Observational Study'
     path = tmp_path / 'papers.json'
     save_records(path, [record(low), record(article('keep'))])
     with pytest.raises(RuntimeError):
@@ -725,7 +729,7 @@ def test_every_published_record_passes_current_jif_policy():
     from src.journal_metrics import load_policy
     policy = load_policy()
     records = load_records(Path(__file__).parent / 'data/headache_papers.json')
-    assert all(policy.eligible(p.article_metadata.source_society_or_journal) for p in records)
+    assert all(policy.eligible(p.article_metadata.source_society_or_journal, p.article_metadata.study_design) for p in records)
 
 
 def test_migraine_therapy_class_safety_requires_explicit_indication():
@@ -739,3 +743,98 @@ def test_jif_query_includes_indexed_aliases_for_full_titles():
     clause = load_policy().pubmed_clause()
     assert '"BMJ"[Journal]' in clause
     assert '"Lancet Neurol"[Journal]' in clause
+
+
+@pytest.mark.parametrize('design,expected', [
+    ('Clinical Trial', True), ('Clinical Trial, Phase I', True),
+    ('Clinical Trial, Phase II', True), ('Clinical Trial, Phase III', True),
+    ('Clinical Trial, Phase IV', True), ('Controlled Clinical Trial', True),
+    ('Randomized Controlled Trial', True), ('Pragmatic Clinical Trial', True),
+    ('Adaptive Clinical Trial', True), ('Equivalence Trial', True),
+    ('Multicenter Study; Randomized Controlled Trial', True),
+    (' clinical   trial ; Multicenter Study ', True),
+    ('Not reported', False), ('Clinical Study', False), ('Multicenter Study', False),
+    ('Clinical Trial Protocol', False), ('Clinical Trials as Topic', False),
+    ('Observational Study', False), ('Clinical Trial, Veterinary', False),
+    ('Review', False), ('Systematic Review', False), ('Meta-Analysis', False),
+    ('A randomized controlled trial of migraine prevention', False),
+    ('Randomized Controlled Trial; Clinical Trial Protocol', False),
+    ('Clinical Trial; Observational Study', False), ('Clinical Trial; Review', False),
+    ('Randomized Controlled Trial; Meta-Analysis', False),
+    ('Clinical Trial; Clinical Trial, Veterinary', False),
+])
+def test_lower_jif_requires_exact_pubmed_clinical_trial_type(design, expected):
+    from src.journal_metrics import is_clinical_trial, load_policy
+    assert is_clinical_trial(design) is expected
+    policy = load_policy()
+    assert policy.eligible('Cephalalgia | International Headache Society', design) is expected
+    # Study design restrictions apply only to lower-JIF journals.
+    assert policy.eligible('JAMA Neurology', design)
+
+
+@pytest.mark.parametrize('value,year,expected', [
+    (0, 2025, True), (14.999, 2025, True), (15, 2025, False),
+    (15.0001, 2025, True), (None, 2025, False), (5.8, 2024, False),
+])
+def test_trial_exception_never_bypasses_metric_verification(value, year, expected):
+    from src.journal_metrics import JournalPolicy, load_policy
+    data = load_policy().model_dump(mode='json')
+    data['journals'][0].update(jif=value, metric_year=year)
+    policy = JournalPolicy.model_validate(data)
+    assert policy.eligible(data['journals'][0]['journal'], 'Clinical Trial') is expected
+    assert not policy.eligible('Unknown | JAMA Neurology', 'Clinical Trial')
+
+
+def test_pubmed_query_keeps_low_jif_and_trial_requirement_in_same_branch():
+    from src.journal_metrics import JournalPolicy, load_policy
+    data = load_policy().model_dump(mode='json')
+    # All low entries must be paired with trial types; high entries have no design gate.
+    high = next(entry for entry in data['journals'] if entry['journal'] == 'JAMA Neurology')
+    low = next(entry for entry in data['journals'] if entry['journal'] == 'Neurology')
+    data['journals'] = [high, low]
+    clause = JournalPolicy.model_validate(data).pubmed_clause()
+    assert clause.startswith('(("JAMA Neurology"[Journal] OR "JAMA Neurol"[Journal]) OR (("Neurology"[Journal]) AND (')
+    assert '"Controlled Clinical Trial"[Publication Type]' in clause
+    assert 'NOT ("Clinical Trial Protocol"[Publication Type]' in clause
+    data['journals'] = [dict(low, jif=15)]
+    assert JournalPolicy.model_validate(data).pubmed_clause() == '0[PMID]'
+
+
+@patch('src.crawler.time.sleep')
+def test_crawler_retains_verified_lower_jif_trial(sleep):
+    session = Mock()
+    session.get.side_effect = [response(content=b'<eSearchResult><IdList><Id>12345</Id></IdList></eSearchResult>'),
+                               response(content=PUBMED_XML)]
+    fetched = Crawler(session).fetch_pubmed(date(2026, 9, 18), date(2026, 10, 17))
+    assert len(fetched) == 1
+    assert fetched[0].metadata.study_design == 'Randomized Controlled Trial'
+    term = session.get.call_args_list[0].kwargs['params']['term']
+    assert term.count('"JAMA Neurology"[Journal]') == 1
+
+
+def test_pipeline_saves_and_upgrades_low_jif_trials_without_accepting_title_claims(tmp_path):
+    trial = article('trial')
+    trial.metadata.source_society_or_journal = 'Headache'
+    nontrial = article('nontrial', abstract='A randomized controlled trial for migraine is described.')
+    nontrial.metadata.source_society_or_journal = 'Headache'
+    nontrial.metadata.study_design = 'Not reported'
+    path = tmp_path / 'papers.json'
+    stats = run_pipeline(path, crawler=mock_crawler([trial, nontrial]))
+    assert (stats.saved, stats.fallback_saved, stats.skipped_jif) == (1, 1, 1)
+    assert [p.article_metadata.pmid_or_id for p in load_records(path)] == ['trial']
+    ai = ai_summarizer()
+    stats = run_pipeline(path, crawler=mock_crawler([trial, nontrial]), summarizer=ai)
+    assert (stats.upgraded, stats.duplicates, stats.skipped_jif, stats.removed_jif) == (1, 1, 1, 0)
+    ai.client.beta.chat.completions.parse.assert_called_once()
+    assert not is_fallback(load_records(path)[0])
+
+
+def test_low_jif_trial_must_still_pass_topic_gate_before_ai(tmp_path):
+    trial = article()
+    trial.metadata.source_society_or_journal = 'Neurology'
+    trial.metadata.title = 'Treatment of epilepsy: a randomized controlled trial'
+    trial.abstract = 'Seizures improved. Adverse events included nausea and headache.'
+    ai = ai_summarizer()
+    stats = run_pipeline(tmp_path / 'papers.json', crawler=mock_crawler([trial]), summarizer=ai)
+    assert (stats.skipped_off_topic, stats.saved) == (1, 0)
+    ai.client.beta.chat.completions.parse.assert_not_called()

@@ -10,6 +10,24 @@ from pydantic import BaseModel, ConfigDict, Field, HttpUrl, model_validator
 
 METRICS_PATH = Path(__file__).resolve().parents[1] / "data" / "journal_metrics.json"
 MINIMUM_JIF = Decimal("15")
+# NLM Publication Types, not title/abstract keywords or AI-inferred designs.
+# https://www.nlm.nih.gov/mesh/pubtypes.html
+CLINICAL_TRIAL_TYPES = frozenset({
+    "Clinical Trial", "Clinical Trial, Phase I", "Clinical Trial, Phase II",
+    "Clinical Trial, Phase III", "Clinical Trial, Phase IV",
+    "Controlled Clinical Trial", "Randomized Controlled Trial",
+    "Pragmatic Clinical Trial", "Adaptive Clinical Trial", "Equivalence Trial",
+})
+NON_TRIAL_TYPES = frozenset({
+    "Clinical Trial Protocol", "Clinical Trial, Veterinary", "Observational Study",
+    "Review", "Systematic Review", "Meta-Analysis",
+})
+
+
+def is_clinical_trial(study_design: str) -> bool:
+    types = {" ".join(value.casefold().split()) for value in study_design.split(";")}
+    return bool(types & {value.casefold() for value in CLINICAL_TRIAL_TYPES}) and not bool(
+        types & {value.casefold() for value in NON_TRIAL_TYPES})
 
 
 def normalize_journal(source: str) -> str:
@@ -58,16 +76,28 @@ class JournalPolicy(BaseModel):
         return next((entry for entry in self.journals
                      if any(normalize_journal(name) == key for name in [entry.journal, *entry.aliases])), None)
 
-    def eligible(self, source: str) -> bool:
+    def eligible(self, source: str, study_design: str = "") -> bool:
         entry = self.lookup(source)
         return bool(entry and entry.metric_year == self.metric_year
-                    and entry.jif is not None and entry.jif > MINIMUM_JIF)
+                    and entry.jif is not None and (entry.jif > MINIMUM_JIF
+                    or (entry.jif < MINIMUM_JIF and is_clinical_trial(study_design))))
 
     def pubmed_clause(self) -> str:
-        names = list(dict.fromkeys(name for entry in self.journals if self.eligible(entry.journal)
-                                   for name in [entry.journal, *entry.aliases]))
+        def journal_clause(entries):
+            names = dict.fromkeys(name for entry in entries for name in [entry.journal, *entry.aliases])
+            return "(" + " OR ".join(f'"{name}"[Journal]' for name in names) + ")"
+
+        verified = [entry for entry in self.journals
+                    if entry.metric_year == self.metric_year and entry.jif is not None]
+        high = [entry for entry in verified if entry.jif > MINIMUM_JIF]
+        low = [entry for entry in verified if entry.jif < MINIMUM_JIF]
+        branches = [journal_clause(high)] if high else []
+        if low:
+            trials = " OR ".join(f'"{name}"[Publication Type]' for name in sorted(CLINICAL_TRIAL_TYPES))
+            exclusions = " OR ".join(f'"{name}"[Publication Type]' for name in sorted(NON_TRIAL_TYPES))
+            branches.append(f"({journal_clause(low)} AND ({trials}) NOT ({exclusions}))")
         # Do not turn an empty allowlist into an unrestricted query.
-        return "(" + " OR ".join(f'"{name}"[Journal]' for name in names) + ")" if names else "0[PMID]"
+        return "(" + " OR ".join(branches) + ")" if branches else "0[PMID]"
 
 
 def load_policy(path: Path = METRICS_PATH) -> JournalPolicy:

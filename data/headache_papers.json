@@ -1,6 +1,34 @@
 [
   {
     "article_metadata": {
+      "pmid_or_id": "42418214",
+      "doi": "10.1111/head.70184",
+      "title": "Safety and tolerability of transnasal evaporative cooling for the acute treatment of migraine in an at-home setting: A randomized, double-blind, sham-controlled, decentralized clinical trial.",
+      "source_society_or_journal": "Headache | American Headache Society",
+      "publication_date": "2026-07-08",
+      "study_design": "Randomized Controlled Trial"
+    },
+    "structured_summary": {
+      "methods": "前瞻性、雙盲、假治療對照、隨機分派的居家分散式臨床試驗，於 2023 年 11 月至 2024 年 6 月在美國進行。參與者分至經鼻蒸發冷卻（TNEC）4、6 或 10 L/min 去濕空氣組，或 2 L/min 環境空氣的假治療組（間歇送氣約占總時間 10%）。以因不適而提前停止治療的比例評估耐受性。療效分析用於提出假說，p 值為名義值；試驗登錄號為 NCT06051604。",
+      "inclusion_criteria": [
+        "18–65 歲成年人",
+        "自述偏頭痛病史至少 1 年"
+      ],
+      "exclusion_criteria": [
+        "Not reported"
+      ],
+      "number_of_inclusion": "參與者共 137 人；耐受性結果的分母為 128 人（因不適提前停止治療者 0/128）。摘要未說明分母差異的原因。",
+      "mechanism_of_action_moa": "經鼻蒸發冷卻（TNEC）被認為可調節蝶腭神經節及三叉神經上頜支的活動；此為摘要提出的可能機轉。",
+      "conclusion": "作者認為 TNEC 在居家分散式試驗中具安全性與可行性，高流量亦可耐受。2 小時疼痛緩解率的各主動治療組與假治療組比較皆未達名義統計顯著；10 L/min 組的 2 小時無痛率為 33.3%（10/30），假治療組為 12.1%（4/33），名義 p = 0.043。這些探索性療效結果仍須較大型、具足夠統計檢定力的試驗確認。",
+      "pitfalls_and_limitations": [
+        "療效分析屬假說生成性質，報告的 p 值為名義值，不能據此視為已確立療效。",
+        "作者指出需要較大型、具足夠統計檢定力的臨床試驗確認療效。",
+        "摘要未報告排除條件，也未解釋 137 名參與者與 128 名耐受性評估者之間的分母差異。"
+      ]
+    }
+  },
+  {
+    "article_metadata": {
       "pmid_or_id": "42862583",
       "doi": "10.1001/jamaneurol.2026.3573",
       "title": "Early Pregnancy Use of Anti-CGRP Monoclonal Antibodies and Propranolol and Spontaneous Abortion Risk.",

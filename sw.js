@@ -2,13 +2,14 @@
 
 // Scope-specific cache names keep different GitHub Pages project sites isolated.
 const PREFIX = `headache-digest:${self.registration.scope}:`;
-const CACHE = `${PREFIX}v8`;
+const CACHE = `${PREFIX}v9`;
 const SHELL = [
   "./",
   "./index.html",
   "./assets/styles.css",
   "./assets/tailwind.css",
   "./assets/app.js",
+  "./assets/paper-filters.js",
   "./assets/icon.svg",
   "./assets/icon-192.png",
   "./assets/icon-512.png",

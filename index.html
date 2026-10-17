@@ -14,6 +14,7 @@
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="stylesheet" href="./assets/tailwind.css" />
     <link rel="stylesheet" href="./assets/styles.css" />
+    <script src="./assets/paper-filters.js" defer></script>
     <script src="./assets/app.js" defer></script>
   </head>
   <body class="antialiased">
@@ -122,6 +123,20 @@
             </select></label
           >
         </div>
+        <div class="literature-selects" role="group" aria-label="依症候群及研究類型篩選">
+          <label for="syndrome-filter">症候群 · Syndrome
+            <select id="syndrome-filter" aria-describedby="facet-note" disabled>
+              <option value="all">全部症候群 · 讀取中…</option>
+            </select>
+          </label>
+          <label for="study-filter">研究類型 · Study design
+            <select id="study-filter" aria-describedby="facet-note" disabled>
+              <option value="all">全部研究類型 · 讀取中…</option>
+            </select>
+          </label>
+          <button id="reset-filters" class="subtle-button" type="button" disabled>清除全部篩選</button>
+        </div>
+        <p id="facet-note" class="facet-note">可搭配關鍵字與期刊篩選；篇數為全庫統計，同篇可屬多類。症候群依標題與摘要用語配對，研究類型依 PubMed 標籤及方法描述分類；未明確記載者列為未分類。</p>
         <div class="filter-row">
           <div
             id="journal-filters"

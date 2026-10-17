@@ -1092,3 +1092,17 @@ def test_verified_journals_between_ten_and_fifteen_admit_nontrials():
     assert policy.eligible('Brain : a journal of neurology','Review')
     assert policy.eligible('JAMA Netw Open','Observational Study')
     assert not policy.eligible('Brain unknown journal','Clinical Trial')
+
+
+@pytest.mark.parametrize('title,abstract', [
+    ('Hypothermia after decompressive hemicraniectomy for malignant stroke',
+     'OBJECTIVE: We aimed to evaluate survival after hemicraniectomy.'),
+    ('Critical care after cerebral infarction',
+     'OBJECTIVE: We assessed hemicraniectomy in patients with large strokes.'),
+    ('An antiviral trial for influenza',
+     'The primary outcome was resolution of symptoms (cough, sore throat, headache, fever and fatigue).'),
+    ('A first-in-human dementia drug trial',
+     'Safety and tolerability, the primary endpoints, were met: no deaths; headache and fatigue were mild.'),
+])
+def test_surgical_word_stems_and_incidental_safety_symptoms_are_not_headache_topics(title, abstract):
+    assert not is_headache_topic(title, abstract)

@@ -81,7 +81,7 @@ HEADACHE_QUERY = "(" + " OR ".join(pubmed_term(term) for term in SEARCH_TERMS) +
 )
 
 TOPIC = re.compile(
-    r"\b(?:migrain\w*|head[-\s]*aches?|cephalalgi\w*|cephalgi\w*|hemicrani\w*|"
+    r"\b(?:migrain\w*|head[-\s]*aches?|cephalalgi\w*|cephalgi\w*|hemicranias?|"
     r"(?:head|facial|craniofacial|orofacial)[-\s]+pains?|"
     r"trigeminal[-\s]+neuralgia|SUNCT|SUNA|HaNDL|NDPH)\b", re.I)
 
@@ -117,7 +117,9 @@ def has_topic(text: str) -> bool:
 
 
 INCIDENTAL = re.compile(r"(?:symptoms?|side effects?|adverse (?:events?|effects?|reactions?))\s+"
-                        r"(?:\w+\s+){0,3}(?:included?|including|such as|were|are|:)", re.I)
+                        r"(?:\w+\s+){0,3}(?:included?|including|such as|were|are|:)|"
+                        r"\bsymptoms?\s*\([^)]*\bheadaches?\b|"
+                        r"\bsafety and tolerability\b[^.!?]*\bheadaches?\b", re.I)
 GOAL = re.compile(r"\b(?:we (?:aim(?:ed)?|sought)|(?:this|the) study (?:aim(?:s|ed)?|sought)|"
                   r"(?:our |the )?(?:objectives?|aims?|purposes?) (?:of [^.!?]{0,100}? )?(?:was|were|is|are)|"
                   r"we (?:investigated|evaluated|examined|assessed|compared|studied))\b", re.I)

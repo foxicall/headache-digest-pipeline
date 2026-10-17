@@ -1,31 +1,6 @@
 [
   {
     "article_metadata": {
-      "pmid_or_id": "42875454",
-      "doi": "10.1038/s41467-026-77638-2",
-      "title": "Preclinical and clinical investigation of VES001, an oral small molecule sortilin receptor inhibitor for the treatment of frontotemporal dementia: a first-in-human randomized placebo-controlled phase 1 trial.",
-      "source_society_or_journal": "Nature communications",
-      "publication_date": "2026-09-14",
-      "study_design": "Randomized Controlled Trial; Clinical Trial, Phase I"
-    },
-    "structured_summary": {
-      "methods": "隨機對照試驗；臨床試驗，第一階段。參與者接受VES001或安慰劑作為單次或多次劑量，持續7天。",
-      "inclusion_criteria": [
-        "健康成年人"
-      ],
-      "exclusion_criteria": [
-        "未報告"
-      ],
-      "number_of_inclusion": "79 healthy adults (63/37% male/female; mean age 28 years)",
-      "mechanism_of_action_moa": "VES001是一種口服小分子sortilin抑制劑，能夠選擇性地結合sortilin並提高progranulin水平。",
-      "conclusion": "安全性和耐受性是主要終點，結果顯示無死亡、嚴重不良事件或與治療相關的中斷；頭痛和疲勞輕微且與劑量無關。單次劑量增加血漿progranulin，雙次每日劑量相較於安慰劑在血漿和腦脊髓液中產生更大且持續的增加。這些發現建立了口服sortilin抑制的藥理學機制證據，並支持VES001作為潛在的疾病修飾療法進一步開發。",
-      "pitfalls_and_limitations": [
-        "雖然隊列較小，劑量持續7天，且參與者為健康者，但這些結果仍需進一步驗證。"
-      ]
-    }
-  },
-  {
-    "article_metadata": {
       "pmid_or_id": "42669793",
       "doi": "10.1177/03331024261480724",
       "title": "App-based self-administered biofeedback for the prevention of episodic migraine: A randomized controlled trial.",
@@ -2479,37 +2454,6 @@
   },
   {
     "article_metadata": {
-      "pmid_or_id": "39775042",
-      "doi": "10.1038/s41591-024-03419-3",
-      "title": "Single-dose suraxavir marboxil for acute uncomplicated influenza in adults and adolescents: a multicenter, randomized, double-blind, placebo-controlled phase 3 trial.",
-      "source_society_or_journal": "Nature medicine",
-      "publication_date": "2025-01-07",
-      "study_design": "Randomized Controlled Trial; Clinical Trial, Phase III; Multicenter Study"
-    },
-    "structured_summary": {
-      "methods": "這是一項多中心、隨機、雙盲、安慰劑對照的第三期臨床試驗，旨在研究單劑量 suraxavir marboxil（40 毫克口服劑量）在年齡介於 5 至 65 歲的健康門診患者中對簡單流感的療效和安全性。",
-      "inclusion_criteria": [
-        "年齡介於 5 至 65 歲的健康門診患者",
-        "診斷為簡單流感",
-        "在症狀出現後 2 天內接受治療"
-      ],
-      "exclusion_criteria": [
-        "有嚴重健康問題的患者",
-        "對 suraxavir marboxil 或其成分過敏的患者",
-        "正在接受其他抗病毒治療的患者"
-      ],
-      "number_of_inclusion": "591 outpatients",
-      "mechanism_of_action_moa": "Suraxavir marboxil (GP681) 是一種抗病毒藥物，抑制流感 RNA 聚合酶的聚合酶酸性蛋白 (PA)。",
-      "conclusion": "在這項試驗中，及時使用單劑量 suraxavir marboxil 能有效縮短流感症狀緩解時間 (TTAS) 並安全地降低 5 至 65 歲簡單流感患者的流感病毒載量。",
-      "pitfalls_and_limitations": [
-        "本研究的副作用報告中，28.4% 的 suraxavir marboxil 接受者和 23.3% 的安慰劑接受者出現不良事件，雖然大多數為輕度或中度，但仍需注意。",
-        "本研究的樣本來自中國的 46 個研究中心，可能不具代表性。",
-        "本研究的主要結果是基於自我報告的症狀緩解時間，可能存在偏差。"
-      ]
-    }
-  },
-  {
-    "article_metadata": {
       "pmid_or_id": "39748312",
       "doi": "10.1186/s10194-024-01915-y",
       "title": "Reduction of pain and functional disability over time in patients treated with zavegepant: a post-hoc analysis of the BHV3500-301 phase 3 randomized controlled trial.",
@@ -2589,32 +2533,6 @@
         "這是一項探索性研究，樣本量較小，可能影響結果的普遍性。",
         "缺乏對照組，無法與其他治療方法進行直接比較。",
         "治療的最佳電極放置和使用模式尚未達成共識。"
-      ]
-    }
-  },
-  {
-    "article_metadata": {
-      "pmid_or_id": "39648975",
-      "doi": "10.1002/ana.27151",
-      "title": "Critical Care Decisions After Large Core Cerebral Infarctions: A Secondary Analysis From the SELECT2 Trial.",
-      "source_society_or_journal": "Annals of neurology | American Neurological Association",
-      "publication_date": "2024-12-09",
-      "study_design": "Randomized Controlled Trial"
-    },
-    "structured_summary": {
-      "methods": "本研究分析了SELECT2試驗的整體人群，隨機分配352名因大血管阻塞（LVO）和大缺血核心而中風的患者接受血管內血栓切除術（EVT）或醫療管理。我們使用治療原則比較隨機化後7天內DHC和早期WLST的使用情況，並進一步評估這些決策後的功能結果（修訂Rankin評分）。",
-      "inclusion_criteria": [
-        "患者必須因大血管阻塞（LVO）和大缺血核心而中風。",
-        "隨機分配至血管內血栓切除術（EVT）或醫療管理。"
-      ],
-      "exclusion_criteria": [
-        "未報告的排除標準。"
-      ],
-      "number_of_inclusion": "352 patients",
-      "mechanism_of_action_moa": "Not applicable",
-      "conclusion": "在SELECT2試驗中，約1/6的患者接受了DHC，約1/5的患者進行了早期WLST，且無論是接受EVT還是醫療管理，這些決策之間沒有差異。DHC或WLST並未減少血栓切除術的治療效益。此外，約20%的DHC治療患者在1年隨訪時達到獨立行走。這些關鍵護理決策的相似分佈提供了保證，表明整體試驗結果未受到開放標籤治療分配的偏見。",
-      "pitfalls_and_limitations": [
-        "未報告的研究限制。"
       ]
     }
   },
@@ -2866,14 +2784,11 @@
     "structured_summary": {
       "methods": "在這項開放標籤的Ib期上升劑量研究中，口服低劑量的psilocybin（劑量為5、7.5和10毫克，每次會議一劑，共三次劑量會議）與心理支持一起給予六到十二名慢性短暫性單側神經性頭痛攻擊（SUNHA）患者。通過劍橋神經心理測試自動化電池評估認知，通過頭痛日記和六項頭痛影響測試（HIT-6）評估頭痛攻擊。主觀劑量強度通過五維改變意識狀態問卷（5D-ASC）進行評估。由於招募困難，研究提前終止；共招募四名患者，其中三名完成了研究。",
       "inclusion_criteria": [
-        "慢性短暫性單側神經性頭痛攻擊（SUNHA）患者",
-        "年齡在18歲以上",
-        "能夠提供知情同意"
+        "慢性短暫性單側神經痛樣頭痛發作（SUNHA）患者。",
+        "Not reported：摘要未另列年齡或其他正式納入條件。"
       ],
       "exclusion_criteria": [
-        "有精神疾病病史的患者",
-        "正在接受其他頭痛治療的患者",
-        "對psilocybin過敏的患者"
+        "Not reported"
       ],
       "number_of_inclusion": "4 patients (3 completers)",
       "mechanism_of_action_moa": "Not reported",
@@ -11614,33 +11529,6 @@
         "BTA的療效在研究中僅為適度，且可能受到因BTA引起的額頭皺紋去除而導致的揭盲影響。",
         "其他次要終點，包括殘疾和生活質量的測量，也未顯示差異。",
         "急性戒斷的耐受性良好，盲法成功。"
-      ]
-    }
-  },
-  {
-    "article_metadata": {
-      "pmid_or_id": "30657812",
-      "doi": "10.1001/jamaneurol.2018.4822",
-      "title": "Outcomes of Hypothermia in Addition to Decompressive Hemicraniectomy in Treatment of Malignant Middle Cerebral Artery Stroke: A Randomized Clinical Trial.",
-      "source_society_or_journal": "JAMA neurology",
-      "publication_date": "2019-05-01",
-      "study_design": "Randomized Controlled Trial"
-    },
-    "structured_summary": {
-      "methods": "這是一項隨機對照試驗，研究中介入措施為在顱骨切除術後立即維持中度低體溫（溫度33.0 ± 1.0°C）至少72小時，對照組為標準護理。",
-      "inclusion_criteria": [
-        "患者必須接受顱骨切除術並評估符合資格。"
-      ],
-      "exclusion_criteria": [
-        "未報告的排除標準。"
-      ],
-      "number_of_inclusion": "50 patients (24 assigned to standard care, 26 to moderate hypothermia)",
-      "mechanism_of_action_moa": "Not applicable",
-      "conclusion": "在惡性中大腦動脈中風患者中，顱骨切除術後早期的中度低體溫未能改善死亡率和功能結果，與標準護理相比，但在這一特定情況下可能會造成嚴重傷害。",
-      "pitfalls_and_limitations": [
-        "招募因安全問題而中止。",
-        "在低體溫組中，46%的患者在14天內至少出現1例嚴重不良事件。",
-        "在12個月後，低體溫組的嚴重不良事件發生率為80%。"
       ]
     }
   },

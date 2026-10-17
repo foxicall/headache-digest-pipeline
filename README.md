@@ -166,6 +166,15 @@ The viewer fetches both `./data/headache_papers.json` and `./data/journal_metric
 
 Titles and abstracts are inserted as text, never HTML. Relative URLs work under GitHub Pages project paths. Loading, fetch errors, retries, empty results and cached/offline data are handled. The existing app manifest and service worker support installation/offline reading after an online visit; production requires HTTPS.
 
+Two literature dropdowns combine with keyword search and journal/society chips using AND:
+
+- **Syndrome:** all 368 catalog codes, grouped into 26 chapters, plus an unclassified option. Matching uses the title, stored methods and positive inclusion-criteria text, with common bilingual synonyms/abbreviations and context guards. Descendants also count toward their parents. Duplicate appendix headings require explicit appendix/alternative-criteria wording or a matching appendix descendant. These are text-based literature facets, not assigned diagnoses or verification of ICHD diagnostic criteria.
+- **Study design:** clinical trials, RCTs/phases, case reports/series, cohort, case-control, cross-sectional, observational, reviews/meta-analyses, guidelines/consensus, protocols, and other designs/attributes. Clinical-trial/RCT/phase facets use exact PubMed types; the other facets also recognize explicit English or Chinese title/methods wording. Reviews/protocols do not inherit the primary designs they discuss; missing design information is not inferred from sample size or use of a control group.
+
+Options show counts for the full eligible archive, including zero-count categories; overlapping categories need not sum to the archive total. The result count reflects the combined filters. Changing a dropdown resets pagination, and **Clear all filters** resets the keyword, both dropdowns and journal selection. The catalog browser remains independent. If catalog loading fails, the syndrome dropdown is disabled with retry guidance while study-design filtering and the reader remain usable. These filters do not relax the IF, topic or date admission rules. Four historical incidental-headache/hemicraniectomy false positives were removed after source rechecking; regression tests prevent their recurrence.
+
+Source checking also removed unsupported age/consent and exclusion criteria from the stored SUNHA trial summary (PMID 39301810); absent eligibility details are marked `Not reported`.
+
 Tailwind CSS is compiled and checked in as `assets/tailwind.css`; no runtime CDN or Node installation is required. Rebuild after changing utility classes with:
 
 ```bash
@@ -177,3 +186,5 @@ npm_config_cache=/tmp/headache-npm-cache npx --yes tailwindcss@3.4.17 \
 ## Verification
 
 Run `pytest`. Tests use `unittest.mock`, clear API-key environment variables, block real HTTP requests and prevent real OpenAI client creation. Coverage includes the exact schema, XML/DOI/date parsing, query coverage, rate limiting/retries, 30-day/ten-year defaults and overrides, leap-year and electronic-date boundaries, pagination and PubMed ceiling splits, journal aliases and overlapping source groups, Taiwan classification, strict topic screening, all 368 catalog entries, underlying-disease exclusions, long-query POST transport and source-based regressions, mocked Structured Outputs, missing/blank keys, deduplication, prepending, upgrades, partial failures, atomic writes, historical seed fixtures, strict JIF boundaries, low-JIF clinical-trial exceptions and exclusions, unknown/wrong-year metrics, custom-query protection and archive pruning. Tests require no network access, external API key or billing.
+
+Run `node --test tests/paper_filters.test.cjs` with Node 22+ for the DOM-free dropdown classifiers. Tests cover all catalog names and parent codes, bilingual aliases, overlapping research designs, negated/unknown designs, protocol/review exclusions, case-report-form false positives and the current cohort record. GitHub Actions runs both suites before synchronization/deployment; Node is not required by the Python pipeline or the deployed reader.

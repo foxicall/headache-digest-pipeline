@@ -41,22 +41,8 @@ const FILTERS = [
   ["ths", "THS · 台灣頭痛學會"],
 ];
 const FALLBACK_NOTICE = "Requires OPENAI_API_KEY for AI extraction";
-// Exact PubMed publication types, mirrored in src/journal_metrics.py.
-const CLINICAL_TRIAL_TYPES = new Set([
-  "clinical trial", "clinical trial, phase i", "clinical trial, phase ii",
-  "clinical trial, phase iii", "clinical trial, phase iv", "controlled clinical trial",
-  "randomized controlled trial", "pragmatic clinical trial", "adaptive clinical trial", "equivalence trial",
-]);
-const NON_TRIAL_TYPES = new Set([
-  "clinical trial protocol", "clinical trial, veterinary", "observational study",
-  "review", "systematic review", "meta-analysis",
-]);
-
-function isClinicalTrial(studyDesign) {
-  const types = studyDesign.split(";").map((value) => value.trim().toLowerCase().replace(/\s+/g, " "));
-  return types.some((value) => CLINICAL_TRIAL_TYPES.has(value)) &&
-    !types.some((value) => NON_TRIAL_TYPES.has(value));
-}
+// Exact PubMed trial types also mirror src/journal_metrics.py's admission policy.
+const { CLINICAL_TRIAL_TYPES, NON_TRIAL_TYPES, isClinicalTrial } = DigestFilters;
 const MODES = {
   fallback: ["原始摘要 · 尚未 AI 擷取", "bg-sky-50 text-sky-900"],
   structured: ["臨床結構摘要", "bg-emerald-50 text-emerald-900"],
@@ -74,6 +60,7 @@ const state = {
   visible: 20,
   cached: false,
   loaded: false,
+  facets: new Map(),
 };
 let pendingInstall;
 
@@ -237,6 +224,63 @@ function renderFilters() {
   );
 }
 
+function renderFacetOptions() {
+  const syndromeSelect = byId("syndrome-filter");
+  const studySelect = byId("study-filter");
+  const previousSyndrome = syndromeSelect.value;
+  const previousStudy = studySelect.value;
+  const matchers = syndromeCatalog ? DigestFilters.buildSyndromeMatchers(syndromeCatalog) : [];
+  state.facets = new Map(state.papers.map(paper => [paper.article_metadata.pmid_or_id, {
+    syndromes: syndromeCatalog ? DigestFilters.classifySyndromes(paper, matchers) : new Set(),
+    studies: DigestFilters.classifyStudy(paper),
+  }]));
+  const counts = { syndromes: new Map(), studies: new Map() };
+  for (const facets of state.facets.values()) for (const kind of Object.keys(counts)) {
+    for (const key of facets[kind]) counts[kind].set(key, (counts[kind].get(key) || 0) + 1);
+  }
+  const option = (key, label, count) => {
+    const node = element("option", "", `${label}（${count} 篇）`);
+    node.value = key;
+    return node;
+  };
+  studySelect.replaceChildren(option("all", "全部研究類型", state.papers.length));
+  for (const label of new Set(DigestFilters.STUDY_TYPES.map(type => type[2]))) {
+    const group = element("optgroup");
+    group.label = label;
+    for (const [key, name, category] of DigestFilters.STUDY_TYPES) if (category === label) {
+      group.append(option(key, name, counts.studies.get(key) || 0));
+    }
+    studySelect.append(group);
+  }
+  studySelect.value = [...studySelect.options].some(o => o.value === previousStudy) ? previousStudy : "all";
+  studySelect.disabled = !state.loaded;
+  syndromeSelect.replaceChildren(option("all", "全部症候群", state.papers.length));
+  if (syndromeCatalog) {
+    for (const item of syndromeCatalog.groups) {
+      const group = element("optgroup");
+      group.label = `${item.code} · ${item.label}`;
+      for (const entry of syndromeCatalog.entries.filter(e => e.code.split(".")[0] === item.code)) {
+        group.append(option(entry.code, `${entry.code} · ${entry.code === item.code ? item.label + " · " : ""}${entry.name}`, counts.syndromes.get(entry.code) || 0));
+      }
+      syndromeSelect.append(group);
+    }
+    syndromeSelect.append(option("unclassified", "未明確配對症候群", counts.syndromes.get("unclassified") || 0));
+  }
+  syndromeSelect.value = [...syndromeSelect.options].some(o => o.value === previousSyndrome) ? previousSyndrome : "all";
+  syndromeSelect.disabled = !syndromeCatalog || !state.loaded;
+  if (!syndromeCatalog) syndromeSelect.options[0].textContent = "症候群目錄未就緒 · 請使用目錄重試";
+}
+
+function resetFilters() {
+  byId("search").value = "";
+  byId("syndrome-filter").value = "all";
+  byId("study-filter").value = "all";
+  state.filter = "all";
+  state.visible = 20;
+  renderFilters();
+  render();
+}
+
 function paperCard(paper, index) {
   const info = paper.article_metadata;
   const mode = recordMode(paper);
@@ -339,10 +383,14 @@ function paperCard(paper, index) {
 function render() {
   if (!state.loaded) return;
   const query = byId("search").value.trim().toLocaleLowerCase();
+  const syndrome = byId("syndrome-filter").value;
+  const study = byId("study-filter").value;
   const filtered = state.papers.filter(
     (paper) =>
       eligiblePaper(paper) &&
       matchesFilter(paper, state.filter) &&
+      (syndrome === "all" || state.facets.get(paper.article_metadata.pmid_or_id)?.syndromes.has(syndrome)) &&
+      (study === "all" || state.facets.get(paper.article_metadata.pmid_or_id)?.studies.has(study)) &&
       (!query ||
         [
           ...Object.values(paper.article_metadata),
@@ -374,13 +422,14 @@ function render() {
   );
   byId("result-count").textContent = filtered.length + " 篇文獻";
   byId("load-more").hidden = filtered.length <= state.visible;
+  byId("reset-filters").disabled = !query && state.filter === "all" && syndrome === "all" && study === "all";
   byId("empty").hidden = filtered.length !== 0;
   const hasData = state.papers.length > 0;
   byId("empty-title").textContent = hasData
     ? "找不到符合的文獻"
     : "目前沒有符合收錄條件的文獻";
   byId("empty-message").textContent = hasData
-    ? "試試其他關鍵字，或切換期刊與學會。"
+    ? "目前的症候群、研究類型、期刊與關鍵字組合沒有符合文獻。可調整條件或清除全部篩選。"
     : "收錄 JIF > 10 的文獻，或 JIF < 10 且 PubMed 已標註為 clinical trial 的文獻；皆須符合症候群目錄的研究主題範圍。";
   byId("clear-search").hidden = !hasData;
 }
@@ -431,6 +480,7 @@ async function loadPapers() {
         .filter(Boolean)
         .join("；") + "。請依卡片標示區分資料模式。";
     renderFilters();
+    renderFacetOptions();
     render();
     connectionStatus();
   } catch (error) {
@@ -516,11 +566,15 @@ async function loadSyndromes() {
     syndromeCatalog = validateSyndromes(await response.json());
     syndromeCached = response.headers.get("X-Digest-Cache") === "offline";
     renderSyndromes();
+    renderFacetOptions();
+    render();
   } catch (error) {
     syndromeCatalog = null;
     byId("syndrome-groups").replaceChildren();
     byId("syndrome-status").textContent = error.name === "AbortError" ? "讀取目錄逾時，請重試。" : error.message;
     byId("syndrome-retry").hidden = false;
+    renderFacetOptions();
+    render();
   } finally {
     clearTimeout(timeout);
   }
@@ -534,13 +588,17 @@ byId("search").addEventListener("input", () => {
   render();
 });
 byId("sort").addEventListener("change", render);
+for (const id of ["syndrome-filter", "study-filter"]) byId(id).addEventListener("change", () => {
+  state.visible = 20;
+  render();
+});
+byId("reset-filters").addEventListener("click", resetFilters);
 byId("load-more").addEventListener("click", () => {
   state.visible += 20;
   render();
 });
 byId("clear-search").addEventListener("click", () => {
-  byId("search").value = "";
-  byId("journal-filters").querySelector('[data-filter="all"]').click();
+  resetFilters();
   byId("search").focus();
 });
 byId("retry").addEventListener("click", loadPapers);

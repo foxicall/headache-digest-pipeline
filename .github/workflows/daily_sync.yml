@@ -1,0 +1,115 @@
+name: Daily headache digest
+
+on:
+  schedule:
+    # 00:00 UTC = 08:00 Asia/Taipei.
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: headache-digest-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - run: python -m pytest -q
+
+  sync:
+    needs: test
+    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install pipeline dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Fetch and summarize new articles
+        id: pipeline
+        continue-on-error: true
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SUMMARY_LANGUAGE: ${{ vars.SUMMARY_LANGUAGE || 'Traditional Chinese' }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-4o-mini' }}
+        run: python src/main.py
+      - name: Commit completed summaries, including partial successes
+        if: ${{ !cancelled() }}
+        run: |
+          git add -- data/headache_papers.json
+          if ! git diff --cached --quiet -- data/headache_papers.json; then
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'data: update headache literature digest'
+            git push origin HEAD:main
+          fi
+      - name: Preserve a recovery copy
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: headache-papers-${{ github.run_id }}
+          path: data/headache_papers.json
+          retention-days: 7
+      - name: Surface partial or complete pipeline failures
+        if: always() && steps.pipeline.outcome == 'failure'
+        run: |
+          echo 'Some sources or summaries failed. Completed summaries were retained; inspect pipeline logs and the recovery artifact.'
+          exit 1
+
+  deploy:
+    needs: [test, sync]
+    # Data sync works without Pages. Opt in after enabling Pages in Settings.
+    if: >-
+      always() && needs.test.result == 'success' &&
+      (needs.sync.result == 'success' || needs.sync.result == 'skipped') &&
+      github.event_name != 'pull_request' && github.ref == 'refs/heads/main' &&
+      vars.DEPLOY_PAGES == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Read the data commit created by sync, not the event's older SHA.
+          ref: main
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Stage the static site
+        run: |
+          mkdir -p _site/data
+          cp index.html manifest.webmanifest sw.js _site/
+          cp -R assets _site/assets
+          cp data/headache_papers.json _site/data/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

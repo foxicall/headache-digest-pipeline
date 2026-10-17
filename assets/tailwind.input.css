@@ -1,0 +1,15 @@
+/* Build: npx --yes tailwindcss@3.4.17 -i assets/tailwind.input.css -o assets/tailwind.css --content './index.html,./assets/app.js' --minify */
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .journal-chip {
+    @apply rounded-full border border-solid border-stone-200 bg-white px-3 py-1.5 text-xs text-stone-600 transition-colors hover:border-emerald-700 hover:text-emerald-900;
+  }
+  .journal-chip[aria-pressed="true"] {
+    @apply border-emerald-900 bg-emerald-900 text-white;
+  }
+  .record-mode {
+    @apply inline-flex items-center rounded px-2 py-0.5 text-xs font-medium;
+  }
+}

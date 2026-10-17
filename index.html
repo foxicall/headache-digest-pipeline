@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#123e35" />
+    <meta
+      name="description"
+      content="頭痛與神經醫學文獻：七欄臨床摘要、原始摘要與可追溯的期刊來源。"
+    />
+    <title>Headache Digest · 頭痛文獻摘要</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/icon.svg" />
+    <link rel="apple-touch-icon" href="./assets/icon-192.png" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="stylesheet" href="./assets/tailwind.css" />
+    <link rel="stylesheet" href="./assets/styles.css" />
+    <script src="./assets/app.js" defer></script>
+  </head>
+  <body class="antialiased">
+    <a class="skip-link" href="#papers">跳至文獻列表</a>
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="Headache Digest 首頁">
+        <img src="./assets/icon.svg" width="38" height="38" alt="" />
+        <span>Headache<span class="brand-light">Digest</span></span>
+      </a>
+      <div class="header-actions">
+        <span class="edition">THE CLINICAL READING ROOM</span
+        ><button id="install" class="subtle-button" hidden>
+          安裝 App <span aria-hidden="true">↗</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">
+            <span class="status-dot" aria-hidden="true"></span> HEADACHE &
+            NEUROLOGY
+          </p>
+          <h1 id="hero-title">頭痛研究，<br /><span>掌握臨床重點。</span></h1>
+          <p class="hero-description">
+            從 PubMed 追蹤頭痛期刊與學會相關研究。<br
+              class="desktop-break"
+            />讓閱讀更有方向，讓證據回到來源。
+          </p>
+          <a class="browse-link" href="#papers"
+            >開始閱讀 <span aria-hidden="true">↓</span></a
+          >
+        </div>
+        <aside class="overview" aria-label="文獻庫概況">
+          <div class="overview-top">
+            <span>YOUR EVIDENCE BRIEF</span><span aria-hidden="true">↗</span>
+          </div>
+          <div class="count-line">
+            <strong id="total-count">—</strong><span>篇文獻<br />持續累積</span>
+          </div>
+          <div class="overview-rule"></div>
+          <dl>
+            <div>
+              <dt>摘要結構</dt>
+              <dd>7 個臨床欄位</dd>
+            </div>
+            <div>
+              <dt>最新文獻發表日</dt>
+              <dd id="last-updated">—</dd>
+            </div>
+            <div>
+              <dt>資料來源</dt>
+              <dd>PubMed / 期刊與學會</dd>
+            </div>
+          </dl>
+          <p class="overview-note">來源可追溯 · 原文與摘要並讀</p>
+        </aside>
+      </section>
+
+      <section id="papers" class="library" aria-labelledby="library-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">THE LITERATURE COLLECTION</p>
+            <h2 id="library-title">文獻書架</h2>
+          </div>
+          <span class="section-aside">每日更新 · 循證閱讀</span>
+        </div>
+        <div class="toolbar">
+          <label class="search-wrap"
+            ><span aria-hidden="true">⌕</span
+            ><span class="sr-only">搜尋標題、摘要或期刊</span
+            ><input
+              id="search"
+              type="search"
+              placeholder="搜尋關鍵字、研究或期刊…"
+              autocomplete="off"
+          /></label>
+          <label class="sort-wrap"
+            ><span class="sr-only">排序方式</span
+            ><select id="sort">
+              <option value="newest">發表日期：新到舊</option>
+              <option value="oldest">發表日期：舊到新</option>
+              <option value="added">最近加入</option>
+            </select></label
+          >
+        </div>
+        <div class="filter-row">
+          <div
+            id="journal-filters"
+            class="flex flex-wrap gap-2"
+            role="group"
+            aria-label="依期刊或學會篩選"
+          ></div>
+          <span
+            id="result-count"
+            class="result-count"
+            aria-live="polite"
+          ></span>
+        </div>
+        <p
+          id="mode-notice"
+          class="rounded border border-emerald-100 bg-emerald-50 px-4 py-3 text-xs leading-relaxed text-emerald-900 mb-5"
+          hidden
+        ></p>
+        <p
+          id="connection-status"
+          class="connection-status"
+          role="status"
+          hidden
+        ></p>
+        <div id="loading" class="state-panel" role="status">
+          <span class="loading-dot"></span> 正在讀取文獻庫…
+        </div>
+        <div id="error" class="state-panel error-panel" role="alert" hidden>
+          <h3>暫時無法讀取文獻</h3>
+          <p id="error-message"></p>
+          <button id="retry" class="primary-button">重新載入</button>
+        </div>
+        <div id="empty" class="state-panel" hidden>
+          <div class="empty-symbol" aria-hidden="true">⌁</div>
+          <h3 id="empty-title">文獻書架準備好了</h3>
+          <p id="empty-message">
+            第一批摘要發佈後，會在這裡顯示。你可以稍後回來閱讀。
+          </p>
+          <button id="clear-search" class="subtle-button" hidden>
+            清除篩選條件 ↗
+          </button>
+        </div>
+        <div id="paper-list" aria-busy="true"></div>
+        <button id="load-more" class="load-more" hidden>
+          載入更多文獻 <span aria-hidden="true">↓</span>
+        </button>
+      </section>
+
+      <section class="reading-note">
+        <span class="note-marker" aria-hidden="true">i</span>
+        <div>
+          <h2>摘要是閱讀起點，原文是判讀依據。</h2>
+          <p>
+            範例文獻會標示發表年份，原始摘要模式不代表已完成臨床擷取。AI
+            摘要仍需核對原文；未報告與不適用的資訊會分別標示。本網站不提供個別診療建議。
+          </p>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <a class="footer-brand" href="./">Headache Digest</a
+      ><span>OPEN LITERATURE. CLEARER PERSPECTIVES.</span
+      ><a
+        href="https://pubmed.ncbi.nlm.nih.gov/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >探索 PubMed ↗</a
+      >
+    </footer>
+    <noscript
+      ><p class="state-panel">
+        請開啟 JavaScript 以瀏覽文獻，或直接<a
+          href="./data/headache_papers.json"
+          >下載文獻 JSON</a
+        >。
+      </p></noscript
+    >
+  </body>
+</html>

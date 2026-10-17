@@ -2,7 +2,7 @@
 
 const FIELDS = [
   ["methods", "Methods · 研究方法", "text"],
-  ["mechanism_of_action_moa", "MOA · 作用機轉", "text"],
+  ["participants_feature", "Participants feature · 參與者特徵", "text"],
   ["number_of_inclusion", "Number of Inclusion · 納入人數", "text"],
   ["inclusion_criteria", "Inclusion Criteria · 納入條件", "list"],
   ["exclusion_criteria", "Exclusion Criteria · 排除條件", "list"],

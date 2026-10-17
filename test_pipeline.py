@@ -21,7 +21,7 @@ from src.models import Article, ArticleMetadata, PaperRecord, StructuredSummary
 from src.summarizer import DEFAULT_MODEL, FALLBACK_NOTICE, Summarizer, SummaryError, is_fallback
 
 FIELDS = {"methods", "inclusion_criteria", "exclusion_criteria", "number_of_inclusion",
-          "mechanism_of_action_moa", "conclusion", "pitfalls_and_limitations"}
+          "participants_feature", "conclusion", "pitfalls_and_limitations"}
 LIST_FIELDS = {"inclusion_criteria", "exclusion_criteria", "pitfalls_and_limitations"}
 PUBMED_XML = b'''<PubmedArticleSet><PubmedArticle><MedlineCitation><PMID>12345</PMID><Article>
 <Journal><JournalIssue><PubDate><Year>2026</Year><Month>Oct</Month></PubDate></JournalIssue><Title>Cephalalgia</Title></Journal>
@@ -101,7 +101,8 @@ def test_exact_seven_fields_and_three_list_fields():
 @pytest.mark.parametrize("change", [
     {"methods": ""}, {"conclusion": "   "}, {"inclusion_criteria": []},
     {"exclusion_criteria": [" "]}, {"pitfalls_and_limitations": "Not reported"},
-    {"number_of_inclusion": 577}, {"placebo": "old schema"},
+    {"number_of_inclusion": 577}, {"participants_feature": ""},
+    {"participants_feature": ["Adults with migraine"]}, {"placebo": "old schema"},
 ])
 def test_schema_rejects_empty_wrong_type_and_extra_fields(change):
     with pytest.raises(ValidationError):
@@ -111,6 +112,18 @@ def test_schema_rejects_empty_wrong_type_and_extra_fields(change):
 def test_missing_required_fields_rejected():
     with pytest.raises(ValidationError):
         StructuredSummary(methods="Incomplete")
+
+
+def test_participants_feature_replaces_moa_without_accepting_old_content():
+    values = summary(participants_feature="成人陣發性偏頭痛患者；平均年齡 42 歲，女性占 80%。").model_dump()
+    assert len(values) == 7 and "participants_feature" in values
+    assert "mechanism_of_action_moa" not in values
+    old = {key: value for key, value in values.items() if key != "participants_feature"}
+    old["mechanism_of_action_moa"] = "Blocks a receptor"
+    with pytest.raises(ValidationError):
+        StructuredSummary.model_validate(old)
+    with pytest.raises(ValidationError):
+        StructuredSummary.model_validate({**values, "mechanism_of_action_moa": "Blocks a receptor"})
 
 
 def test_metadata_fields_and_date_precision():
@@ -275,6 +288,24 @@ def test_key_present_uses_mini_and_strict_structured_outputs(monkeypatch):
     assert "Not reported" in prompt and "Not applicable" in prompt
     assert "Never add arm counts" in prompt
     assert json.loads(kwargs["messages"][1]["content"])["source_text"] == article().abstract
+
+
+def test_mocked_ai_extracts_participant_features_and_preserves_missing_information_rules():
+    source = article(abstract="Adults with episodic migraine had a mean age of 42 years; 80% were women.")
+    features = "成人陣發性偏頭痛患者；平均年齡 42 歲，女性占 80%。"
+    client = mock_ai(parsed=summary(participants_feature=features))
+    result = Summarizer(client=client).summarize(source)
+    assert result.structured_summary.participants_feature == features
+    assert result.article_metadata == source.metadata
+    call_args = client.beta.chat.completions.parse.call_args.kwargs
+    schema = call_args['response_format'].model_json_schema()
+    assert 'participants_feature' in schema['required']
+    assert 'mechanism_of_action_moa' not in schema['properties']
+    prompt = call_args['messages'][0]['content']
+    assert 'eligibility-only age ranges' in prompt
+    assert 'Do not infer ethnicity' in prompt
+    assert 'post-treatment outcomes as baseline features' in prompt
+    assert 'Not reported' in prompt and 'Not applicable' in prompt
 
 
 @pytest.mark.parametrize("kwargs", [

@@ -36,7 +36,7 @@ class StructuredSummary(BaseModel):
     inclusion_criteria: list[str] = Field(description="Only explicitly reported inclusion criteria; otherwise ['Not reported'] or ['Not applicable'] with a reason.")
     exclusion_criteria: list[str] = Field(description="Only explicitly reported exclusion criteria; never infer exclusions from participant characteristics.")
     number_of_inclusion: str = Field(description="Reported participant counts, distinguishing randomized/enrolled/analyzed. Use Not reported or Not applicable; never calculate or infer a number.")
-    mechanism_of_action_moa: str = Field(description="Only the mechanism explicitly described in the source; otherwise Not reported or Not applicable.")
+    participants_feature: str = Field(description="Explicitly reported participant characteristics: population/diagnosis, age, sex or gender, baseline disease burden, prior treatment and relevant comorbidities. Distinguish actual baseline characteristics from eligibility thresholds. Never infer demographics from location or calculate missing values; use Not reported or Not applicable when appropriate.")
     conclusion: str = Field(description="Source conclusions and reported outcomes, preserving effect sizes, uncertainty and harms without inventing statistics.")
     pitfalls_and_limitations: list[str] = Field(description="Reported limitations and clearly labeled limitations of abstract-only evidence; distinguish these from author-reported limitations.")
 

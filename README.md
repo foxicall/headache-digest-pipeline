@@ -69,17 +69,19 @@ Each `PaperRecord` contains exactly `article_metadata` and `structured_summary`.
 | `inclusion_criteria` | string array |
 | `exclusion_criteria` | string array |
 | `number_of_inclusion` | string |
-| `mechanism_of_action_moa` | string |
+| `participants_feature` | string |
 | `conclusion` | string |
 | `pitfalls_and_limitations` | string array |
 
 Pydantic v2 rejects extra fields and empty summary strings/lists. Participant counts remain strings to preserve distinctions such as “577 randomized; 570 included in efficacy analyses.”
 
+`participants_feature` replaces the former MOA field and is shown as **Participants feature · 參與者特徵**. It describes explicitly reported population/diagnosis, age, sex or gender, baseline headache burden, previous treatment and relevant comorbidities. Eligibility thresholds are labeled separately from observed baseline distributions; missing characteristics use `Not reported`, and genuinely inapplicable populations use `Not applicable`. Neither ethnicity nor missing statistics are inferred. Existing archive records were populated from their original PubMed abstracts; mechanism text was not relabeled as participant information. The other six clinical fields and metadata are preserved. Older custom JSON using the retired key requires source-based migration to this seven-field schema.
+
 ## No-key fallback and AI extraction
 
 **Without a key:** missing, empty or whitespace-only `OPENAI_API_KEY` logs a warning. Both `methods` and `conclusion` contain the complete raw PubMed abstract. The other five fields contain `Requires OPENAI_API_KEY for AI extraction`, wrapped in a one-element list for list fields. No OpenAI client is constructed. An unexpectedly missing abstract is explicitly marked.
 
-**With a key:** `gpt-4o-mini` uses OpenAI Structured Outputs with `StructuredSummary` as the response model. The prompt distinguishes `Not reported` (relevant information omitted) from `Not applicable` (irrelevant to the study design). It forbids inventing sample sizes, p-values, mechanisms or eligibility criteria, treats source text as evidence rather than instructions, and separates author-reported limitations from limits of abstract-only reading. Refusals or invalid/incomplete output are reported as failures and remain retryable.
+**With a key:** `gpt-4o-mini` uses OpenAI Structured Outputs with `StructuredSummary` as the response model. The prompt distinguishes `Not reported` (relevant information omitted) from `Not applicable` (irrelevant to the study design). It forbids inventing sample sizes, p-values, participant characteristics or eligibility criteria, treats source text as evidence rather than instructions, and separates author-reported limitations from limits of abstract-only reading. Refusals or invalid/incomplete output are reported as failures and remain retryable.
 
 Adding a key also upgrades stored fallback records, including those outside the fetch window, using the abstract retained in `methods`. Upgrades replace records in place without duplicate PMIDs. No additional mode/provenance fields are added to the public schema. The dashboard recognizes fallback records by the exact marker. All upgrades remain subject to the JIF gate.
 

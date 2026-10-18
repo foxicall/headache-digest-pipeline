@@ -55,6 +55,9 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   const url = new URL(event.request.url);
+  // Navigation requests can retain #guidelines/#library in a service worker.
+  // They identify a section of the same cached document, not another resource.
+  url.hash = "";
   const isData = [DATA_URL, METRICS_URL, SYNDROMES_URL, GUIDELINES_URL].includes(url.href);
   if (!isData && !SHELL_URLS.has(url.href)) return;
   event.respondWith(
@@ -73,10 +76,10 @@ self.addEventListener("fetch", (event) => {
               : !Array.isArray(payload?.entries) || !Array.isArray(payload?.groups))
             throw new Error("Invalid data response");
         }
-        await cache.put(event.request, response.clone());
+        await cache.put(url.href, response.clone());
         return response;
       } catch {
-        const cached = await cache.match(event.request);
+        const cached = await cache.match(url.href);
         if (!cached)
           return new Response("Offline and no cached copy is available", {
             status: 503,

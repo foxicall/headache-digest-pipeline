@@ -67,7 +67,7 @@ test('service worker caches verified guideline JSON, preserves it on invalid res
   const sandbox = {
     self: {registration: {scope}, addEventListener: (event, handler) => {listeners[event] = handler;}, DigestGuidelines:guides},
     importScripts: () => {}, URL, Response, Headers, fetch: (...args) => response(...args),
-    caches: {open: async () => ({put: async (req, res) => cached.set(req.url, res), match: async (req) => cached.get(req.url)?.clone()})},
+    caches: {open: async () => ({put: async (url, res) => cached.set(url, res), match: async (url) => cached.get(url)?.clone()})},
   };
   vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../sw.js'), 'utf8'), sandbox);
   const url = scope + 'data/headache_guidelines.json';
@@ -79,6 +79,24 @@ test('service worker caches verified guideline JSON, preserves it on invalid res
   assert.deepEqual(await fallback.json(), data);
   response = async () => { throw new Error('network offline'); };
   assert.deepEqual(await (await request()).json(), data);
+});
+
+test('offline section bookmarks use the cached document without a fragment', async () => {
+  const listeners = {}, scope = 'https://example.test/headache-digest-pipeline/';
+  const cached = new Map([[scope, new Response('<main>Offline reader</main>')]]);
+  const sandbox = {
+    self: {registration: {scope}, addEventListener: (event, handler) => {listeners[event] = handler;}, DigestGuidelines:guides},
+    importScripts: () => {}, URL, Response, Headers,
+    fetch: async () => { throw new Error('offline'); },
+    caches: {open: async () => ({match: async (url) => cached.get(url)?.clone()})},
+  };
+  vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../sw.js'), 'utf8'), sandbox);
+  for (const fragment of ['#guidelines', '#library']) {
+    let response;
+    listeners.fetch({request:{method:'GET',url:scope+fragment}, respondWith: (result) => {response=result;}});
+    assert.ok(response, 'the worker must handle section navigation');
+    assert.equal(await (await response).text(), '<main>Offline reader</main>');
+  }
 });
 
 const findDrug = (country, drug, population = '') => data.comparisons.find((r) => r.id === country).recommendations.find((r) => r.drug === drug && r.population.includes(population));

@@ -31,8 +31,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Test literature filter classification
-        run: node --test tests/paper_filters.test.cjs
+      - name: Test literature filters and reading library
+        run: node --test tests/*.test.cjs
 
   sync:
     needs: test

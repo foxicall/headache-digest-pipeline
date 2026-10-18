@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="./assets/tailwind.css" />
     <link rel="stylesheet" href="./assets/styles.css" />
     <script src="./assets/paper-filters.js" defer></script>
+    <script src="./assets/reading-library.js" defer></script>
     <script src="./assets/app.js" defer></script>
   </head>
   <body class="antialiased">
@@ -137,6 +138,18 @@
           <button id="reset-filters" class="subtle-button" type="button" disabled>清除全部篩選</button>
         </div>
         <p id="facet-note" class="facet-note">可搭配關鍵字與期刊篩選；篇數為全庫統計，同篇可屬多類。症候群依標題與摘要用語配對，研究類型依 PubMed 標籤及方法描述分類；未明確記載者列為未分類。</p>
+        <div class="reading-library" aria-label="個人閱讀清單">
+          <div id="reading-filters" class="reading-filters" role="group" aria-label="依閱讀與收藏狀態篩選">
+            <button type="button" data-reading="all" aria-pressed="true">全部文獻</button>
+            <button type="button" data-reading="unread" aria-pressed="false">未閱讀</button>
+            <button type="button" data-reading="read" aria-pressed="false">已閱讀</button>
+            <button type="button" data-reading="saved" aria-pressed="false">★ 我的收藏</button>
+          </div>
+          <p class="reading-storage-note">點選 ☆ 收藏重要 trials 或其他文獻，點選 ✓ 標記已閱讀。標記與收藏摘要保存在此瀏覽器，不會跨裝置同步；清除網站資料會移除收藏。</p>
+          <p id="saved-notice" class="reading-storage-note" hidden>我的收藏保留文章離開更新清單前儲存的摘要。可再選「Clinical trial」只看已收藏的臨床試驗；期刊與下拉選單篇數以收藏清單計算。</p>
+          <p id="library-warning" class="library-warning" role="alert" hidden></p>
+          <p id="library-feedback" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+        </div>
         <div class="filter-row">
           <div
             id="journal-filters"

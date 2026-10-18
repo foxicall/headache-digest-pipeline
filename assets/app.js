@@ -61,7 +61,14 @@ const state = {
   cached: false,
   loaded: false,
   facets: new Map(),
+  reading: "all",
+  library: { read: new Set(), saved: new Map() },
 };
+const readingLibrary = DigestLibrary.createLibrary(
+  () => window.localStorage,
+  new URL("./", window.location.href).pathname,
+  paper => validatePapers([paper]),
+);
 let pendingInstall;
 
 function element(tag, className, text) {
@@ -196,14 +203,84 @@ function matchesFilter(paper, filter) {
     (SOCIETY_TAGS[filter] || []).some((tag) => tags.includes(tag));
 }
 
+function libraryPapers() {
+  if (state.reading !== "saved") return state.papers;
+  const current = new Map(state.papers.map(p => [p.article_metadata.pmid_or_id, p]));
+  return [...state.library.saved.entries()]
+    .sort((a, b) => b[1].savedAt.localeCompare(a[1].savedAt))
+    .map(([id, entry]) => current.get(id) || entry.paper);
+}
+
+function refreshLibrary() {
+  try {
+    state.library = readingLibrary.load();
+    byId("library-warning").hidden = !state.library.damaged;
+    byId("library-warning").textContent = state.library.damaged
+      ? "部分本機收藏資料無法讀取，已保留原資料；其他標記與收藏仍可使用。" : "";
+  } catch {
+    byId("library-warning").hidden = false;
+    byId("library-warning").textContent = "此瀏覽器無法讀寫閱讀清單。請允許儲存網站資料；文獻仍可閱讀。";
+  }
+}
+
+function renderReadingFilters() {
+  const readCount = state.papers.filter(p => state.library.read.has(p.article_metadata.pmid_or_id)).length;
+  const labels = {
+    all: `全部文獻 · ${state.papers.length}`,
+    unread: `未閱讀 · ${state.papers.length - readCount}`,
+    read: `已閱讀 · ${readCount}`,
+    saved: `★ 我的收藏 · ${state.library.saved.size}`,
+  };
+  byId("reading-filters").querySelectorAll("button").forEach(button => {
+    button.textContent = labels[button.dataset.reading];
+    button.setAttribute("aria-pressed", String(state.reading === button.dataset.reading));
+  });
+  byId("saved-notice").hidden = state.reading !== "saved";
+}
+
+function changePaperMark(paper, action, button) {
+  const id = paper.article_metadata.pmid_or_id;
+  const top = button.getBoundingClientRect().top;
+  const oldIndex = [...byId("paper-list").children].indexOf(button.closest(".paper-shell"));
+  let enabled;
+  try {
+    enabled = action === "saved" ? readingLibrary.toggleSaved(paper) : readingLibrary.toggleRead(id);
+  } catch {
+    const message = "本次標記未儲存，原有收藏不變。請確認瀏覽器允許儲存網站資料，且仍有可用空間後重試。";
+    byId("library-warning").hidden = false;
+    byId("library-warning").textContent = message;
+    const actions = button.closest(".paper-actions");
+    actions.querySelector(".mark-error")?.remove();
+    const error = element("p", "mark-error", message);
+    error.setAttribute("role", "alert");
+    actions.append(error);
+    return;
+  }
+  refreshLibrary();
+  if (state.reading === "saved") {
+    renderFilters();
+    renderFacetOptions();
+  }
+  render({ preserveOpen: true });
+  byId("library-feedback").textContent = (action === "saved"
+    ? enabled ? "已收藏摘要：" : "已取消收藏："
+    : enabled ? "已標記已閱讀：" : "已標記未閱讀：") + paper.article_metadata.title;
+  const same = [...byId("paper-list").children].find(card => card.dataset.pmid === id);
+  const target = (same || byId("paper-list").children[oldIndex] || byId("paper-list").lastElementChild)
+    ?.querySelector(`[data-mark="${action}"]`) || byId("reading-filters").querySelector('[aria-pressed="true"]');
+  target.focus({ preventScroll: true });
+  if (same) window.scrollBy({ top: target.getBoundingClientRect().top - top, behavior: "instant" });
+}
+
 function renderFilters() {
-  const filters = FILTERS.filter(([key]) => key === "all" || state.papers.some((paper) => matchesFilter(paper, key)));
-  const journals = [...new Set(state.papers.map((paper) => verifiedMetric(paper.article_metadata.source_society_or_journal)?.journal).filter(Boolean))].sort();
+  const papers = libraryPapers();
+  const filters = FILTERS.filter(([key]) => key === "all" || papers.some((paper) => matchesFilter(paper, key)));
+  const journals = [...new Set(papers.map((paper) => verifiedMetric(paper.article_metadata.source_society_or_journal)?.journal).filter(Boolean))].sort();
   filters.push(...journals.map((journal) => ["journal:" + journal, canonicalJournal(journal)]));
   if (!filters.some(([key]) => key === state.filter)) state.filter = "all";
   byId("journal-filters").replaceChildren(
     ...filters.map(([key, label]) => {
-      const count = state.papers.filter((paper) =>
+      const count = papers.filter((paper) =>
         matchesFilter(paper, key),
       ).length;
       const button = element("button", "journal-chip", label + " · " + count);
@@ -225,12 +302,13 @@ function renderFilters() {
 }
 
 function renderFacetOptions() {
+  const papers = libraryPapers();
   const syndromeSelect = byId("syndrome-filter");
   const studySelect = byId("study-filter");
   const previousSyndrome = syndromeSelect.value;
   const previousStudy = studySelect.value;
   const matchers = syndromeCatalog ? DigestFilters.buildSyndromeMatchers(syndromeCatalog) : [];
-  state.facets = new Map(state.papers.map(paper => [paper.article_metadata.pmid_or_id, {
+  state.facets = new Map(papers.map(paper => [paper.article_metadata.pmid_or_id, {
     syndromes: syndromeCatalog ? DigestFilters.classifySyndromes(paper, matchers) : new Set(),
     studies: DigestFilters.classifyStudy(paper),
   }]));
@@ -243,7 +321,7 @@ function renderFacetOptions() {
     node.value = key;
     return node;
   };
-  studySelect.replaceChildren(option("all", "全部研究類型", state.papers.length));
+  studySelect.replaceChildren(option("all", "全部研究類型", papers.length));
   for (const label of new Set(DigestFilters.STUDY_TYPES.map(type => type[2]))) {
     const group = element("optgroup");
     group.label = label;
@@ -254,7 +332,7 @@ function renderFacetOptions() {
   }
   studySelect.value = [...studySelect.options].some(o => o.value === previousStudy) ? previousStudy : "all";
   studySelect.disabled = !state.loaded;
-  syndromeSelect.replaceChildren(option("all", "全部症候群", state.papers.length));
+  syndromeSelect.replaceChildren(option("all", "全部症候群", papers.length));
   if (syndromeCatalog) {
     for (const item of syndromeCatalog.groups) {
       const group = element("optgroup");
@@ -276,13 +354,35 @@ function resetFilters() {
   byId("syndrome-filter").value = "all";
   byId("study-filter").value = "all";
   state.filter = "all";
+  state.reading = "all";
   state.visible = 20;
   renderFilters();
+  renderFacetOptions();
   render();
 }
 
 function paperCard(paper, index) {
   const info = paper.article_metadata;
+  const read = state.library.read.has(info.pmid_or_id);
+  const saved = state.library.saved.has(info.pmid_or_id);
+  const shell = element("article", "paper-shell" + (read ? " is-read" : ""));
+  shell.dataset.pmid = info.pmid_or_id;
+  const actions = element("div", "paper-actions");
+  actions.setAttribute("role", "group");
+  actions.setAttribute("aria-label", "閱讀與收藏：" + info.title);
+  for (const [action, active, label, undo] of [
+    ["read", read, "✓ 已閱讀", "標記已閱讀"],
+    ["saved", saved, "★ 已收藏", "☆ 收藏"],
+  ]) {
+    const button = element("button", "paper-mark", active ? label : undo);
+    button.type = "button";
+    button.dataset.mark = action;
+    button.setAttribute("aria-pressed", String(active));
+    button.setAttribute("aria-label", (action === "read" ? "已閱讀：" : "收藏：") + info.title);
+    button.title = action === "read" ? read ? "改為未閱讀" : "標記已閱讀" : saved ? "取消收藏" : "收藏此文獻摘要";
+    button.addEventListener("click", () => changePaperMark(paper, action, button));
+    actions.append(button);
+  }
   const mode = recordMode(paper);
   const details = element("details", "paper");
   details.dataset.pmid = info.pmid_or_id;
@@ -320,6 +420,10 @@ function paperCard(paper, index) {
     expand,
   );
   const body = element("div", "paper-content");
+  if (state.reading === "saved" && !state.papers.some(p => p.article_metadata.pmid_or_id === info.pmid_or_id)) {
+    const savedAt = state.library.saved.get(info.pmid_or_id).savedAt.slice(0, 10);
+    body.append(element("p", "snapshot-note", `收藏摘要 · 儲存於 ${savedAt}（UTC）。目前無法從更新清單取得此篇，顯示收藏當時版本。`));
+  }
   if (mode === "fallback") {
     body.append(
       element(
@@ -377,17 +481,22 @@ function paperCard(paper, index) {
   }
   body.append(footer);
   details.append(heading, body);
-  return details;
+  shell.append(actions, details);
+  return shell;
 }
 
-function render() {
+function render({ preserveOpen = false } = {}) {
   if (!state.loaded) return;
+  const open = new Set([...byId("paper-list").querySelectorAll(".paper[open]")].map(card => card.dataset.pmid));
+  renderReadingFilters();
   const query = byId("search").value.trim().toLocaleLowerCase();
   const syndrome = byId("syndrome-filter").value;
   const study = byId("study-filter").value;
-  const filtered = state.papers.filter(
+  const filtered = libraryPapers().filter(
     (paper) =>
-      eligiblePaper(paper) &&
+      (state.reading === "saved" || eligiblePaper(paper)) &&
+      (state.reading !== "read" || state.library.read.has(paper.article_metadata.pmid_or_id)) &&
+      (state.reading !== "unread" || !state.library.read.has(paper.article_metadata.pmid_or_id)) &&
       matchesFilter(paper, state.filter) &&
       (syndrome === "all" || state.facets.get(paper.article_metadata.pmid_or_id)?.syndromes.has(syndrome)) &&
       (study === "all" || state.facets.get(paper.article_metadata.pmid_or_id)?.studies.has(study)) &&
@@ -403,7 +512,7 @@ function render() {
   );
   const sort = byId("sort").value;
   filtered.sort((a, b) => {
-    if (sort === "added") return 0; // Repository array is newest-added first.
+    if (sort === "added") return 0; // Feed order, or most recently saved first in the personal library.
     const left = a.article_metadata,
       right = b.article_metadata;
     if (left.publication_date === "Not reported")
@@ -420,9 +529,10 @@ function render() {
   byId("paper-list").replaceChildren(
     ...filtered.slice(0, state.visible).map(paperCard),
   );
+  if (preserveOpen) byId("paper-list").querySelectorAll(".paper").forEach(card => { card.open = open.has(card.dataset.pmid); });
   byId("result-count").textContent = filtered.length + " 篇文獻";
   byId("load-more").hidden = filtered.length <= state.visible;
-  byId("reset-filters").disabled = !query && state.filter === "all" && syndrome === "all" && study === "all";
+  byId("reset-filters").disabled = !query && state.filter === "all" && syndrome === "all" && study === "all" && state.reading === "all";
   byId("empty").hidden = filtered.length !== 0;
   const hasData = state.papers.length > 0;
   byId("empty-title").textContent = hasData
@@ -432,6 +542,14 @@ function render() {
     ? "目前的症候群、研究類型、期刊與關鍵字組合沒有符合文獻。可調整條件或清除全部篩選。"
     : "收錄 JIF > 10 的文獻，或 JIF < 10 且 PubMed 已標註為 clinical trial 的文獻；皆須符合症候群目錄的研究主題範圍。";
   byId("clear-search").hidden = !hasData;
+  if (state.reading !== "all") {
+    const savedEmpty = state.reading === "saved" && !state.library.saved.size;
+    byId("empty-title").textContent = savedEmpty ? "還沒有收藏文獻" : "此閱讀清單沒有符合的文獻";
+    byId("empty-message").textContent = savedEmpty
+      ? "在文獻卡片點選「☆ 收藏」，即可保存重要 trials 或其他研究摘要。"
+      : "可切換全部文獻，或調整閱讀狀態、症候群、研究類型、期刊與關鍵字條件。";
+    byId("clear-search").hidden = false;
+  }
 }
 
 function connectionStatus() {
@@ -492,6 +610,14 @@ async function loadPapers() {
           ? "請檢查網路連線後重試。"
           : error.message;
     byId("result-count").textContent = "";
+    if (state.library.saved.size) {
+      state.papers = [];
+      state.loaded = true;
+      state.reading = "saved";
+      renderFilters();
+      renderFacetOptions();
+      render();
+    }
   } finally {
     clearTimeout(timeout);
     byId("loading").hidden = true;
@@ -581,6 +707,22 @@ async function loadSyndromes() {
 }
 
 byId("syndrome-search").addEventListener("input", renderSyndromes);
+byId("reading-filters").querySelectorAll("button").forEach(button => {
+  button.addEventListener("click", () => {
+    state.reading = button.dataset.reading;
+    state.visible = 20;
+    renderFilters();
+    renderFacetOptions();
+    render();
+  });
+});
+window.addEventListener("storage", event => {
+  if (event.key !== null && !event.key.startsWith(readingLibrary.prefix)) return;
+  refreshLibrary();
+  renderFilters();
+  renderFacetOptions();
+  render({ preserveOpen: true });
+});
 byId("syndrome-part").addEventListener("change", renderSyndromes);
 byId("syndrome-retry").addEventListener("click", loadSyndromes);
 byId("search").addEventListener("input", () => {
@@ -620,6 +762,8 @@ window.addEventListener("appinstalled", () => {
 });
 
 async function boot() {
+  refreshLibrary();
+  renderReadingFilters();
   if ("serviceWorker" in navigator && window.isSecureContext) {
     try {
       await navigator.serviceWorker.register("./sw.js");

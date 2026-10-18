@@ -21,6 +21,14 @@ python -m http.server 8000 --bind 127.0.0.1
 
 Open <http://localhost:8000>. Use HTTP rather than `file://`, which cannot reliably fetch JSON. No database, frontend build or NCBI key is required.
 
+## Personal reading list
+
+Each card has independent **標記已閱讀 / ✓ 已閱讀** and **☆ 收藏 / ★ 已收藏** toggles. Opening a card does not automatically mark it as read. The reading filters show all current papers, unread papers, read papers, or **我的收藏**; they combine with keyword, syndrome, study-design and journal filters. Choose Clinical trial within 我的收藏 to see only saved trials. Clearing filters never deletes marks or saved papers.
+
+Marks are stored in this browser's `localStorage`, scoped to the Pages project path and PMID. Each saved item includes the complete seven-field summary and metadata. 我的收藏 uses the current record when available, otherwise its saved snapshot, clearly labeled with the save date; papers that leave the rolling feed remain accessible there. Personal snapshots do not re-enter the public archive or bypass the crawler's admission policy. In the saved view, journal and study/syndrome counts refer to saved papers. Current-feed read/unread counts exclude archived snapshots.
+
+The library works offline after the app has been loaded, survives daily deployments and browser restarts, and updates other open tabs on the same origin. If the feed cannot load, existing saved snapshots remain readable. Storage failures are reported without pretending a mark was saved; malformed entries do not hide valid entries. No account or database is needed, and marks are never committed to GitHub. Different devices, browsers and isolated installed-app storage do not synchronize; clearing site data or ending an ephemeral private-browsing session removes the local library.
+
 ## Strict Journal Impact Factor policy
 
 The policy is a versioned, manually verified snapshot of **2025 two-year JIF (2026 JCR release)**, checked on **2026-10-17**. It is maintained in `data/journal_metrics.json`, independent of the unchanged seven-field clinical summary schema. This is a curated list of verified journals, not an exhaustive JCR catalog.

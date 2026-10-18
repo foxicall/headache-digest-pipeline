@@ -53,3 +53,35 @@
   .guidelines .section-aside { display: block; margin-top: 8px; }
   .guideline-identity h3 { width: 100%; }
 }
+/* Native source grading stays visible on both wide tables and mobile rows. */
+.guidelines-controls { grid-template-columns: 1.15fr 1fr 1fr; }
+.guideline-drugs h4 { font-size: 14px; margin: 0; padding: 16px 20px; border-top: 1px solid var(--line); }
+.guideline-drug-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
+.guideline-drug-table th, .guideline-drug-table td { padding: 14px 16px; text-align: left; vertical-align: top; border-top: 1px solid var(--line); overflow-wrap: anywhere; line-height: 1.65; }
+.guideline-drug-table thead th { color: var(--muted); font-size: 11px; font-weight: 600; background: #f8faf5; }
+.guideline-drug-table thead th:first-child { width: 29%; }
+.guideline-drug-table thead th:nth-child(2), .guideline-drug-table thead th:nth-child(3) { width: 20%; }
+.guideline-drug-table .drug-name { font-weight: 400; }
+.drug-population, .drug-phase, .drug-regimen, .drug-locator, .grade-wording { display: block; margin-top: 5px; color: var(--muted); font-size: 11px; }
+.drug-name strong { font-size: 13px; }
+.drug-system { display: block; font-size: 11px; font-weight: 600; }
+.drug-provenance p { margin: 6px 0; font-size: 11px; color: var(--muted); }
+.grade-value { display: inline-block; border: 1px solid #b9ccb6; padding: 2px 8px; border-radius: 4px; background: #f0f5ea; color: var(--green); font-weight: 650; }
+.grade-unavailable { color: var(--muted); font-size: 11px; }
+.drug-mobile-label { display: none; }
+.guideline-overview { border-top: 1px solid var(--line); }
+.guideline-overview > summary { padding: 12px 20px; cursor: pointer; font-size: 12px; font-weight: 600; color: var(--muted); }
+.guideline-drug-empty { padding: 0 20px 14px; font-size: 12px; color: var(--muted); }
+.grading-system-definition h4 { margin-bottom: 0; }
+.grading-system-definition p { margin-top: 5px; }
+@media (max-width: 700px) {
+  .guidelines-controls { grid-template-columns: 1fr; }
+  .guideline-drug-table, .guideline-drug-table tbody { display: block; }
+  .guideline-drug-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+  .guideline-drug-table tbody tr { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); border-top: 1px solid var(--line); }
+  .guideline-drug-table th, .guideline-drug-table td { display: block; border: 0; min-width: 0; }
+  .guideline-drug-table .drug-name, .guideline-drug-table .drug-provenance { grid-column: 1 / -1; }
+  .guideline-drug-table .drug-grade { padding-top: 4px; padding-bottom: 4px; }
+  .drug-mobile-label { display: block; font-size: 10px; color: var(--muted); margin-bottom: 7px; }
+  .guideline-drug-table .drug-provenance { background: #fafcf8; margin: 10px; padding: 10px; border-radius: 5px; }
+}

@@ -1,9 +1,11 @@
 "use strict";
-importScripts("./assets/guidelines.js");
+// Version the schema validator in both the reader and worker so HTTP caches
+// cannot combine the previous validator with the new JSON schema.
+importScripts("./assets/guidelines.js?v=13");
 
 // Scope-specific cache names keep different GitHub Pages project sites isolated.
 const PREFIX = `headache-digest:${self.registration.scope}:`;
-const CACHE = `${PREFIX}v12`;
+const CACHE = `${PREFIX}v13`;
 const SHELL = [
   "./",
   "./index.html",
@@ -12,8 +14,8 @@ const SHELL = [
   "./assets/app.js",
   "./assets/paper-filters.js",
   "./assets/reading-library.js",
-  "./assets/guidelines.js",
-  "./assets/guidelines.css",
+  "./assets/guidelines.js?v=13",
+  "./assets/guidelines.css?v=13",
   "./assets/icon.svg",
   "./assets/icon-192.png",
   "./assets/icon-512.png",
@@ -67,7 +69,7 @@ self.addEventListener("fetch", (event) => {
           if (url.href === GUIDELINES_URL) self.DigestGuidelines.validate(payload);
           if (url.href === DATA_URL ? !Array.isArray(payload)
               : url.href === METRICS_URL ? payload?.metric !== "Journal Impact Factor"
-              : url.href === GUIDELINES_URL ? payload?.schema_version !== 1 || !Array.isArray(payload?.comparisons) || !Array.isArray(payload?.sources)
+              : url.href === GUIDELINES_URL ? payload?.schema_version !== 2 || !Array.isArray(payload?.comparisons) || !Array.isArray(payload?.sources)
               : !Array.isArray(payload?.entries) || !Array.isArray(payload?.groups))
             throw new Error("Invalid data response");
         }

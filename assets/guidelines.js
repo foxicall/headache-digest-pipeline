@@ -11,6 +11,7 @@
   });
   const READ_LEVEL = { full_text: "全文／原始建議", abstract_only: "原始摘要", official_summary: "官方摘要" };
   const DEFAULT_REGIONS = ["tw", "jp", "uk-nice", "de", "eu"];
+  const GRADE_STATUS = { reported: "原文分級", not_reported: "所引段落未報告", not_verified: "尚未核實" };
   const string = (value) => typeof value === "string" && value.trim().length > 0;
   function httpsUrl(value) {
     try { const url = new URL(value); return url.protocol === "https:" && !!url.hostname && !url.username && !url.password; }
@@ -24,8 +25,8 @@
   }
   function validate(data) {
     const fail = () => { throw new Error("指引資料格式不完整，請稍後重新載入。"); };
-    if (data?.schema_version !== 1 || !validDate(data.reviewed_on) ||
-        !string(data.coverage_note) || !string(data.update_note)) fail();
+    if (data?.schema_version !== 2 || !validDate(data.reviewed_on) ||
+        !string(data.coverage_note) || !string(data.update_note) || !string(data.grading_note)) fail();
     function index(list) {
       if (!Array.isArray(list) || !list.length) fail();
       const map = new Map();
@@ -36,13 +37,21 @@
       return map;
     }
     const countries = index(data.jurisdictions), syndromes = index(data.syndromes), sources = index(data.sources);
+    const systems = index(data.grading_systems);
+    for (const system of systems.values()) {
+      if (![system.label, system.description].every(string)) fail();
+      for (const key of ['recommendation_values', 'evidence_values']) {
+        if (!Array.isArray(system[key]) || !system[key].every(string) || new Set(system[key]).size !== system[key].length) fail();
+      }
+    }
     for (const item of countries.values()) if (!string(item.label) || !["asia", "europe", "pan-european"].includes(item.group)) fail();
     for (const item of syndromes.values()) if (!string(item.label)) fail();
     for (const source of sources.values()) {
       if (![source.title, source.publisher, source.kind, source.scope, source.version_note].every(string) ||
           !httpsUrl(source.url) || !validDate(source.version_date, true) || !validDate(source.reviewed_on) ||
           source.version_date > source.reviewed_on || source.reviewed_on > data.reviewed_on ||
-          !Object.hasOwn(READ_LEVEL, source.verification)) fail();
+          !Object.hasOwn(READ_LEVEL, source.verification) || !Array.isArray(source.grading_system_ids) ||
+          !source.grading_system_ids.length || source.grading_system_ids.some((id) => !systems.has(id))) fail();
     }
     const rows = index(data.comparisons), pairs = new Set();
     for (const row of rows.values()) {
@@ -58,6 +67,24 @@
             !Array.isArray(item.source_ids) || item.source_ids.some((id) => !row.source_ids.includes(id))) fail();
         if (item.status !== "not_verified" && (!item.source_ids.length || !string(item.locator))) fail();
       }
+      // A grade belongs to a specific source, clinical question and regimen.
+      const recommendations = index(row.recommendations);
+      for (const item of recommendations.values()) {
+        const source = sources.get(item.source_id), system = systems.get(item.grading_system);
+        if (![item.drug, item.population, item.locator].every(string) || !source || !system ||
+            !row.source_ids.includes(item.source_id) || !source.grading_system_ids.includes(item.grading_system) ||
+            !Array.isArray(item.domains) || !item.domains.length || new Set(item.domains).size !== item.domains.length ||
+            item.domains.some((key) => !['acute', 'prevention', 'escalation'].includes(key)) ||
+            !validDate(item.reviewed_on) || item.reviewed_on > source.reviewed_on ||
+            !['regimen', 'wording', 'note'].every((key) => typeof item[key] === 'string')) fail();
+        for (const [key, allowed] of [['recommendation', system.recommendation_values], ['evidence', system.evidence_values]]) {
+          const grade = item[key];
+          if (!grade || !Object.hasOwn(GRADE_STATUS, grade.status)) fail();
+          if (grade.status === 'reported' ? !allowed.includes(grade.value) : grade.value !== null) fail();
+        }
+        if (item.recommendation.status !== 'reported' && !string(item.wording)) fail();
+        if ((item.recommendation.status !== 'reported' || item.evidence.status !== 'reported') && !string(item.note)) fail();
+      }
     }
     return data;
   }
@@ -68,6 +95,9 @@
   function missingRegions(data, syndrome, jurisdictions) {
     const represented = new Set(filterRows(data, syndrome, jurisdictions).map((row) => row.jurisdiction));
     return data.jurisdictions.filter((region) => jurisdictions.includes(region.id) && !represented.has(region.id));
+  }
+  function filterRecommendations(row, domain = 'all') {
+    return row.recommendations.filter((item) => domain === 'all' || item.domains.includes(domain));
   }
   function stale(data, now = new Date()) {
     return now.getTime() - Date.parse(`${data.reviewed_on}T00:00:00Z`) > 90 * 86400000;
@@ -90,11 +120,11 @@
       result.title = `${source.title} · ${source.version_date}`;
       return result;
     };
-    let data = null, cached = false, busy = false;
+    let data = null, cached = false, busy = false, retryAfterControllerChange = false;
     let selected = [...DEFAULT_REGIONS];
-    let syndrome = "migraine", domain = "all";
+    let syndrome = "migraine", domain = "all", format = "grades";
     function controls(disabled) {
-      for (const id of ["guideline-syndrome", "guideline-domain", "guideline-countries"]) $(id).disabled = disabled;
+      for (const id of ["guideline-syndrome", "guideline-domain", "guideline-format", "guideline-countries"]) $(id).disabled = disabled;
       document.querySelectorAll("[data-guideline-preset]").forEach((button) => { button.disabled = disabled; });
     }
     function render() {
@@ -102,10 +132,14 @@
       const rows = filterRows(data, syndrome, selected);
       const sources = new Map(data.sources.map((s) => [s.id, s]));
       const countries = new Map(data.jurisdictions.map((s) => [s.id, s]));
+      const systems = new Map(data.grading_systems.map((s) => [s.id, s]));
       const domains = domain === "all" ? Object.keys(DOMAINS) : [domain];
       $('guidelines-results').dataset.domain = domain;
+      $('guidelines-results').dataset.format = format;
       $('guidelines-selection').textContent = `${selected.length} / ${data.jurisdictions.length}`;
+      const drugCount = rows.reduce((count, row) => count + filterRecommendations(row, domain).length, 0);
       $('guidelines-status').textContent = `${rows.length} 個地區／組織可比較 · ${data.syndromes.find((s) => s.id === syndrome).label}` +
+        (format === 'grades' && domain !== 'access' ? ` · ${drugCount} 項藥物建議（同藥不同情境分列）` : '') +
         (cached ? " · 離線快取，內容截至標示查核日" : "");
       const gaps = missingRegions(data, syndrome, selected);
       $('guidelines-gaps').hidden = !gaps.length;
@@ -122,6 +156,46 @@
           versions.append(node('span', 'guideline-version', `${s.version_date} · ${s.kind}`));
         }
         heading.append(versions);
+        const drugSection = node('section', 'guideline-drugs');
+        const drugHeading = node('h4', '', '藥物推薦與證據等級');
+        drugHeading.id = `drugs-${row.id}`;
+        drugSection.setAttribute('aria-labelledby', drugHeading.id);
+        drugSection.append(drugHeading);
+        const recommendations = filterRecommendations(row, domain);
+        if (!recommendations.length) drugSection.append(node('p', 'guideline-drug-empty', '此比較重點尚無已整理的藥物分級；可切換重點或查看治療概覽。'));
+        else {
+          const table = node('table', 'guideline-drug-table'); table.setAttribute('role', 'table');
+          const caption = node('caption', 'sr-only', `${countries.get(row.jurisdiction).label} · 藥物 COR／LOE`);
+          const thead = node('thead'), tr = node('tr');
+          thead.setAttribute('role', 'rowgroup'); tr.setAttribute('role', 'row');
+          for (const text of ['藥物／適用情境', 'Class of Recommendation', 'Level of Evidence', '分級制度／來源']) {
+            const th = node('th', '', text); th.scope = 'col'; th.setAttribute('role', 'columnheader'); tr.append(th);
+          }
+          thead.append(tr);
+          const tbody = node('tbody'); tbody.setAttribute('role', 'rowgroup');
+          for (const item of recommendations) {
+            const entry = node('tr'); entry.setAttribute('role', 'row'); entry.dataset.recommendationId = item.id;
+            const drug = node('th', 'drug-name'); drug.scope = 'row'; drug.setAttribute('role', 'rowheader');
+            drug.append(node('strong', '', item.drug), node('span', 'drug-population', item.population));
+            drug.append(node('span', 'drug-phase', item.domains.map((key) => DOMAINS[key]).join(' · ')));
+            if (item.regimen) drug.append(node('small', 'drug-regimen', `原文評級療程：${item.regimen}`));
+            entry.append(drug);
+            for (const [key, label] of [['recommendation', 'Class of Recommendation'], ['evidence', 'Level of Evidence']]) {
+              const grade = item[key], cell = node('td', `drug-grade drug-${key}`); cell.setAttribute('role', 'cell');
+              const mobileLabel = node('span', 'drug-mobile-label', label); mobileLabel.setAttribute('aria-hidden', 'true');
+              cell.append(mobileLabel, node('span', grade.status === 'reported' ? 'grade-value' : 'grade-unavailable', grade.status === 'reported' ? grade.value : GRADE_STATUS[grade.status]));
+              cell.dataset.gradeStatus = grade.status;
+              if (key === 'recommendation' && item.wording) cell.append(node('small', 'grade-wording', `原文建議：${item.wording}`));
+              entry.append(cell);
+            }
+            const provenance = node('td', 'drug-provenance'); provenance.setAttribute('role', 'cell');
+            provenance.append(node('span', 'drug-system', systems.get(item.grading_system).label));
+            if (item.note) provenance.append(node('p', '', item.note));
+            provenance.append(link(sources.get(item.source_id), `來源 ${row.source_ids.indexOf(item.source_id) + 1} ↗`), node('small', 'drug-locator', item.locator));
+            entry.append(provenance); tbody.append(entry);
+          }
+          table.append(caption, thead, tbody); drugSection.append(table);
+        }
         const fields = node('dl', 'guideline-fields');
         for (const key of domains) {
           const item = row.domains[key], cell = node('div', `guideline-cell ${key === 'access' ? 'guideline-access' : ''}`);
@@ -145,7 +219,13 @@
             node('p', '', s.version_note));
           list.append(li);
         }
-        details.append(list); card.append(heading, fields, details); return card;
+        details.append(list); card.append(heading);
+        if (format === 'grades' && domain !== 'access') {
+          card.append(drugSection);
+          const overview = node('details', 'guideline-overview');
+          overview.append(node('summary', '', '治療情境與使用條件'), fields); card.append(overview);
+        } else card.append(fields);
+        card.append(details); return card;
       });
       if (!cards.length) cards.push(node('p', 'guidelines-empty', selected.length ? '目前所選地區尚無此症候群的已核實比較。請更換症候群或地區。' : '請勾選至少一個地區開始比較。'));
       $('guidelines-results').replaceChildren(...cards);
@@ -170,6 +250,11 @@
         $('guidelines-reviewed').textContent = `版本查核 ${data.reviewed_on}`;
         $('guidelines-coverage').textContent = data.coverage_note;
         $('guidelines-update-note').textContent = data.update_note;
+        $('guidelines-grading-note').textContent = data.grading_note;
+        $('guidelines-grading-systems').replaceChildren(...data.grading_systems.map((system) => {
+          const item = node('div', 'grading-system-definition');
+          item.append(node('h4', '', system.label), node('p', '', system.description)); return item;
+        }));
         $('guidelines-freshness').hidden = !stale(data);
         $('guidelines-freshness').textContent = '距上次版本查核已超過 90 天，可能已有新版；請優先確認原文網站。';
         $('guideline-syndrome').replaceChildren(...data.syndromes.map((s) => {
@@ -178,6 +263,7 @@
         if (!data.syndromes.some((s) => s.id === syndrome)) syndrome = data.syndromes[0].id;
         $('guideline-syndrome').value = syndrome;
         $('guideline-domain').value = domain;
+        $('guideline-format').value = format;
         selected = selected.filter((id) => data.jurisdictions.some((j) => j.id === id));
         const legend = node('legend', 'sr-only', '可複選國家與指引組織');
         $('guideline-countries').replaceChildren(legend, ...data.jurisdictions.map((region) => {
@@ -198,10 +284,21 @@
       } finally {
         clearTimeout(timer); busy = false;
         $('guidelines-results').setAttribute('aria-busy', 'false');
+        // A previous worker may return the old schema while an update activates.
+        if (retryAfterControllerChange) {
+          retryAfterControllerChange = false;
+          if (!data) void load();
+        }
       }
     }
+    if ('serviceWorker' in navigator) navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (data) return;
+      if (busy) retryAfterControllerChange = true;
+      else void load();
+    });
     $('guideline-syndrome').addEventListener('change', (e) => { syndrome = e.target.value; render(); });
     $('guideline-domain').addEventListener('change', (e) => { domain = e.target.value; render(); });
+    $('guideline-format').addEventListener('change', (e) => { format = e.target.value; render(); });
     $('guidelines-retry').addEventListener('click', load);
     document.querySelectorAll('[data-guideline-preset]').forEach((button) => button.addEventListener('click', () => {
       if (!data) return;
@@ -210,5 +307,5 @@
     }));
     return load();
   }
-  return { DOMAINS, validate, filterRows, missingRegions, stale, mount };
+  return { DOMAINS, validate, filterRows, filterRecommendations, missingRegions, stale, mount };
 });

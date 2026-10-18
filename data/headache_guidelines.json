@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "reviewed_on": "2026-10-18",
   "coverage_note": "已整理 9 個歐洲國家（英國分 NICE／SIGN）、台灣、日本及 EHF／EAN 跨國建議。以成人偏頭痛為主，另列已查核的叢集性頭痛、三叉神經痛；尚非所有歐洲國家或所有症候群的完整指引庫。",
   "update_note": "版本由官方學會、主管機關或原始指引出版物人工查核；每日 PubMed 同步不會自動更新本比較。顯示的是截至查核日可核實的版本，並不保證此後沒有新版。",
@@ -95,7 +95,10 @@
       "scope": "成人偏頭痛急性治療",
       "verification": "abstract_only",
       "reviewed_on": "2026-10-18",
-      "version_note": "線上先行出版；更新 2022 急性治療指引，並非預防指引更新。"
+      "version_note": "線上先行出版；更新 2022 急性治療指引，並非預防指引更新。",
+      "grading_system_ids": [
+        "ungraded"
+      ]
     },
     {
       "id": "tw-prevent-2022",
@@ -103,11 +106,15 @@
       "publisher": "台灣頭痛學會 THS",
       "version_date": "2022-09-30",
       "kind": "指引",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/36089629/",
+      "url": "https://taiwanheadache.org.tw/wp-content/uploads/2022/10/2022-%E5%81%8F%E9%A0%AD%E7%97%9B%E9%A0%90%E9%98%B2%E6%80%A7%E6%B2%BB%E7%99%82%E6%BA%96%E5%89%87-revised.pdf",
       "scope": "偏頭痛預防",
-      "verification": "abstract_only",
+      "verification": "full_text",
       "reviewed_on": "2026-10-18",
-      "version_note": "本次查核未核實較新的 THS 全面預防指引；不以 2026 急性指引取代。"
+      "version_note": "已核對原始全文的藥物表及附註（印刷頁 198–202）；本次未核實較新的 THS 全面預防指引。2026 急性版不取代預防版。",
+      "publication_url": "https://pubmed.ncbi.nlm.nih.gov/36089629/",
+      "grading_system_ids": [
+        "ths-2022"
+      ]
     },
     {
       "id": "jp-2021",
@@ -119,7 +126,10 @@
       "scope": "頭痛及相關神經痛",
       "verification": "full_text",
       "reviewed_on": "2026-10-18",
-      "version_note": "日本頭痛學會指引目錄仍列此綜合版；CGRP 預防另參照 2025 立場聲明。"
+      "version_note": "日本頭痛學會指引目錄仍列此綜合版；CGRP 預防另參照 2025 立場聲明。",
+      "grading_system_ids": [
+        "jhs-2021"
+      ]
     },
     {
       "id": "jp-cgrp-2025",
@@ -131,7 +141,10 @@
       "scope": "成人偏頭痛 CGRP 抗體預防",
       "verification": "full_text",
       "reviewed_on": "2026-10-18",
-      "version_note": "局部更新；不取代其他症候群的 2021 建議。"
+      "version_note": "局部更新；不取代其他症候群的 2021 建議。",
+      "grading_system_ids": [
+        "ungraded"
+      ]
     },
     {
       "id": "nice-cg150",
@@ -143,7 +156,10 @@
       "scope": "12 歲以上頭痛；本表擷取成人建議",
       "verification": "full_text",
       "reviewed_on": "2026-10-18",
-      "version_note": "CG150 標示的最後更新日；頁面連結的個別技術評估可能較新。2025-12 的預防治療更新規畫不是已發布的新建議。"
+      "version_note": "CG150 標示的最後更新日；頁面連結的個別技術評估可能較新。2025-12 的預防治療更新規畫不是已發布的新建議。",
+      "grading_system_ids": [
+        "ungraded"
+      ]
     },
     {
       "id": "sign-acute-2026",
@@ -155,7 +171,10 @@
       "scope": "偏頭痛急性治療",
       "verification": "full_text",
       "reviewed_on": "2026-10-18",
-      "version_note": "官方 Right Decisions 工具包標示依據 SIGN 155 的 2026 更新。"
+      "version_note": "官方 Right Decisions 工具包標示依據 SIGN 155 的 2026 更新。",
+      "grading_system_ids": [
+        "ungraded"
+      ]
     },
     {
       "id": "sign-prevent-2026",
@@ -167,7 +186,10 @@
       "scope": "偏頭痛預防",
       "verification": "full_text",
       "reviewed_on": "2026-10-18",
-      "version_note": "分開呈現蘇格蘭 SIGN 與 NICE 的建議。"
+      "version_note": "分開呈現蘇格蘭 SIGN 與 NICE 的建議。",
+      "grading_system_ids": [
+        "ungraded"
+      ]
     },
     {
       "id": "de-2025",
@@ -179,7 +201,10 @@
       "scope": "偏頭痛急性與預防治療",
       "verification": "full_text",
       "reviewed_on": "2026-10-18",
-      "version_note": "2025-08-08 全面修訂；2025-11-06 修正圖 2；有效至 2028-08-07。"
+      "version_note": "2025-08-08 全面修訂；2025-11-06 修正圖 2；有效至 2028-08-07。",
+      "grading_system_ids": [
+        "ungraded"
+      ]
     },
     {
       "id": "fr-acute-2021",
@@ -191,7 +216,10 @@
       "scope": "成人偏頭痛急性治療",
       "verification": "official_summary",
       "reviewed_on": "2026-10-18",
-      "version_note": "2021 建議；法文期刊版本 2022 出版，網站上架年份不視為新版本。"
+      "version_note": "2021 建議；法文期刊版本 2022 出版，網站上架年份不視為新版本。",
+      "grading_system_ids": [
+        "ungraded"
+      ]
     },
     {
       "id": "fr-position-2025",
@@ -203,7 +231,10 @@
       "scope": "偏頭痛標靶預防與 topiramate 安全性",
       "verification": "abstract_only",
       "reviewed_on": "2026-10-18",
-      "version_note": "期刊線上先行於 2024；學會 2025-03-05 刊載，作為 2021 指引的局部補充。"
+      "version_note": "期刊線上先行於 2024；學會 2025-03-05 刊載，作為 2021 指引的局部補充。",
+      "grading_system_ids": [
+        "ungraded"
+      ]
     },
     {
       "id": "it-2025",
@@ -215,7 +246,10 @@
       "scope": "偏頭痛藥物治療",
       "verification": "full_text",
       "reviewed_on": "2026-10-18",
-      "version_note": "義大利 SISC 與國際 IHS 聯合制定；不是義大利健保給付規則。"
+      "version_note": "義大利 SISC 與國際 IHS 聯合制定；不是義大利健保給付規則。",
+      "grading_system_ids": [
+        "grade"
+      ]
     },
     {
       "id": "es-2026",
@@ -227,7 +261,10 @@
       "scope": "頭痛及顱顏面神經痛",
       "verification": "full_text",
       "reviewed_on": "2026-10-18",
-      "version_note": "2026 第五版；本表整理偏頭痛章節。"
+      "version_note": "2026 第五版；本表整理偏頭痛章節。",
+      "grading_system_ids": [
+        "sen-2026"
+      ]
     },
     {
       "id": "nl-cgrp-2023",
@@ -239,7 +276,10 @@
       "scope": "難治性慢性偏頭痛的 CGRP 抗體",
       "verification": "full_text",
       "reviewed_on": "2026-10-18",
-      "version_note": "僅此模組的發布日；不將它視為所有頭痛章節都在 2023 更新。"
+      "version_note": "僅此模組的發布日；不將它視為所有頭痛章節都在 2023 更新。",
+      "grading_system_ids": [
+        "ungraded"
+      ]
     },
     {
       "id": "dk-2026",
@@ -251,7 +291,10 @@
       "scope": "偏頭痛治療",
       "verification": "full_text",
       "reviewed_on": "2026-10-18",
-      "version_note": "官方頁面標示最後修訂 19.9.2026。"
+      "version_note": "官方頁面標示最後修訂 19.9.2026。",
+      "grading_system_ids": [
+        "ungraded"
+      ]
     },
     {
       "id": "dk-cgrp-2026",
@@ -263,7 +306,10 @@
       "scope": "偏頭痛 CGRP 治療",
       "verification": "full_text",
       "reviewed_on": "2026-10-18",
-      "version_note": "第五版；本表摘錄慢性偏頭痛治療門檻。"
+      "version_note": "第五版；本表摘錄慢性偏頭痛治療門檻。",
+      "grading_system_ids": [
+        "ungraded"
+      ]
     },
     {
       "id": "ch-2026",
@@ -275,7 +321,10 @@
       "scope": "原發性頭痛與顱神經痛",
       "verification": "full_text",
       "reviewed_on": "2026-10-18",
-      "version_note": "官方治療委員會目前提供第 12 版；PDF 版權年為 2026。"
+      "version_note": "官方治療委員會目前提供第 12 版；PDF 版權年為 2026。",
+      "grading_system_ids": [
+        "ungraded"
+      ]
     },
     {
       "id": "fi-2024",
@@ -287,7 +336,10 @@
       "scope": "偏頭痛",
       "verification": "full_text",
       "reviewed_on": "2026-10-18",
-      "version_note": "官方頁面標為更新中；規畫中的更新不視為已發布版本。"
+      "version_note": "官方頁面標為更新中；規畫中的更新不視為已發布版本。",
+      "grading_system_ids": [
+        "ungraded"
+      ]
     },
     {
       "id": "ehf-2022",
@@ -299,7 +351,10 @@
       "scope": "偏頭痛 CGRP 抗體預防",
       "verification": "full_text",
       "reviewed_on": "2026-10-18",
-      "version_note": "第一線定位出自專家共識表 9；不是各國給付決定。"
+      "version_note": "第一線定位出自專家共識表 9；不是各國給付決定。",
+      "grading_system_ids": [
+        "grade"
+      ]
     },
     {
       "id": "ean-cluster-2023",
@@ -311,7 +366,11 @@
       "scope": "叢集性頭痛",
       "verification": "abstract_only",
       "reviewed_on": "2026-10-18",
-      "version_note": "跨國歐洲建議，不能代表每個國家的給付或核准。"
+      "version_note": "跨國歐洲建議，不能代表每個國家的給付或核准。",
+      "grading_system_ids": [
+        "grade",
+        "ungraded"
+      ]
     },
     {
       "id": "ean-tn-2019",
@@ -323,7 +382,10 @@
       "scope": "三叉神經痛",
       "verification": "abstract_only",
       "reviewed_on": "2026-10-18",
-      "version_note": "仍須分別核對國家版本；不將舊年分改標為 2026。"
+      "version_note": "仍須分別核對國家版本；不將舊年分改標為 2026。",
+      "grading_system_ids": [
+        "ungraded"
+      ]
     }
   ],
   "comparisons": [
@@ -367,7 +429,288 @@
           "source_ids": [],
           "locator": ""
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "tw-migraine-drug-1",
+          "drug": "Propranolol",
+          "domains": [
+            "prevention"
+          ],
+          "population": "成人陣發性偏頭痛",
+          "regimen": "",
+          "grading_system": "ths-2022",
+          "recommendation": {
+            "status": "reported",
+            "value": "Group I"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "Grade A"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "tw-prevent-2022",
+          "locator": "表 1；印刷頁 198（PDF 35）；附註頁 202",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "tw-migraine-drug-2",
+          "drug": "Topiramate",
+          "domains": [
+            "prevention"
+          ],
+          "population": "成人陣發性偏頭痛",
+          "regimen": "",
+          "grading_system": "ths-2022",
+          "recommendation": {
+            "status": "reported",
+            "value": "Group I"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "Grade A"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "tw-prevent-2022",
+          "locator": "表 1；印刷頁 198（PDF 35）；附註頁 202",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "tw-migraine-drug-3",
+          "drug": "Flunarizine",
+          "domains": [
+            "prevention"
+          ],
+          "population": "成人陣發性偏頭痛",
+          "regimen": "",
+          "grading_system": "ths-2022",
+          "recommendation": {
+            "status": "reported",
+            "value": "Group I"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "Grade A"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "tw-prevent-2022",
+          "locator": "表 1；印刷頁 198（PDF 35）；附註頁 202",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "tw-migraine-drug-4",
+          "drug": "Amitriptyline",
+          "domains": [
+            "prevention"
+          ],
+          "population": "成人陣發性偏頭痛",
+          "regimen": "",
+          "grading_system": "ths-2022",
+          "recommendation": {
+            "status": "reported",
+            "value": "Group I"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "Grade B"
+          },
+          "wording": "",
+          "note": "依藥物表列級；此分組不等同摘要的第一／第二線順位。",
+          "source_id": "tw-prevent-2022",
+          "locator": "表 1；印刷頁 198（PDF 35）；附註頁 202",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "tw-migraine-drug-5",
+          "drug": "Galcanezumab",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "成人陣發性偏頭痛",
+          "regimen": "",
+          "grading_system": "ths-2022",
+          "recommendation": {
+            "status": "reported",
+            "value": "Group I"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "Grade A"
+          },
+          "wording": "",
+          "note": "摘要列第二線；表列推薦 Group I，兩者意義不同。",
+          "source_id": "tw-prevent-2022",
+          "locator": "表 1；印刷頁 199（PDF 36）；附註頁 202",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "tw-migraine-drug-6",
+          "drug": "Fremanezumab",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "成人陣發性偏頭痛",
+          "regimen": "",
+          "grading_system": "ths-2022",
+          "recommendation": {
+            "status": "reported",
+            "value": "Group I"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "Grade A"
+          },
+          "wording": "",
+          "note": "摘要列第二線；表列推薦 Group I，兩者意義不同。",
+          "source_id": "tw-prevent-2022",
+          "locator": "表 1；印刷頁 199（PDF 36）；附註頁 202",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "tw-migraine-drug-7",
+          "drug": "OnabotulinumtoxinA",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "成人慢性偏頭痛",
+          "regimen": "",
+          "grading_system": "ths-2022",
+          "recommendation": {
+            "status": "reported",
+            "value": "Group I"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "Grade A"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "tw-prevent-2022",
+          "locator": "表 2；印刷頁 200（PDF 37）；附註頁 202",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "tw-migraine-drug-8",
+          "drug": "Topiramate",
+          "domains": [
+            "prevention"
+          ],
+          "population": "成人慢性偏頭痛",
+          "regimen": "",
+          "grading_system": "ths-2022",
+          "recommendation": {
+            "status": "reported",
+            "value": "Group I"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "Grade A"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "tw-prevent-2022",
+          "locator": "表 2；印刷頁 200（PDF 37）；附註頁 202",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "tw-migraine-drug-9",
+          "drug": "Flunarizine",
+          "domains": [
+            "prevention"
+          ],
+          "population": "成人慢性偏頭痛",
+          "regimen": "",
+          "grading_system": "ths-2022",
+          "recommendation": {
+            "status": "reported",
+            "value": "Group II"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "Grade B"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "tw-prevent-2022",
+          "locator": "表 2；印刷頁 200（PDF 37）；附註頁 202",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "tw-migraine-drug-10",
+          "drug": "NSAIDs",
+          "domains": [
+            "acute"
+          ],
+          "population": "成人偏頭痛發作",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_verified",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_verified",
+            "value": null
+          },
+          "wording": "較輕失能的分層急性選項",
+          "note": "僅核實摘要；摘要未列此藥的正式 COR／LOE，不能補用 2022 急性版等級。",
+          "source_id": "tw-acute-2026",
+          "locator": "原始摘要",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "tw-migraine-drug-11",
+          "drug": "Triptans",
+          "domains": [
+            "acute"
+          ],
+          "population": "成人偏頭痛發作",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_verified",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_verified",
+            "value": null
+          },
+          "wording": "中重度失能的分層急性選項",
+          "note": "僅核實摘要；摘要未列此藥的正式 COR／LOE，不能補用 2022 急性版等級。",
+          "source_id": "tw-acute-2026",
+          "locator": "原始摘要",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "tw-migraine-drug-12",
+          "drug": "Rimegepant",
+          "domains": [
+            "acute"
+          ],
+          "population": "成人偏頭痛發作",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_verified",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_verified",
+            "value": null
+          },
+          "wording": "可作第一線急性選項",
+          "note": "僅核實摘要；摘要未列此藥的正式 COR／LOE，不能補用 2022 急性版等級。",
+          "source_id": "tw-acute-2026",
+          "locator": "原始摘要",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "jp-migraine",
@@ -411,7 +754,102 @@
           ],
           "locator": "PDF 第 3 頁：最適使用推進ガイドライン"
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "jp-migraine-drug-1",
+          "drug": "Triptans（相較 NSAIDs）",
+          "domains": [
+            "acute"
+          ],
+          "population": "成人、發作影響日常生活",
+          "regimen": "",
+          "grading_system": "jhs-2021",
+          "recommendation": {
+            "status": "reported",
+            "value": "弱い推奨"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "B"
+          },
+          "wording": "",
+          "note": "僅此比較問題的分級，不代表 triptan 絕對療效等級；原文另有限制。",
+          "source_id": "jp-2021",
+          "locator": "CQ II-2-3；印刷頁 146（PDF 162）",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "jp-migraine-drug-2",
+          "drug": "Propranolol",
+          "domains": [
+            "prevention"
+          ],
+          "population": "偏頭痛預防",
+          "regimen": "",
+          "grading_system": "jhs-2021",
+          "recommendation": {
+            "status": "reported",
+            "value": "強い推奨"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "A"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "jp-2021",
+          "locator": "CQ II-3-6",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "jp-migraine-drug-3",
+          "drug": "Lomerizine",
+          "domains": [
+            "prevention"
+          ],
+          "population": "偏頭痛預防",
+          "regimen": "",
+          "grading_system": "jhs-2021",
+          "recommendation": {
+            "status": "reported",
+            "value": "弱い推奨"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "B"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "jp-2021",
+          "locator": "CQ II-3-7",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "jp-migraine-drug-4",
+          "drug": "CGRP monoclonal antibodies",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "成人偏頭痛預防",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "可作第一線預防選項",
+          "note": "2025 立場聲明的治療定位未附正式逐藥 COR／LOE；不借用 2021 或國外等級。",
+          "source_id": "jp-cgrp-2025",
+          "locator": "PDF 第 2–5 頁",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "uk-nice-migraine",
@@ -454,7 +892,103 @@
           ],
           "locator": "§1.3.24–1.3.26；NICE technology appraisals"
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "uk-nice-migraine-drug-1",
+          "drug": "Triptan ＋ NSAID／paracetamol",
+          "domains": [
+            "acute"
+          ],
+          "population": "成人偏頭痛發作",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "Offer",
+          "note": "所引建議頁沒有逐藥正式 COR／LOE；Offer／Consider 不轉換為 Class I／II。",
+          "source_id": "nice-cg150",
+          "locator": "§1.3.10",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "uk-nice-migraine-drug-2",
+          "drug": "Propranolol／topiramate／amitriptyline",
+          "domains": [
+            "prevention"
+          ],
+          "population": "成人偏頭痛預防",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "Consider",
+          "note": "所引建議頁沒有逐藥正式 COR／LOE；Offer／Consider 不轉換為 Class I／II。",
+          "source_id": "nice-cg150",
+          "locator": "§1.3.18",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "uk-nice-migraine-drug-3",
+          "drug": "CGRP inhibitors",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "符合個別技術評估條件的成人",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "依個別技術評估列為選項",
+          "note": "所引建議頁沒有逐藥正式 COR／LOE；Offer／Consider 不轉換為 Class I／II。",
+          "source_id": "nice-cg150",
+          "locator": "§1.3.24–1.3.25",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "uk-nice-migraine-drug-4",
+          "drug": "Botulinum toxin A",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "符合條件的慢性偏頭痛",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "符合條件時列為選項",
+          "note": "所引建議頁沒有逐藥正式 COR／LOE；Offer／Consider 不轉換為 Class I／II。",
+          "source_id": "nice-cg150",
+          "locator": "§1.3.26",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "uk-sign-migraine",
@@ -498,7 +1032,103 @@
           ],
           "locator": "Specialist therapies"
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "uk-sign-migraine-drug-1",
+          "drug": "Aspirin／ibuprofen／sumatriptan",
+          "domains": [
+            "acute"
+          ],
+          "population": "成人偏頭痛；各藥 EM／CM 適用不同",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_verified",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_verified",
+            "value": null
+          },
+          "wording": "第一線選項",
+          "note": "工具包未顯示逐藥完整分級；正式 COR／LOE 尚未核實。",
+          "source_id": "sign-acute-2026",
+          "locator": "First-line therapies",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "uk-sign-migraine-drug-2",
+          "drug": "Candesartan／propranolol／amitriptyline",
+          "domains": [
+            "prevention"
+          ],
+          "population": "成人偏頭痛；各藥 EM／CM 適用不同",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_verified",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_verified",
+            "value": null
+          },
+          "wording": "第一線選項",
+          "note": "工具包未顯示逐藥完整分級；正式 COR／LOE 尚未核實。",
+          "source_id": "sign-prevent-2026",
+          "locator": "First-line therapies",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "uk-sign-migraine-drug-3",
+          "drug": "Atogepant／rimegepant",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "成人偏頭痛；各藥 EM／CM 適用不同",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_verified",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_verified",
+            "value": null
+          },
+          "wording": "依藥物適應症及既往治療選擇",
+          "note": "工具包未顯示逐藥完整分級；正式 COR／LOE 尚未核實。",
+          "source_id": "sign-prevent-2026",
+          "locator": "Specialist therapies",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "uk-sign-migraine-drug-4",
+          "drug": "CGRP monoclonal antibodies",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "成人偏頭痛；各藥 EM／CM 適用不同",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_verified",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_verified",
+            "value": null
+          },
+          "wording": "專科治療選項",
+          "note": "工具包未顯示逐藥完整分級；正式 COR／LOE 尚未核實。",
+          "source_id": "sign-prevent-2026",
+          "locator": "Specialist therapies",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "de-migraine",
@@ -539,7 +1169,102 @@
           "source_ids": [],
           "locator": ""
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "de-migraine-drug-1",
+          "drug": "NSAIDs",
+          "domains": [
+            "acute"
+          ],
+          "population": "成人偏頭痛",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "較輕發作先用",
+          "note": "S1 是指引制定方法分類，不是藥物 Class I；所引重點頁未附逐藥正式 COR／LOE。",
+          "source_id": "de-2025",
+          "locator": "PDF 10",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "de-migraine-drug-2",
+          "drug": "Triptans",
+          "domains": [
+            "acute"
+          ],
+          "population": "成人偏頭痛",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "嚴重或止痛藥反應不佳時使用",
+          "note": "S1 是指引制定方法分類，不是藥物 Class I；所引重點頁未附逐藥正式 COR／LOE。",
+          "source_id": "de-2025",
+          "locator": "PDF 9",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "de-migraine-drug-3",
+          "drug": "Propranolol／metoprolol／flunarizine／topiramate／amitriptyline",
+          "domains": [
+            "prevention"
+          ],
+          "population": "成人偏頭痛",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "有效預防選項",
+          "note": "S1 是指引制定方法分類，不是藥物 Class I；所引重點頁未附逐藥正式 COR／LOE。",
+          "source_id": "de-2025",
+          "locator": "PDF 11",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "de-migraine-drug-4",
+          "drug": "CGRP 抗體／atogepant／rimegepant",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "成人偏頭痛",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "按 EM／CM 與適用條件選擇",
+          "note": "S1 是指引制定方法分類，不是藥物 Class I；所引重點頁未附逐藥正式 COR／LOE。",
+          "source_id": "de-2025",
+          "locator": "PDF 11–13",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "fr-migraine",
@@ -583,7 +1308,56 @@
           ],
           "locator": "摘要：possible reimbursement"
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "fr-migraine-drug-1",
+          "drug": "NSAID／triptan",
+          "domains": [
+            "acute"
+          ],
+          "population": "成人偏頭痛發作",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_verified",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_verified",
+            "value": null
+          },
+          "wording": "依發作嚴重度選用",
+          "note": "官方摘要未列本項 COR／LOE，未核實完整分級。",
+          "source_id": "fr-acute-2021",
+          "locator": "官方摘要：Points essentiels",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "fr-migraine-drug-2",
+          "drug": "CGRP 抗體／gepants",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "成人偏頭痛預防",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_verified",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_verified",
+            "value": null
+          },
+          "wording": "可提供作第一線預防",
+          "note": "立場聲明摘要未列正式 COR／LOE；不由第一線定位推算。",
+          "source_id": "fr-position-2025",
+          "locator": "原始摘要／官方學會頁",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "it-migraine",
@@ -624,7 +1398,195 @@
           "source_ids": [],
           "locator": ""
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "it-migraine-drug-1",
+          "drug": "Sumatriptan",
+          "domains": [
+            "acute"
+          ],
+          "population": "成人偏頭痛發作",
+          "regimen": "口服 50／100 mg",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Strong in favor"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "High"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "it-2025",
+          "locator": "Table 3；Methods：GRADE",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "it-migraine-drug-2",
+          "drug": "Rimegepant",
+          "domains": [
+            "acute"
+          ],
+          "population": "成人偏頭痛發作",
+          "regimen": "口服 75 mg",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Strong in favor"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "High"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "it-2025",
+          "locator": "Table 3；Methods：GRADE",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "it-migraine-drug-3",
+          "drug": "Ibuprofen",
+          "domains": [
+            "acute"
+          ],
+          "population": "成人偏頭痛發作",
+          "regimen": "口服 200／400／600 mg",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Strong in favor"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "Low"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "it-2025",
+          "locator": "Table 3；Methods：GRADE",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "it-migraine-drug-4",
+          "drug": "Atogepant",
+          "domains": [
+            "prevention"
+          ],
+          "population": "陣發性偏頭痛",
+          "regimen": "口服 60 mg",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Strong in favor"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "High"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "it-2025",
+          "locator": "Table 5；Methods：GRADE",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "it-migraine-drug-5",
+          "drug": "Topiramate",
+          "domains": [
+            "prevention"
+          ],
+          "population": "陣發性偏頭痛",
+          "regimen": "口服 100／200 mg",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Strong in favor"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "Moderate"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "it-2025",
+          "locator": "Table 5；Methods：GRADE",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "it-migraine-drug-6",
+          "drug": "Propranolol",
+          "domains": [
+            "prevention"
+          ],
+          "population": "陣發性偏頭痛",
+          "regimen": "口服 160 mg",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Weak in favor"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "Low"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "it-2025",
+          "locator": "Table 5；Methods：GRADE",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "it-migraine-drug-7",
+          "drug": "OnabotulinumtoxinA",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "慢性偏頭痛",
+          "regimen": "155–195 units 肌肉注射",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Strong in favor"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "High"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "it-2025",
+          "locator": "Table 6",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "it-migraine-drug-8",
+          "drug": "Atogepant",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "慢性偏頭痛",
+          "regimen": "口服 60 mg",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Strong in favor"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "High"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "it-2025",
+          "locator": "Table 6",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "es-migraine",
@@ -665,7 +1627,79 @@
           "source_ids": [],
           "locator": ""
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "es-migraine-drug-1",
+          "drug": "NSAIDs（ibuprofen、naproxen 等）",
+          "domains": [
+            "acute"
+          ],
+          "population": "輕中度偏頭痛發作",
+          "regimen": "",
+          "grading_system": "sen-2026",
+          "recommendation": {
+            "status": "reported",
+            "value": "GR-A"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "NE-I"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "es-2026",
+          "locator": "第 3 章 §3.2.1；PDF 84",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "es-migraine-drug-2",
+          "drug": "Triptans",
+          "domains": [
+            "acute"
+          ],
+          "population": "中重度偏頭痛發作",
+          "regimen": "",
+          "grading_system": "sen-2026",
+          "recommendation": {
+            "status": "reported",
+            "value": "GR-A"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "NE-I"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "es-2026",
+          "locator": "第 3 章 §3.2.2；PDF 85",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "es-migraine-drug-3",
+          "drug": "OnabotulinumtoxinA",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "慢性偏頭痛",
+          "regimen": "",
+          "grading_system": "sen-2026",
+          "recommendation": {
+            "status": "reported",
+            "value": "GR-A"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "NE-I"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "es-2026",
+          "locator": "第 4 章 §7.3；PDF 118",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "nl-migraine",
@@ -708,7 +1742,33 @@
           ],
           "locator": "Kosten / Aanvaardbaarheid en haalbaarheid"
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "nl-migraine-drug-1",
+          "drug": "CGRP monoclonal antibodies",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "難治性慢性偏頭痛，無 MOH",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_verified",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_verified",
+            "value": null
+          },
+          "wording": "Overweeg（考慮）",
+          "note": "GRADE 證據依結局評定；尚未核實可代表整項藥物建議的單一 COR／LOE，故不合併推算。",
+          "source_id": "nl-cgrp-2023",
+          "locator": "Aanbeveling / Overwegingen",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "dk-migraine",
@@ -752,7 +1812,79 @@
           ],
           "locator": "Patienter med kronisk migræne"
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "dk-migraine-drug-1",
+          "drug": "NSAIDs／triptans",
+          "domains": [
+            "acute"
+          ],
+          "population": "成人偏頭痛；標靶列限慢性",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "急性治療選項",
+          "note": "所引治療段落未附逐藥正式 COR／LOE。",
+          "source_id": "dk-2026",
+          "locator": "Anfaldsbehandling",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "dk-migraine-drug-2",
+          "drug": "Candesartan／beta-blockers／topiramate／amitriptyline",
+          "domains": [
+            "prevention"
+          ],
+          "population": "成人偏頭痛；標靶列限慢性",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "依共病與耐受選藥",
+          "note": "所引治療段落未附逐藥正式 COR／LOE。",
+          "source_id": "dk-2026",
+          "locator": "Forebyggende behandling",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "dk-migraine-drug-3",
+          "drug": "CGRP 抗體／atogepant",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "成人偏頭痛；標靶列限慢性",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "符合慢性偏頭痛途徑條件時使用",
+          "note": "所引治療段落未附逐藥正式 COR／LOE。",
+          "source_id": "dk-cgrp-2026",
+          "locator": "Patienter med kronisk migræne",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "ch-migraine",
@@ -795,7 +1927,79 @@
           ],
           "locator": "印刷頁 10–11"
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "ch-migraine-drug-1",
+          "drug": "NSAIDs／triptans／gepants",
+          "domains": [
+            "acute"
+          ],
+          "population": "偏頭痛發作",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "依失能程度選擇",
+          "note": "所引治療表未列正式 COR／LOE。",
+          "source_id": "ch-2026",
+          "locator": "印刷頁 6–7",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "ch-migraine-drug-2",
+          "drug": "傳統口服預防藥",
+          "domains": [
+            "prevention"
+          ],
+          "population": "偏頭痛預防",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "依共病與耐受選擇",
+          "note": "所引治療表未列正式 COR／LOE。",
+          "source_id": "ch-2026",
+          "locator": "印刷頁 8–10",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "ch-migraine-drug-3",
+          "drug": "CGRP 抗體／atogepant／botulinum toxin A",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "慢性偏頭痛",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "列為治療選項",
+          "note": "所引治療表未列正式 COR／LOE。",
+          "source_id": "ch-2026",
+          "locator": "印刷頁 10–11",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "fi-migraine",
@@ -836,7 +2040,56 @@
           "source_ids": [],
           "locator": ""
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "fi-migraine-drug-1",
+          "drug": "止痛藥／triptans",
+          "domains": [
+            "acute"
+          ],
+          "population": "成人偏頭痛",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_verified",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_verified",
+            "value": null
+          },
+          "wording": "急性治療選項",
+          "note": "本次尚未擷取逐藥證據摘要中的正式分級。",
+          "source_id": "fi-2024",
+          "locator": "Keskeinen sanoma",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "fi-migraine-drug-2",
+          "drug": "CGRP monoclonal antibodies／onabotulinumtoxinA",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "成人偏頭痛",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_verified",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_verified",
+            "value": null
+          },
+          "wording": "難治或慢性者可轉專科考慮",
+          "note": "本次尚未擷取逐藥證據摘要中的正式分級。",
+          "source_id": "fi-2024",
+          "locator": "Keskeinen sanoma",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "eu-migraine",
@@ -879,7 +2132,224 @@
           ],
           "locator": "Methods：Consensus-based statements"
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "eu-migraine-drug-1",
+          "drug": "Eptinezumab",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "陣發性偏頭痛；相較安慰劑",
+          "regimen": "100／300 mg，每 3 個月",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Strong"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "Moderate"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "ehf-2022",
+          "locator": "Table 2；GRADE 定義 Table 1",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "eu-migraine-drug-2",
+          "drug": "Erenumab",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "陣發性偏頭痛；相較安慰劑",
+          "regimen": "70／140 mg，每月",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Strong"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "High"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "ehf-2022",
+          "locator": "Table 2；GRADE 定義 Table 1",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "eu-migraine-drug-3",
+          "drug": "Fremanezumab",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "陣發性偏頭痛；相較安慰劑",
+          "regimen": "225 mg 每月／675 mg 每 3 個月",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Strong"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "High"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "ehf-2022",
+          "locator": "Table 2；GRADE 定義 Table 1",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "eu-migraine-drug-4",
+          "drug": "Galcanezumab",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "陣發性偏頭痛；相較安慰劑",
+          "regimen": "120 mg 每月（起始 240 mg）",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Strong"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "High"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "ehf-2022",
+          "locator": "Table 2；GRADE 定義 Table 1",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "eu-migraine-drug-5",
+          "drug": "Erenumab",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "慢性偏頭痛；相較安慰劑",
+          "regimen": "70 mg 每月",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Strong"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "High"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "ehf-2022",
+          "locator": "Table 2；GRADE 定義 Table 1",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "eu-migraine-drug-6",
+          "drug": "Erenumab",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "慢性偏頭痛；相較安慰劑",
+          "regimen": "140 mg 每月",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Strong"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "Moderate"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "ehf-2022",
+          "locator": "Table 2；GRADE 定義 Table 1",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "eu-migraine-drug-7",
+          "drug": "Fremanezumab",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "慢性偏頭痛；相較安慰劑",
+          "regimen": "225 mg 每月",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Strong"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "Moderate"
+          },
+          "wording": "",
+          "note": "225 mg 每月的試驗使用 675 mg 起始劑量；原文註明與臨床使用不同。",
+          "source_id": "ehf-2022",
+          "locator": "Table 2；GRADE 定義 Table 1",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "eu-migraine-drug-8",
+          "drug": "Fremanezumab",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "慢性偏頭痛；相較安慰劑",
+          "regimen": "675 mg 每 3 個月",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Strong"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "High"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "ehf-2022",
+          "locator": "Table 2；GRADE 定義 Table 1",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "eu-migraine-drug-9",
+          "drug": "Erenumab（相較 topiramate）",
+          "domains": [
+            "prevention"
+          ],
+          "population": "偏頭痛；藥物間比較",
+          "regimen": "",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Strong"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "Low"
+          },
+          "wording": "",
+          "note": "此低證據等級屬直接藥物比較，不能挪用到安慰劑比較。",
+          "source_id": "ehf-2022",
+          "locator": "Table 2：question 3",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "eu-cluster",
@@ -920,7 +2390,103 @@
           "source_ids": [],
           "locator": ""
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "eu-cluster-drug-1",
+          "drug": "Oxygen",
+          "domains": [
+            "acute"
+          ],
+          "population": "叢集性頭痛發作",
+          "regimen": "",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Strong"
+          },
+          "evidence": {
+            "status": "not_verified",
+            "value": null
+          },
+          "wording": "",
+          "note": "摘要明載強推薦，但未列逐藥證據確定性；LOE 尚未核實。",
+          "source_id": "ean-cluster-2023",
+          "locator": "摘要：Recommendations",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "eu-cluster-drug-2",
+          "drug": "Sumatriptan（皮下注射）",
+          "domains": [
+            "acute"
+          ],
+          "population": "叢集性頭痛發作",
+          "regimen": "",
+          "grading_system": "grade",
+          "recommendation": {
+            "status": "reported",
+            "value": "Strong"
+          },
+          "evidence": {
+            "status": "not_verified",
+            "value": null
+          },
+          "wording": "",
+          "note": "摘要明載強推薦，但未列逐藥證據確定性；LOE 尚未核實。",
+          "source_id": "ean-cluster-2023",
+          "locator": "摘要：Recommendations",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "eu-cluster-drug-3",
+          "drug": "Verapamil",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "叢集性頭痛（依藥物限制）",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_verified",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_verified",
+            "value": null
+          },
+          "wording": "推薦預防",
+          "note": "摘要未列本藥的正式推薦強度與證據等級。",
+          "source_id": "ean-cluster-2023",
+          "locator": "摘要：Recommendations",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "eu-cluster-drug-4",
+          "drug": "Galcanezumab",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "叢集性頭痛（依藥物限制）",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_verified",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_verified",
+            "value": null
+          },
+          "wording": "僅陣發性叢集性頭痛的替代選項",
+          "note": "摘要未列本藥的正式推薦強度與證據等級。",
+          "source_id": "ean-cluster-2023",
+          "locator": "摘要：Recommendations",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "uk-nice-cluster",
@@ -961,7 +2527,55 @@
           "source_ids": [],
           "locator": ""
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "uk-nice-cluster-drug-1",
+          "drug": "Oxygen／皮下或鼻用 triptan",
+          "domains": [
+            "acute"
+          ],
+          "population": "叢集性頭痛",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "Offer",
+          "note": "所引建議頁未列逐藥正式 COR／LOE。",
+          "source_id": "nice-cg150",
+          "locator": "§1.3.35–1.3.38",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "uk-nice-cluster-drug-2",
+          "drug": "Verapamil",
+          "domains": [
+            "prevention"
+          ],
+          "population": "叢集性頭痛",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "Consider；需心電圖／專科建議",
+          "note": "所引建議頁未列逐藥正式 COR／LOE。",
+          "source_id": "nice-cg150",
+          "locator": "§1.3.39",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "jp-cluster",
@@ -1002,7 +2616,101 @@
           "source_ids": [],
           "locator": ""
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "jp-cluster-drug-1",
+          "drug": "Sumatriptan（皮下注射）",
+          "domains": [
+            "acute"
+          ],
+          "population": "叢集性頭痛發作",
+          "regimen": "",
+          "grading_system": "jhs-2021",
+          "recommendation": {
+            "status": "reported",
+            "value": "強い推奨"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "A"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "jp-2021",
+          "locator": "CQ IV-6",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "jp-cluster-drug-2",
+          "drug": "Oxygen",
+          "domains": [
+            "acute"
+          ],
+          "population": "叢集性頭痛發作",
+          "regimen": "",
+          "grading_system": "jhs-2021",
+          "recommendation": {
+            "status": "reported",
+            "value": "強い推奨"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "A"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "jp-2021",
+          "locator": "CQ IV-6–IV-7",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "jp-cluster-drug-3",
+          "drug": "Verapamil",
+          "domains": [
+            "prevention"
+          ],
+          "population": "叢集性頭痛發作期預防",
+          "regimen": "",
+          "grading_system": "jhs-2021",
+          "recommendation": {
+            "status": "reported",
+            "value": "弱い推奨"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "B"
+          },
+          "wording": "",
+          "note": "Verapamil 需監測心傳導；日本原文劑量與使用條件另有限制。",
+          "source_id": "jp-2021",
+          "locator": "CQ IV-8",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "jp-cluster-drug-4",
+          "drug": "Corticosteroids",
+          "domains": [
+            "prevention"
+          ],
+          "population": "短期過渡預防",
+          "regimen": "",
+          "grading_system": "jhs-2021",
+          "recommendation": {
+            "status": "reported",
+            "value": "弱い推奨"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "C"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "jp-2021",
+          "locator": "CQ IV-8",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "ch-cluster",
@@ -1043,7 +2751,79 @@
           "source_ids": [],
           "locator": ""
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "ch-cluster-drug-1",
+          "drug": "Oxygen／sumatriptan／zolmitriptan",
+          "domains": [
+            "acute"
+          ],
+          "population": "叢集性頭痛",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "急性治療選項",
+          "note": "所引治療表未列正式 COR／LOE。",
+          "source_id": "ch-2026",
+          "locator": "印刷頁 11",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "ch-cluster-drug-2",
+          "drug": "Verapamil",
+          "domains": [
+            "prevention"
+          ],
+          "population": "叢集性頭痛",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "預防選項；需心電圖監測",
+          "note": "所引治療表未列正式 COR／LOE。",
+          "source_id": "ch-2026",
+          "locator": "印刷頁 11",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "ch-cluster-drug-3",
+          "drug": "Prednisone",
+          "domains": [
+            "prevention",
+            "escalation"
+          ],
+          "population": "叢集性頭痛",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "短期過渡治療",
+          "note": "所引治療表未列正式 COR／LOE。",
+          "source_id": "ch-2026",
+          "locator": "印刷頁 11",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "eu-trigeminal-neuralgia",
@@ -1084,7 +2864,55 @@
           "source_ids": [],
           "locator": ""
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "eu-trigeminal-neuralgia-drug-1",
+          "drug": "Carbamazepine",
+          "domains": [
+            "prevention"
+          ],
+          "population": "三叉神經痛",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_verified",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_verified",
+            "value": null
+          },
+          "wording": "長期第一選擇",
+          "note": "摘要未列逐藥 COR／LOE；第一選擇不換算為 Class I。",
+          "source_id": "ean-tn-2019",
+          "locator": "摘要：Results",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "eu-trigeminal-neuralgia-drug-2",
+          "drug": "Oxcarbazepine",
+          "domains": [
+            "prevention"
+          ],
+          "population": "三叉神經痛",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_verified",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_verified",
+            "value": null
+          },
+          "wording": "長期第一選擇",
+          "note": "摘要未列逐藥 COR／LOE；第一選擇不換算為 Class I。",
+          "source_id": "ean-tn-2019",
+          "locator": "摘要：Results",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "jp-trigeminal-neuralgia",
@@ -1125,7 +2953,79 @@
           "source_ids": [],
           "locator": ""
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "jp-trigeminal-neuralgia-drug-1",
+          "drug": "Carbamazepine",
+          "domains": [
+            "prevention"
+          ],
+          "population": "三叉神經痛",
+          "regimen": "",
+          "grading_system": "jhs-2021",
+          "recommendation": {
+            "status": "reported",
+            "value": "強い推奨"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "A"
+          },
+          "wording": "",
+          "note": "",
+          "source_id": "jp-2021",
+          "locator": "CQ VIII-20；印刷頁 462（PDF 478）",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "jp-trigeminal-neuralgia-drug-2",
+          "drug": "Oxcarbazepine",
+          "domains": [
+            "prevention"
+          ],
+          "population": "三叉神經痛",
+          "regimen": "",
+          "grading_system": "jhs-2021",
+          "recommendation": {
+            "status": "reported",
+            "value": "弱い推奨"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "B"
+          },
+          "wording": "",
+          "note": "原文記載日本已停止販售；等級不代表當地可取得性。",
+          "source_id": "jp-2021",
+          "locator": "CQ VIII-20；印刷頁 462（PDF 478）",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "jp-trigeminal-neuralgia-drug-3",
+          "drug": "Lidocaine（靜脈）",
+          "domains": [
+            "acute",
+            "escalation"
+          ],
+          "population": "三叉神經痛",
+          "regimen": "",
+          "grading_system": "jhs-2021",
+          "recommendation": {
+            "status": "reported",
+            "value": "弱い推奨"
+          },
+          "evidence": {
+            "status": "reported",
+            "value": "B"
+          },
+          "wording": "",
+          "note": "靜脈使用限監測情境。",
+          "source_id": "jp-2021",
+          "locator": "CQ VIII-20；印刷頁 462（PDF 478）",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
     },
     {
       "id": "ch-trigeminal-neuralgia",
@@ -1166,7 +3066,133 @@
           "source_ids": [],
           "locator": ""
         }
-      }
+      },
+      "recommendations": [
+        {
+          "id": "ch-trigeminal-neuralgia-drug-1",
+          "drug": "Carbamazepine",
+          "domains": [
+            "prevention"
+          ],
+          "population": "三叉神經痛",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "第一選擇",
+          "note": "治療順位不是正式 COR；所引表未列 COR／LOE。",
+          "source_id": "ch-2026",
+          "locator": "印刷頁 21",
+          "reviewed_on": "2026-10-18"
+        },
+        {
+          "id": "ch-trigeminal-neuralgia-drug-2",
+          "drug": "Oxcarbazepine",
+          "domains": [
+            "prevention"
+          ],
+          "population": "三叉神經痛",
+          "regimen": "",
+          "grading_system": "ungraded",
+          "recommendation": {
+            "status": "not_reported",
+            "value": null
+          },
+          "evidence": {
+            "status": "not_reported",
+            "value": null
+          },
+          "wording": "第二選擇",
+          "note": "治療順位不是正式 COR；所引表未列 COR／LOE。",
+          "source_id": "ch-2026",
+          "locator": "印刷頁 21",
+          "reviewed_on": "2026-10-18"
+        }
+      ]
+    }
+  ],
+  "grading_note": "COR／LOE 欄位保留原指引的推薦強度與證據分級，不換算成統一 Class I／IIa／IIb／III。第一線順位、推薦強度、證據等級與給付資格是不同概念。藥物列為目前比較重點，非完整處方清單；劑量僅用於辨識原文評級適用的療程。",
+  "grading_systems": [
+    {
+      "id": "ths-2022",
+      "label": "THS 2022 · Recommendation Group / Strength of evidence",
+      "recommendation_values": [
+        "Group I",
+        "Group II",
+        "Group III",
+        "Group IV",
+        "Group V"
+      ],
+      "evidence_values": [
+        "Grade A",
+        "Grade B",
+        "Grade C"
+      ],
+      "description": "THS Group I–V 為本指引的推薦分組；證據為 Grade A–C。Group I 不能等同心臟學 Class I，也不必然等同文中第一線用藥順位。"
+    },
+    {
+      "id": "jhs-2021",
+      "label": "日本 2021 · 推奨／エビデンスの確実性",
+      "recommendation_values": [
+        "強い推奨",
+        "弱い推奨"
+      ],
+      "evidence_values": [
+        "A",
+        "B",
+        "C"
+      ],
+      "description": "推薦分強、弱；證據確定性 A＝高、B＝中、C＝低。CQ II-2-3 明確使用 GRADE；其餘依日本指引本身的分級。"
+    },
+    {
+      "id": "grade",
+      "label": "GRADE · 推薦強度／證據確定性",
+      "recommendation_values": [
+        "Strong",
+        "Weak",
+        "Strong in favor",
+        "Weak in favor",
+        "Strong against",
+        "Weak against"
+      ],
+      "evidence_values": [
+        "High",
+        "Moderate",
+        "Low",
+        "Very low"
+      ],
+      "description": "Strong／Weak 是推薦強度，High／Moderate／Low／Very low 是證據確定性。強推薦仍可能伴隨低確定性；需看比較對象、族群與劑量。"
+    },
+    {
+      "id": "sen-2026",
+      "label": "SEN 2026 · Grado de recomendación / Nivel de evidencia",
+      "recommendation_values": [
+        "GR-A",
+        "GR-B",
+        "GR-C",
+        "GR-D",
+        "GR-GECSEN"
+      ],
+      "evidence_values": [
+        "NE-I",
+        "NE-II",
+        "NE-III",
+        "NE-IV"
+      ],
+      "description": "GR 是推薦等級，NE 是證據等級；NE-I 不是 Class I recommendation。保留西班牙原文代碼。"
+    },
+    {
+      "id": "ungraded",
+      "label": "未擷取正式分級 · 保留建議措辭",
+      "recommendation_values": [],
+      "evidence_values": [],
+      "description": "所引段落僅有建議措辭、治療順位或共識；未核實的正式等級留空，不自行推算。"
     }
   ]
 }

@@ -64,7 +64,23 @@
       },
     };
   }
-  const api = { createLibrary };
+  function sortPapers(papers, read, mode = "unread") {
+    return [...papers].sort((a, b) => {
+      const left = a.article_metadata, right = b.article_metadata;
+      if (mode === "unread") {
+        const readingOrder = Number(read.has(left.pmid_or_id)) - Number(read.has(right.pmid_or_id));
+        if (readingOrder) return readingOrder;
+      }
+      // Preserve feed order, or save order in the personal library.
+      if (mode === "added") return 0;
+      if (left.publication_date === "Not reported")
+        return right.publication_date !== "Not reported" ? 1 : left.pmid_or_id.localeCompare(right.pmid_or_id);
+      if (right.publication_date === "Not reported") return -1;
+      const dateOrder = left.publication_date.localeCompare(right.publication_date);
+      return (mode === "oldest" ? dateOrder : -dateOrder) || left.pmid_or_id.localeCompare(right.pmid_or_id);
+    });
+  }
+  const api = { createLibrary, sortPapers };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.DigestLibrary = api;
 })(typeof globalThis !== "undefined" ? globalThis : this);

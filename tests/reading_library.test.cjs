@@ -2,7 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const {createLibrary} = require('../assets/reading-library.js');
+const {createLibrary, sortPapers} = require('../assets/reading-library.js');
 const paper = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/headache_papers.json')))[0];
 const id = paper.article_metadata.pmid_or_id;
 const validate = p => {
@@ -21,6 +21,34 @@ function storage() {
   };
 }
 const library = (data, scope = '/headache-digest-pipeline/') => createLibrary(() => data, scope, validate);
+
+const dated = (id, date) => ({article_metadata:{pmid_or_id:id,publication_date:date}});
+const ids = papers => papers.map(p => p.article_metadata.pmid_or_id);
+test('unread papers precede newer read papers, with newest dates within each group', () => {
+  const papers = [dated('read-new','2026-10-18'),dated('unread-old','2020-01-01'),dated('unread-new','2026-10-17'),dated('read-old','2019-01-01')];
+  const before = ids(papers);
+  assert.deepEqual(ids(sortPapers(papers,new Set(['read-new','read-old']))),['unread-new','unread-old','read-new','read-old']);
+  assert.deepEqual(ids(papers),before,'sorting must not change original feed order');
+});
+test('unknown dates stay behind dated papers within their own reading group', () => {
+  const papers = [dated('u-unknown','Not reported'),dated('r-new','2026-10-18'),dated('u-new','2026-10-17'),dated('r-unknown','Not reported')];
+  assert.deepEqual(ids(sortPapers(papers,new Set(['r-new','r-unknown']))),['u-new','u-unknown','r-new','r-unknown']);
+});
+test('saved read state governs ordering after reload, and unreading restores priority', () => {
+  const data=storage(), marks=library(data);
+  const papers=[dated(id,'2026-10-18'),dated('older','2020-01-01')];
+  marks.toggleRead(id);
+  assert.deepEqual(ids(sortPapers(papers,library(data).load().read)),['older',id]);
+  library(data).toggleRead(id);
+  assert.deepEqual(ids(sortPapers(papers,marks.load().read)),[id,'older']);
+});
+test('explicit date and added orders remain available and missing dates sort last', () => {
+  const papers=[dated('old','2020-01-01'),dated('unknown','Not reported'),dated('new','2026-10-18')];
+  const read=new Set(['new']);
+  assert.deepEqual(ids(sortPapers(papers,read,'newest')),['new','old','unknown']);
+  assert.deepEqual(ids(sortPapers(papers,read,'oldest')),['old','new','unknown']);
+  assert.deepEqual(ids(sortPapers(papers,read,'added')),ids(papers));
+});
 
 test('read and saved marks survive a new instance; save includes the full original snapshot', () => {
   const data = storage(), first = library(data);

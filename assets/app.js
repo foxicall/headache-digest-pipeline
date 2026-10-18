@@ -265,11 +265,15 @@ function changePaperMark(paper, action, button) {
   byId("library-feedback").textContent = (action === "saved"
     ? enabled ? "已收藏摘要：" : "已取消收藏："
     : enabled ? "已標記已閱讀：" : "已標記未閱讀：") + paper.article_metadata.title;
-  const same = [...byId("paper-list").children].find(card => card.dataset.pmid === id);
-  const target = (same || byId("paper-list").children[oldIndex] || byId("paper-list").lastElementChild)
+  const cards = [...byId("paper-list").children];
+  const same = cards.find(card => card.dataset.pmid === id);
+  // Keep the reader at the next card when a read toggle moves this one behind
+  // the unread queue. Following the same PMID would jump back to read papers.
+  const anchor = same && cards.indexOf(same) === oldIndex ? same : cards[oldIndex] || cards.at(-1);
+  const target = anchor
     ?.querySelector(`[data-mark="${action}"]`) || byId("reading-filters").querySelector('[aria-pressed="true"]');
   target.focus({ preventScroll: true });
-  if (same) window.scrollBy({ top: target.getBoundingClientRect().top - top, behavior: "instant" });
+  if (anchor) window.scrollBy({ top: target.getBoundingClientRect().top - top, behavior: "instant" });
 }
 
 function renderFilters() {
@@ -510,24 +514,9 @@ function render({ preserveOpen = false } = {}) {
           .toLocaleLowerCase()
           .includes(query)),
   );
-  const sort = byId("sort").value;
-  filtered.sort((a, b) => {
-    if (sort === "added") return 0; // Feed order, or most recently saved first in the personal library.
-    const left = a.article_metadata,
-      right = b.article_metadata;
-    if (left.publication_date === "Not reported")
-      return right.publication_date !== "Not reported"
-        ? 1
-        : left.pmid_or_id.localeCompare(right.pmid_or_id);
-    if (right.publication_date === "Not reported") return -1;
-    const result = left.publication_date.localeCompare(right.publication_date);
-    return (
-      (sort === "oldest" ? result : -result) ||
-      left.pmid_or_id.localeCompare(right.pmid_or_id)
-    );
-  });
+  const sorted = DigestLibrary.sortPapers(filtered, state.library.read, byId("sort").value);
   byId("paper-list").replaceChildren(
-    ...filtered.slice(0, state.visible).map(paperCard),
+    ...sorted.slice(0, state.visible).map(paperCard),
   );
   if (preserveOpen) byId("paper-list").querySelectorAll(".paper").forEach(card => { card.open = open.has(card.dataset.pmid); });
   byId("result-count").textContent = filtered.length + " 篇文獻";
@@ -729,7 +718,10 @@ byId("search").addEventListener("input", () => {
   state.visible = 20;
   render();
 });
-byId("sort").addEventListener("change", render);
+byId("sort").addEventListener("change", () => {
+  state.visible = 20;
+  render();
+});
 for (const id of ["syndrome-filter", "study-filter"]) byId(id).addEventListener("change", () => {
   state.visible = 20;
   render();

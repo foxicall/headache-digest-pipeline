@@ -5,15 +5,15 @@ importScripts("./assets/guidelines.js?v=14");
 
 // Scope-specific cache names keep different GitHub Pages project sites isolated.
 const PREFIX = `headache-digest:${self.registration.scope}:`;
-const CACHE = `${PREFIX}v14`;
+const CACHE = `${PREFIX}v15`;
 const SHELL = [
   "./",
   "./index.html",
   "./assets/styles.css",
   "./assets/tailwind.css",
-  "./assets/app.js",
+  "./assets/app.js?v=15",
   "./assets/paper-filters.js",
-  "./assets/reading-library.js",
+  "./assets/reading-library.js?v=15",
   "./assets/guidelines.js?v=14",
   "./assets/guidelines.css?v=14",
   "./assets/icon.svg",

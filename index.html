@@ -16,9 +16,9 @@
     <link rel="stylesheet" href="./assets/styles.css" />
     <link rel="stylesheet" href="./assets/guidelines.css?v=14" />
     <script src="./assets/paper-filters.js" defer></script>
-    <script src="./assets/reading-library.js" defer></script>
+    <script src="./assets/reading-library.js?v=15" defer></script>
     <script src="./assets/guidelines.js?v=14" defer></script>
-    <script src="./assets/app.js" defer></script>
+    <script src="./assets/app.js?v=15" defer></script>
   </head>
   <body class="antialiased">
     <a class="skip-link" href="#papers">跳至文獻列表</a>
@@ -164,6 +164,7 @@
           <label class="sort-wrap"
             ><span class="sr-only">排序方式</span
             ><select id="sort">
+              <option value="unread" selected>未閱讀優先 · 同組新到舊</option>
               <option value="newest">發表日期：新到舊</option>
               <option value="oldest">發表日期：舊到新</option>
               <option value="added">最近加入</option>
@@ -191,7 +192,7 @@
             <button type="button" data-reading="read" aria-pressed="false">已閱讀</button>
             <button type="button" data-reading="saved" aria-pressed="false">★ 我的收藏</button>
           </div>
-          <p class="reading-storage-note">點選 ☆ 收藏重要 trials 或其他文獻，點選 ✓ 標記已閱讀。標記與收藏摘要保存在此瀏覽器，不會跨裝置同步；清除網站資料會移除收藏。</p>
+          <p class="reading-storage-note">預設未閱讀優先，標記已閱讀後移到後排；選「未閱讀」可完全隱藏已讀文獻。點選 ☆ 收藏重要 trials 或其他文獻。標記與收藏摘要保存在此瀏覽器，不會跨裝置同步；清除網站資料會移除收藏。</p>
           <p id="saved-notice" class="reading-storage-note" hidden>我的收藏保留文章離開更新清單前儲存的摘要。可再選「Clinical trial」只看已收藏的臨床試驗；期刊與下拉選單篇數以收藏清單計算。</p>
           <p id="library-warning" class="library-warning" role="alert" hidden></p>
           <p id="library-feedback" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>

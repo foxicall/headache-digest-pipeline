@@ -60,6 +60,7 @@
           !Array.isArray(row.source_ids) || !row.source_ids.length || new Set(row.source_ids).size !== row.source_ids.length ||
           row.source_ids.some((id) => !sources.has(id))) fail();
       pairs.add(pair);
+      if (row.grading_review !== undefined && !string(row.grading_review)) fail();
       if (!row.domains || Object.keys(row.domains).length !== Object.keys(DOMAINS).length) fail();
       for (const key of Object.keys(DOMAINS)) {
         const item = row.domains[key];
@@ -84,6 +85,24 @@
         }
         if (item.recommendation.status !== 'reported' && !string(item.wording)) fail();
         if ((item.recommendation.status !== 'reported' || item.evidence.status !== 'reported') && !string(item.note)) fail();
+        if (item.evidence_context !== undefined && !string(item.evidence_context)) fail();
+        if (item.evidence_profiles !== undefined) {
+          // Outcome/study-specific ratings must not imply an overall drug grade.
+          if (!Array.isArray(item.evidence_profiles) || !item.evidence_profiles.length ||
+              item.evidence.status !== 'not_reported' || item.evidence.value !== null) fail();
+          const profiles = new Set();
+          for (const profile of item.evidence_profiles) {
+            const evidenceSource = sources.get(profile?.source_id);
+            if (!profile || ![profile.outcome, profile.locator].every(string) || !evidenceSource ||
+                !row.source_ids.includes(profile.source_id) ||
+                !evidenceSource.grading_system_ids.includes(item.grading_system) ||
+                item.reviewed_on > evidenceSource.reviewed_on || typeof profile.reason !== 'string' ||
+                (profile.value === null ? !string(profile.reason) : !system.evidence_values.includes(profile.value))) fail();
+            const key = JSON.stringify([profile.outcome, profile.value, profile.source_id, profile.locator]);
+            if (profiles.has(key)) fail();
+            profiles.add(key);
+          }
+        }
       }
     }
     return data;
@@ -151,11 +170,15 @@
         card.setAttribute('aria-labelledby', h.id);
         heading.append(h, node('p', 'guideline-population', row.population));
         const versions = node('div', 'guideline-versions');
+        const shownVersions = new Set();
         for (const id of row.source_ids) {
           const s = sources.get(id);
-          versions.append(node('span', 'guideline-version', `${s.version_date} · ${s.kind}`));
+          const version = `${s.version_date} · ${s.kind}`;
+          if (!shownVersions.has(version)) versions.append(node('span', 'guideline-version', version));
+          shownVersions.add(version);
         }
         heading.append(versions);
+        if (row.grading_review) heading.append(node('p', 'guideline-grading-review', row.grading_review));
         const drugSection = node('section', 'guideline-drugs');
         const drugHeading = node('h4', '', '藥物推薦與證據等級');
         drugHeading.id = `drugs-${row.id}`;
@@ -183,8 +206,25 @@
             for (const [key, label] of [['recommendation', 'Class of Recommendation'], ['evidence', 'Level of Evidence']]) {
               const grade = item[key], cell = node('td', `drug-grade drug-${key}`); cell.setAttribute('role', 'cell');
               const mobileLabel = node('span', 'drug-mobile-label', label); mobileLabel.setAttribute('aria-hidden', 'true');
-              cell.append(mobileLabel, node('span', grade.status === 'reported' ? 'grade-value' : 'grade-unavailable', grade.status === 'reported' ? grade.value : GRADE_STATUS[grade.status]));
-              cell.dataset.gradeStatus = grade.status;
+              cell.append(mobileLabel);
+              if (key === 'evidence' && item.evidence_profiles) {
+                cell.dataset.gradeStatus = 'profiles';
+                cell.append(node('span', 'grade-profile-heading', '依結果／證據段落分列'));
+                const profiles = node('ul', 'evidence-profiles');
+                for (const profile of item.evidence_profiles) {
+                  const li = node('li'), evidenceSource = sources.get(profile.source_id);
+                  li.append(node('span', 'evidence-outcome', profile.outcome),
+                    node('span', profile.value === null ? 'grade-unavailable' : 'grade-value', profile.value ?? profile.reason),
+                    link(evidenceSource, `${evidenceSource.version_date} · 來源 ${row.source_ids.indexOf(profile.source_id) + 1} ↗`),
+                    node('small', 'drug-locator', profile.locator));
+                  profiles.append(li);
+                }
+                cell.append(profiles);
+              } else {
+                cell.append(node('span', grade.status === 'reported' ? 'grade-value' : 'grade-unavailable', grade.status === 'reported' ? grade.value : GRADE_STATUS[grade.status]));
+                cell.dataset.gradeStatus = grade.status;
+              }
+              if (key === 'evidence' && item.evidence_context) cell.append(node('small', 'grade-wording', item.evidence_context));
               if (key === 'recommendation' && item.wording) cell.append(node('small', 'grade-wording', `原文建議：${item.wording}`));
               entry.append(cell);
             }

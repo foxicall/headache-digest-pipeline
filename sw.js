@@ -1,11 +1,11 @@
 "use strict";
 // Version the schema validator in both the reader and worker so HTTP caches
 // cannot combine the previous validator with the new JSON schema.
-importScripts("./assets/guidelines.js?v=13");
+importScripts("./assets/guidelines.js?v=14");
 
 // Scope-specific cache names keep different GitHub Pages project sites isolated.
 const PREFIX = `headache-digest:${self.registration.scope}:`;
-const CACHE = `${PREFIX}v13`;
+const CACHE = `${PREFIX}v14`;
 const SHELL = [
   "./",
   "./index.html",
@@ -14,8 +14,8 @@ const SHELL = [
   "./assets/app.js",
   "./assets/paper-filters.js",
   "./assets/reading-library.js",
-  "./assets/guidelines.js?v=13",
-  "./assets/guidelines.css?v=13",
+  "./assets/guidelines.js?v=14",
+  "./assets/guidelines.css?v=14",
   "./assets/icon.svg",
   "./assets/icon-192.png",
   "./assets/icon-512.png",

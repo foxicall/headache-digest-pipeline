@@ -68,6 +68,12 @@
 .drug-provenance p { margin: 6px 0; font-size: 11px; color: var(--muted); }
 .grade-value { display: inline-block; border: 1px solid #b9ccb6; padding: 2px 8px; border-radius: 4px; background: #f0f5ea; color: var(--green); font-weight: 650; }
 .grade-unavailable { color: var(--muted); font-size: 11px; }
+.guideline-grading-review { width: 100%; margin: 12px 0 0; font-size: 12px; line-height: 1.8; color: var(--muted); overflow-wrap: anywhere; }
+.grade-profile-heading { font-size: 11px; font-weight: 600; }
+.evidence-profiles { list-style: none; padding: 0; margin: 8px 0 0; }
+.evidence-profiles li + li { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 12px; }
+.evidence-outcome { display: block; margin-bottom: 5px; font-size: 11px; }
+.evidence-profiles .guideline-source-link { display: block; margin-top: 6px; font-size: 10px; }
 .drug-mobile-label { display: none; }
 .guideline-overview { border-top: 1px solid var(--line); }
 .guideline-overview > summary { padding: 12px 20px; cursor: pointer; font-size: 12px; font-weight: 600; color: var(--muted); }
@@ -82,6 +88,7 @@
   .guideline-drug-table th, .guideline-drug-table td { display: block; border: 0; min-width: 0; }
   .guideline-drug-table .drug-name, .guideline-drug-table .drug-provenance { grid-column: 1 / -1; }
   .guideline-drug-table .drug-grade { padding-top: 4px; padding-bottom: 4px; }
+  .guideline-drug-table [data-grade-status="profiles"] { grid-column: 1 / -1; }
   .drug-mobile-label { display: block; font-size: 10px; color: var(--muted); margin-bottom: 7px; }
   .guideline-drug-table .drug-provenance { background: #fafcf8; margin: 10px; padding: 10px; border-radius: 5px; }
 }

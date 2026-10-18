@@ -141,19 +141,98 @@ test('a later Japanese position statement is not assigned another guideline GRAD
   assert.equal(drug.recommendation.status,'not_reported');
   assert.equal(drug.evidence.status,'not_reported');
 });
-test('a verified recommendation does not manufacture unknown evidence certainty', () => {
+test('EAN full text distinguishes strong recommendations from low certainty and consensus', () => {
   const drug = findDrug('eu-cluster','Oxygen');
   assert.equal(drug.recommendation.value,'Strong');
-  assert.equal(drug.evidence.status,'not_verified');
-  assert.equal(drug.evidence.value,null);
+  assert.equal(drug.evidence.value,'Very low');
+  assert.equal(findDrug('eu-cluster','Sumatriptan（皮下注射）').evidence.value,'Low');
+  const verapamil = findDrug('eu-cluster','Verapamil');
+  assert.equal(verapamil.recommendation.value,'Consensus');
+  assert.equal(verapamil.evidence.value,null);
+  assert.equal(verapamil.evidence.status,'not_reported');
+  assert.equal(findDrug('eu-trigeminal-neuralgia','Carbamazepine').evidence.value,'Moderate');
+  assert.equal(findDrug('eu-trigeminal-neuralgia','Oxcarbazepine').evidence.value,'Very low');
 });
 test('NICE wording and Spanish NE-I are not recoded as Class I', () => {
-  const nice = findDrug('uk-nice-migraine','Propranolol／topiramate／amitriptyline');
-  assert.equal(nice.wording,'Consider');
-  assert.equal(nice.recommendation.value,null);
+  const nice = findDrug('uk-nice-migraine','Propranolol');
+  assert.equal(nice.recommendation.value,'Consider');
+  assert.equal(nice.evidence.value,null);
+  assert.equal(nice.evidence_profiles[0].source_id,'nice-addendum-2015');
   const es = findDrug('es-migraine','Triptans');
   assert.deepEqual([es.recommendation.value, es.evidence.value],['GR-A','NE-I']);
 });
+test('France preserves 2021 population-specific grades and does not lend them to the 2024 position', () => {
+  assert.equal(findDrug('fr-migraine','Amitriptyline','陣發性').evidence.value,'High');
+  const cm = findDrug('fr-migraine','Amitriptyline','慢性');
+  assert.deepEqual([cm.recommendation.value,cm.evidence.value],['Moderate','Fair']);
+  assert.equal(findDrug('fr-migraine','Candesartan').evidence.value,'Medium');
+  const position = findDrug('fr-migraine','CGRP 抗體／gepants');
+  assert.equal(position.recommendation.status,'not_reported');
+  assert.equal(position.evidence.status,'not_reported');
+  const source = data.sources.find((s) => s.id === position.source_id);
+  assert.equal(source.version_date,'2024');
+  assert.equal(source.verification,'full_text');
+});
+test('Finnish evidence letters do not imply a recommendation class', () => {
+  const diclofenac = findDrug('fi-migraine','Diclofenac');
+  assert.equal(diclofenac.evidence.value,'B');
+  assert.equal(diclofenac.recommendation.value,null);
+  assert.equal(findDrug('fi-migraine','Ibuprofen').evidence.value,'A');
+  assert.ok(diclofenac.evidence_context);
+});
+test('NICE technology appraisals do not turn trial quality prose into a formal LOE', () => {
+  const drug = findDrug('uk-nice-migraine','Botulinum toxin A');
+  assert.equal(drug.source_id,'nice-ta260');
+  assert.equal(drug.recommendation.value,'Recommended as an option');
+  assert.equal(drug.evidence.status,'not_reported');
+  assert.match(drug.note,/所引章節/);
+  const rimegepant = findDrug('uk-nice-migraine','Rimegepant');
+  assert.match(rimegepant.population,/陣發性/);
+  assert.match(rimegepant.population,/次發作/);
+});
+test('Dutch outcome profiles preserve mixed certainty and outcomes without data', () => {
+  const drug = findDrug('nl-migraine','CGRP monoclonal antibodies');
+  assert.equal(drug.recommendation.value,'Overweeg');
+  assert.equal(drug.evidence.value,null);
+  const profiles = drug.evidence_profiles;
+  assert.equal(profiles.find((p) => p.outcome.includes('（MMD）')).value,'Moderate');
+  assert.equal(profiles.find((p) => p.outcome.includes('HIT-6')).value,'Low');
+  const missing = profiles.find((p) => p.outcome.includes('≥30%'));
+  assert.equal(missing.value,null);
+  assert.match(missing.reason,/沒有可用資料/);
+});
+test('German descriptive evidence and SIGN study levels are not relabeled GRADE', () => {
+  const de = findDrug('de-migraine','CGRP 抗體／atogepant／rimegepant');
+  assert.equal(de.grading_system,'dgn-descriptive');
+  assert.equal(de.evidence.value,'hohe Evidenz');
+  const sign = findDrug('uk-sign-migraine','Propranolol');
+  assert.equal(sign.evidence.value,'1++');
+  assert.equal(sign.grading_system,'sign-2026');
+  assert.equal(sign.source_id,'sign-full-2026');
+});
+test('audited Swiss and Danish missing grades are not inferred from table order', () => {
+  for (const row of data.comparisons.filter((r) => ['ch','dk'].includes(r.jurisdiction))) {
+    assert.ok(row.grading_review);
+    for (const item of row.recommendations) {
+      assert.equal(item.recommendation.status,'not_reported');
+      assert.equal(item.evidence.status,'not_reported');
+    }
+  }
+});
+const profileDrug = (d) => d.comparisons.find((r) => r.id === 'nl-migraine').recommendations[0];
+for (const [name, mutate] of [
+  ['empty profile list', (d) => {profileDrug(d).evidence_profiles=[];}],
+  ['null profile entry', (d) => {profileDrug(d).evidence_profiles[0]=null;}],
+  ['profile with unknown source', (d) => {profileDrug(d).evidence_profiles[0].source_id='missing';}],
+  ['profile with foreign source', (d) => {profileDrug(d).evidence_profiles[0].source_id='nice-full-2012';}],
+  ['profile using foreign grade', (d) => {profileDrug(d).evidence_profiles[0].value='1++';}],
+  ['profile without locator', (d) => {profileDrug(d).evidence_profiles[0].locator='';}],
+  ['ungraded profile without reason', (d) => {const p=profileDrug(d).evidence_profiles[0];p.value=null;p.reason='';}],
+  ['invented aggregate over profiles', (d) => {profileDrug(d).evidence={status:'reported',value:'High'};}],
+  ['duplicate profile', (d) => {const p=profileDrug(d).evidence_profiles;p.push(p[0]);}],
+  ['empty grading review', (d) => {d.comparisons[0].grading_review='';}],
+  ['empty evidence context', (d) => {profileDrug(d).evidence_context='';}],
+]) test(`rejects ${name}`, () => {const d=copy();mutate(d);assert.throws(()=>guides.validate(d));});
 test('drug table domain filter respects tags and excludes administrative conditions', () => {
   const row = data.comparisons.find((r) => r.id === 'tw-migraine');
   assert.equal(guides.filterRecommendations(row, 'acute').length,3);

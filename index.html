@@ -14,8 +14,10 @@
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="stylesheet" href="./assets/tailwind.css" />
     <link rel="stylesheet" href="./assets/styles.css" />
+    <link rel="stylesheet" href="./assets/guidelines.css" />
     <script src="./assets/paper-filters.js" defer></script>
     <script src="./assets/reading-library.js" defer></script>
+    <script src="./assets/guidelines.js" defer></script>
     <script src="./assets/app.js" defer></script>
   </head>
   <body class="antialiased">
@@ -34,6 +36,10 @@
     </header>
 
     <main>
+      <nav class="section-nav" aria-label="內容導覽">
+        <a href="#papers">文獻書架</a>
+        <a href="#guidelines">各國指引比較 <span aria-hidden="true">↗</span></a>
+      </nav>
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
           <p class="eyebrow">
@@ -74,6 +80,43 @@
           </dl>
           <p class="overview-note">來源可追溯 · 原文與摘要並讀</p>
         </aside>
+      </section>
+
+      <section id="guidelines" class="guidelines" aria-labelledby="guidelines-title">
+        <div class="section-heading">
+          <div><p class="eyebrow">GUIDELINES ACROSS BORDERS</p><h2 id="guidelines-title">各國指引比較</h2></div>
+          <span id="guidelines-reviewed" class="section-aside">正在查閱版本…</span>
+        </div>
+        <p class="guidelines-intro">同一個臨床問題，對照不同地區的建議。選擇症候群與地區，比較急性、預防及專科治療；給付條件另外判讀。</p>
+        <p id="guidelines-coverage" class="overview-note"></p>
+        <p id="guidelines-freshness" class="guidelines-notice" role="status" hidden></p>
+        <div class="guidelines-controls">
+          <label for="guideline-syndrome">比較症候群<select id="guideline-syndrome" disabled><option value="migraine">偏頭痛 · 讀取中…</option></select></label>
+          <label for="guideline-domain">比較重點<select id="guideline-domain" disabled>
+            <option value="all">所有重點</option><option value="acute">急性／發作期治療</option>
+            <option value="prevention">預防／長期治療</option><option value="escalation">進階／專科治療</option><option value="access">給付與使用條件</option>
+          </select></label>
+        </div>
+        <details class="guidelines-picker" open>
+          <summary>選擇比較地區 <span id="guidelines-selection"></span></summary>
+          <div class="guidelines-presets" role="group" aria-label="快速選擇地區">
+            <button type="button" data-guideline-preset="all" disabled>全部地區</button>
+            <button type="button" data-guideline-preset="asia" disabled>台灣＋日本</button>
+            <button type="button" data-guideline-preset="europe" disabled>歐洲</button>
+            <button type="button" data-guideline-preset="none" disabled>清除選擇</button>
+          </div>
+          <fieldset id="guideline-countries" disabled><legend class="sr-only">可複選國家與指引組織</legend></fieldset>
+        </details>
+        <p id="guidelines-status" class="overview-note" role="status" aria-live="polite">正在讀取指引比較…</p>
+        <button id="guidelines-retry" class="subtle-button" type="button" hidden>重新載入指引</button>
+        <p id="guidelines-gaps" class="guidelines-notice" hidden></p>
+        <div id="guidelines-results" aria-busy="true"></div>
+        <details class="guidelines-method"><summary>版本、來源與比較方式</summary>
+          <p id="guidelines-update-note"></p>
+          <p>這是獨立的官方指引資料庫，不套用文獻書架的 JIF／發表年限條件。各國推薦分級方法不同，不能直接比較證據等級；強推薦也不必然代表第一線。</p>
+          <p>每個重點附來源與章節。僅讀到摘要的文件會標示「原始摘要」；「未涵蓋」與「未核實」分開顯示。未列出不代表沒有建議，且舊版的給付條件不代表現行政策。</p>
+          <p>EM＝陣發性偏頭痛；CM＝慢性偏頭痛。比較聚焦成人，兒童、孕期及其他特殊族群需另讀完整指引。</p>
+        </details>
       </section>
 
       <section id="papers" class="library" aria-labelledby="library-title">

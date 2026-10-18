@@ -21,6 +21,14 @@ python -m http.server 8000 --bind 127.0.0.1
 
 Open <http://localhost:8000>. Use HTTP rather than `file://`, which cannot reliably fetch JSON. No database, frontend build or NCBI key is required.
 
+## Guideline comparison
+
+Open **各國指引比較** (or `#guidelines`) to compare Taiwan, Japan, nine European countries and EHF/EAN guidance. Select a syndrome, multiple jurisdictions and a treatment domain. The comparison separates acute care, prevention, specialist treatment and administrative access; on phones each country becomes a vertical card.
+
+The independent `data/headache_guidelines.json` collection currently contains 20 source documents and 20 jurisdiction–syndrome comparisons, reviewed **2026-10-18**. Migraine is covered across all listed jurisdictions; cluster headache and trigeminal neuralgia show only verified entries and explicit coverage gaps. Each claim links to an original source and locator; version, document type and full-text/abstract reading depth are visible. This is not an exhaustive European inventory. See [provenance and maintenance](docs/guidelines.md).
+
+Guideline versions are manually reviewed, separate from daily paper ingestion and its JIF/date rules. A reminder appears after 90 days without review. Verified guideline JSON is cached for offline reading; a failed guideline fetch does not block the literature reader. Source links require internet access.
+
 ## Personal reading list
 
 Each card has independent **標記已閱讀 / ✓ 已閱讀** and **☆ 收藏 / ★ 已收藏** toggles. Opening a card does not automatically mark it as read. The reading filters show all current papers, unread papers, read papers, or **我的收藏**; they combine with keyword, syndrome, study-design and journal filters. Choose Clinical trial within 我的收藏 to see only saved trials. Clearing filters never deletes marks or saved papers.
@@ -197,4 +205,4 @@ npm_config_cache=/tmp/headache-npm-cache npx --yes tailwindcss@3.4.17 \
 
 Run `pytest`. Tests use `unittest.mock`, clear API-key environment variables, block real HTTP requests and prevent real OpenAI client creation. Coverage includes the exact schema, XML/DOI/date parsing, query coverage, rate limiting/retries, 30-day/ten-year defaults and overrides, leap-year and electronic-date boundaries, pagination and PubMed ceiling splits, journal aliases and overlapping source groups, Taiwan classification, strict topic screening, all 368 catalog entries, underlying-disease exclusions, long-query POST transport and source-based regressions, mocked Structured Outputs, missing/blank keys, deduplication, prepending, upgrades, partial failures, atomic writes, historical seed fixtures, strict JIF boundaries, low-JIF clinical-trial exceptions and exclusions, unknown/wrong-year metrics, custom-query protection and archive pruning. Tests require no network access, external API key or billing.
 
-Run `node --test tests/paper_filters.test.cjs` with Node 22+ for the DOM-free dropdown classifiers. Tests cover all catalog names and parent codes, bilingual aliases, overlapping research designs, negated/unknown designs, protocol/review exclusions, case-report-form false positives and the current cohort record. GitHub Actions runs both suites before synchronization/deployment; Node is not required by the Python pipeline or the deployed reader.
+Run `node --test tests/*.test.cjs` with Node 22+ for the DOM-free dropdown classifiers, reading library and guideline comparisons. Tests cover all catalog names and parent codes, bilingual aliases, overlapping research designs, negated/unknown designs, protocol/review exclusions, case-report-form false positives, saved snapshots, guideline source integrity and offline cache protection. GitHub Actions runs the Python and JavaScript suites before synchronization/deployment; Node is not required by the Python pipeline or the deployed reader.

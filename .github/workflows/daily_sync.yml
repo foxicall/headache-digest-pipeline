@@ -31,7 +31,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Test literature filters and reading library
+      - name: Test reader, personal library and guideline comparison
         run: node --test tests/*.test.cjs
 
   sync:
@@ -105,7 +105,7 @@ jobs:
           mkdir -p _site/data
           cp index.html manifest.webmanifest sw.js _site/
           cp -R assets _site/assets
-          cp data/headache_papers.json data/journal_metrics.json data/headache_syndromes.json _site/data/
+          cp data/headache_papers.json data/journal_metrics.json data/headache_syndromes.json data/headache_guidelines.json _site/data/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

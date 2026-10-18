@@ -1,0 +1,1172 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-10-18",
+  "coverage_note": "已整理 9 個歐洲國家（英國分 NICE／SIGN）、台灣、日本及 EHF／EAN 跨國建議。以成人偏頭痛為主，另列已查核的叢集性頭痛、三叉神經痛；尚非所有歐洲國家或所有症候群的完整指引庫。",
+  "update_note": "版本由官方學會、主管機關或原始指引出版物人工查核；每日 PubMed 同步不會自動更新本比較。顯示的是截至查核日可核實的版本，並不保證此後沒有新版。",
+  "syndromes": [
+    {
+      "id": "migraine",
+      "label": "偏頭痛 · Migraine"
+    },
+    {
+      "id": "cluster",
+      "label": "叢集性／叢發性頭痛 · Cluster headache"
+    },
+    {
+      "id": "trigeminal-neuralgia",
+      "label": "三叉神經痛 · Trigeminal neuralgia"
+    }
+  ],
+  "jurisdictions": [
+    {
+      "id": "tw",
+      "label": "台灣 · THS",
+      "group": "asia"
+    },
+    {
+      "id": "jp",
+      "label": "日本 · JHS",
+      "group": "asia"
+    },
+    {
+      "id": "uk-nice",
+      "label": "英國 · NICE",
+      "group": "europe"
+    },
+    {
+      "id": "uk-sign",
+      "label": "英國蘇格蘭 · SIGN",
+      "group": "europe"
+    },
+    {
+      "id": "de",
+      "label": "德國 · DGN／DMKG",
+      "group": "europe"
+    },
+    {
+      "id": "fr",
+      "label": "法國 · SFEMC",
+      "group": "europe"
+    },
+    {
+      "id": "it",
+      "label": "義大利 · SISC／IHS",
+      "group": "europe"
+    },
+    {
+      "id": "es",
+      "label": "西班牙 · SEN",
+      "group": "europe"
+    },
+    {
+      "id": "nl",
+      "label": "荷蘭 · NVN",
+      "group": "europe"
+    },
+    {
+      "id": "dk",
+      "label": "丹麥 · DNS",
+      "group": "europe"
+    },
+    {
+      "id": "ch",
+      "label": "瑞士 · SKG",
+      "group": "europe"
+    },
+    {
+      "id": "fi",
+      "label": "芬蘭 · Käypä hoito",
+      "group": "europe"
+    },
+    {
+      "id": "eu",
+      "label": "跨國歐洲 · EHF／EAN",
+      "group": "pan-european"
+    }
+  ],
+  "sources": [
+    {
+      "id": "tw-acute-2026",
+      "title": "2026 Taiwan guidelines for the acute pharmacologic treatment of migraine in adults",
+      "publisher": "台灣頭痛學會 THS",
+      "version_date": "2026-09-11",
+      "kind": "指引",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42723131/",
+      "scope": "成人偏頭痛急性治療",
+      "verification": "abstract_only",
+      "reviewed_on": "2026-10-18",
+      "version_note": "線上先行出版；更新 2022 急性治療指引，並非預防指引更新。"
+    },
+    {
+      "id": "tw-prevent-2022",
+      "title": "2022 Taiwan Guidelines for Preventive Treatment of Migraine",
+      "publisher": "台灣頭痛學會 THS",
+      "version_date": "2022-09-30",
+      "kind": "指引",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36089629/",
+      "scope": "偏頭痛預防",
+      "verification": "abstract_only",
+      "reviewed_on": "2026-10-18",
+      "version_note": "本次查核未核實較新的 THS 全面預防指引；不以 2026 急性指引取代。"
+    },
+    {
+      "id": "jp-2021",
+      "title": "頭痛の診療ガイドライン 2021",
+      "publisher": "日本神經學會、日本頭痛學會、日本神經治療學會",
+      "version_date": "2021",
+      "kind": "綜合指引",
+      "url": "https://www.jhsnet.net/pdf/guideline_2021.pdf",
+      "scope": "頭痛及相關神經痛",
+      "verification": "full_text",
+      "reviewed_on": "2026-10-18",
+      "version_note": "日本頭痛學會指引目錄仍列此綜合版；CGRP 預防另參照 2025 立場聲明。"
+    },
+    {
+      "id": "jp-cgrp-2025",
+      "title": "CGRP-targeting antibodies as a first-line option for the prevention of migraine in adults",
+      "publisher": "日本頭痛學會 JHS",
+      "version_date": "2025-10-27",
+      "kind": "立場聲明",
+      "url": "https://www.jhsnet.net/pdf/guideline_cgrp.pdf",
+      "scope": "成人偏頭痛 CGRP 抗體預防",
+      "verification": "full_text",
+      "reviewed_on": "2026-10-18",
+      "version_note": "局部更新；不取代其他症候群的 2021 建議。"
+    },
+    {
+      "id": "nice-cg150",
+      "title": "Headaches in over 12s: diagnosis and management (CG150)",
+      "publisher": "NICE",
+      "version_date": "2025-06-03",
+      "kind": "指引",
+      "url": "https://www.nice.org.uk/guidance/cg150/chapter/recommendations",
+      "scope": "12 歲以上頭痛；本表擷取成人建議",
+      "verification": "full_text",
+      "reviewed_on": "2026-10-18",
+      "version_note": "CG150 標示的最後更新日；頁面連結的個別技術評估可能較新。2025-12 的預防治療更新規畫不是已發布的新建議。"
+    },
+    {
+      "id": "sign-acute-2026",
+      "title": "SIGN 155 · Acute therapy",
+      "publisher": "SIGN / Healthcare Improvement Scotland",
+      "version_date": "2026",
+      "kind": "指引工具包",
+      "url": "https://www.rightdecisions.scot.nhs.uk/pharmacological-management-of-migraine-sign/acute-therapy/",
+      "scope": "偏頭痛急性治療",
+      "verification": "full_text",
+      "reviewed_on": "2026-10-18",
+      "version_note": "官方 Right Decisions 工具包標示依據 SIGN 155 的 2026 更新。"
+    },
+    {
+      "id": "sign-prevent-2026",
+      "title": "SIGN 155 · Preventive therapy",
+      "publisher": "SIGN / Healthcare Improvement Scotland",
+      "version_date": "2026",
+      "kind": "指引工具包",
+      "url": "https://www.rightdecisions.scot.nhs.uk/pharmacological-management-of-migraine-sign/preventive-therapy/",
+      "scope": "偏頭痛預防",
+      "verification": "full_text",
+      "reviewed_on": "2026-10-18",
+      "version_note": "分開呈現蘇格蘭 SIGN 與 NICE 的建議。"
+    },
+    {
+      "id": "de-2025",
+      "title": "Therapie der Migräneattacke und Prophylaxe der Migräne · S1, Version 7.1",
+      "publisher": "DGN / DMKG",
+      "version_date": "2025-11-06",
+      "kind": "S1 指引",
+      "url": "https://www.dgn.org/cms-content/030057_LL_Migra%CC%88ne_2025_V7.1_1762431954309.pdf",
+      "scope": "偏頭痛急性與預防治療",
+      "verification": "full_text",
+      "reviewed_on": "2026-10-18",
+      "version_note": "2025-08-08 全面修訂；2025-11-06 修正圖 2；有效至 2028-08-07。"
+    },
+    {
+      "id": "fr-acute-2021",
+      "title": "Recommandations 2021 · Traitement des crises",
+      "publisher": "SFEMC",
+      "version_date": "2021",
+      "kind": "指引",
+      "url": "https://sfemc.fr/professionnels/recommandations/recommandations-2021-pour-le-diagnostic-et-la-prise-en-charge-de-la-migraine-chez-ladulte-traitement-des-crises/",
+      "scope": "成人偏頭痛急性治療",
+      "verification": "official_summary",
+      "reviewed_on": "2026-10-18",
+      "version_note": "2021 建議；法文期刊版本 2022 出版，網站上架年份不視為新版本。"
+    },
+    {
+      "id": "fr-position-2025",
+      "title": "Migraine treatment: Position paper of the French Headache Society",
+      "publisher": "SFEMC",
+      "version_date": "2025",
+      "kind": "立場聲明",
+      "url": "https://sfemc.fr/migraine-treatment-position-paper-of-the-french-headache-society/",
+      "scope": "偏頭痛標靶預防與 topiramate 安全性",
+      "verification": "abstract_only",
+      "reviewed_on": "2026-10-18",
+      "version_note": "期刊線上先行於 2024；學會 2025-03-05 刊載，作為 2021 指引的局部補充。"
+    },
+    {
+      "id": "it-2025",
+      "title": "Evidence-based guidelines for the pharmacological treatment of migraine · summary version",
+      "publisher": "SISC / IHS",
+      "version_date": "2025-04-25",
+      "kind": "聯合指引",
+      "url": "https://doi.org/10.1177/03331024251321500",
+      "scope": "偏頭痛藥物治療",
+      "verification": "full_text",
+      "reviewed_on": "2026-10-18",
+      "version_note": "義大利 SISC 與國際 IHS 聯合制定；不是義大利健保給付規則。"
+    },
+    {
+      "id": "es-2026",
+      "title": "Manual de práctica clínica en cefaleas · 5.ª edición",
+      "publisher": "Sociedad Española de Neurología (SEN)",
+      "version_date": "2026",
+      "kind": "臨床實務手冊",
+      "url": "https://www.sen.es/pdf/2026/Manual_Cefaleas_2026.pdf",
+      "scope": "頭痛及顱顏面神經痛",
+      "verification": "full_text",
+      "reviewed_on": "2026-10-18",
+      "version_note": "2026 第五版；本表整理偏頭痛章節。"
+    },
+    {
+      "id": "nl-cgrp-2023",
+      "title": "Hoofdpijn · Migraine: Monoklonale antilichamen",
+      "publisher": "Nederlandse Vereniging voor Neurologie (NVN)",
+      "version_date": "2023-12-04",
+      "kind": "指引模組",
+      "url": "https://richtlijnendatabase.nl/richtlijn/hoofdpijn/migraine/migraine_monoklonale_antilichamen.html",
+      "scope": "難治性慢性偏頭痛的 CGRP 抗體",
+      "verification": "full_text",
+      "reviewed_on": "2026-10-18",
+      "version_note": "僅此模組的發布日；不將它視為所有頭痛章節都在 2023 更新。"
+    },
+    {
+      "id": "dk-2026",
+      "title": "Migræne – behandling",
+      "publisher": "Dansk Neurologisk Selskab / NNBV",
+      "version_date": "2026-09-19",
+      "kind": "線上治療指引",
+      "url": "https://nnbv.dk/migraene-behandling/",
+      "scope": "偏頭痛治療",
+      "verification": "full_text",
+      "reviewed_on": "2026-10-18",
+      "version_note": "官方頁面標示最後修訂 19.9.2026。"
+    },
+    {
+      "id": "dk-cgrp-2026",
+      "title": "CGRP antagonist behandling af migræne",
+      "publisher": "Dansk Neurologisk Selskab / NNBV",
+      "version_date": "2026-07-28",
+      "kind": "線上治療指引",
+      "url": "https://nnbv.dk/cgrp-antagonist-behandling-af-migraene/",
+      "scope": "偏頭痛 CGRP 治療",
+      "verification": "full_text",
+      "reviewed_on": "2026-10-18",
+      "version_note": "第五版；本表摘錄慢性偏頭痛治療門檻。"
+    },
+    {
+      "id": "ch-2026",
+      "title": "Therapieempfehlungen für primäre Kopfschmerzen · 12. Auflage",
+      "publisher": "Schweizerische Kopfwehgesellschaft (SKG)",
+      "version_date": "2026",
+      "kind": "治療建議",
+      "url": "https://www.headache.ch/fileadmin/user_upload/IMSKWMTE26_Therapieemp_2026_komplett_DE_07.pdf",
+      "scope": "原發性頭痛與顱神經痛",
+      "verification": "full_text",
+      "reviewed_on": "2026-10-18",
+      "version_note": "官方治療委員會目前提供第 12 版；PDF 版權年為 2026。"
+    },
+    {
+      "id": "fi-2024",
+      "title": "Migreeni · Käypä hoito -suositus",
+      "publisher": "Suomalainen Lääkäriseura Duodecim / Suomen Neurologinen Yhdistys",
+      "version_date": "2024-03-28",
+      "kind": "指引",
+      "url": "https://www.kaypahoito.fi/hoi36050",
+      "scope": "偏頭痛",
+      "verification": "full_text",
+      "reviewed_on": "2026-10-18",
+      "version_note": "官方頁面標為更新中；規畫中的更新不視為已發布版本。"
+    },
+    {
+      "id": "ehf-2022",
+      "title": "European Headache Federation guideline on CGRP monoclonal antibodies · 2022 update",
+      "publisher": "European Headache Federation (EHF)",
+      "version_date": "2022-06-11",
+      "kind": "指引及專家共識",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9188162/",
+      "scope": "偏頭痛 CGRP 抗體預防",
+      "verification": "full_text",
+      "reviewed_on": "2026-10-18",
+      "version_note": "第一線定位出自專家共識表 9；不是各國給付決定。"
+    },
+    {
+      "id": "ean-cluster-2023",
+      "title": "European Academy of Neurology guidelines on the treatment of cluster headache",
+      "publisher": "European Academy of Neurology (EAN)",
+      "version_date": "2023",
+      "kind": "指引",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37515405/",
+      "scope": "叢集性頭痛",
+      "verification": "abstract_only",
+      "reviewed_on": "2026-10-18",
+      "version_note": "跨國歐洲建議，不能代表每個國家的給付或核准。"
+    },
+    {
+      "id": "ean-tn-2019",
+      "title": "European Academy of Neurology guideline on trigeminal neuralgia",
+      "publisher": "European Academy of Neurology (EAN)",
+      "version_date": "2019",
+      "kind": "指引",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30860637/",
+      "scope": "三叉神經痛",
+      "verification": "abstract_only",
+      "reviewed_on": "2026-10-18",
+      "version_note": "仍須分別核對國家版本；不將舊年分改標為 2026。"
+    }
+  ],
+  "comparisons": [
+    {
+      "id": "tw-migraine",
+      "jurisdiction": "tw",
+      "syndrome": "migraine",
+      "source_ids": [
+        "tw-acute-2026",
+        "tw-prevent-2022"
+      ],
+      "population": "成人偏頭痛；陣發性與慢性分開判讀",
+      "domains": {
+        "acute": {
+          "status": "summarized",
+          "text": "按失能程度分層：較輕可用 NSAID，較重可用 triptan；rimegepant 亦可作第一線選項，尤其 triptan 不適用或無效者。",
+          "source_ids": [
+            "tw-acute-2026"
+          ],
+          "locator": "摘要：acute treatment recommendations"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "陣發性第一線：propranolol、flunarizine、topiramate。慢性第一線另包含 onabotulinumtoxinA 與 CGRP 抗體。",
+          "source_ids": [
+            "tw-prevent-2022"
+          ],
+          "locator": "摘要：episodic / chronic migraine prevention"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "CGRP 抗體：陣發性列第二線，慢性列第一線（2022 預防版）。2026 急性版不改寫此排序。",
+          "source_ids": [
+            "tw-prevent-2022"
+          ],
+          "locator": "摘要：first-line / second-line medications"
+        },
+        "access": {
+          "status": "not_verified",
+          "text": "本表為 THS 臨床建議；尚未核實台灣健保最新 CGRP／肉毒桿菌給付條件。",
+          "source_ids": [],
+          "locator": ""
+        }
+      }
+    },
+    {
+      "id": "jp-migraine",
+      "jurisdiction": "jp",
+      "syndrome": "migraine",
+      "source_ids": [
+        "jp-2021",
+        "jp-cgrp-2025"
+      ],
+      "population": "成人偏頭痛",
+      "domains": {
+        "acute": {
+          "status": "summarized",
+          "text": "依嚴重度使用 NSAID 或 triptan；急性藥在頭痛早期使用，視需要加入止吐藥。",
+          "source_ids": [
+            "jp-2021"
+          ],
+          "locator": "CQ II-2-1；PDF 第 149–158 頁"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "2025 立場聲明：CGRP 抗體可與其他核准預防藥並列第一線選項，由醫病共同決定。",
+          "source_ids": [
+            "jp-cgrp-2025"
+          ],
+          "locator": "PDF 第 2、4–5 頁"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "CGRP 抗體的第一線定位是新增的預防治療立場，並非所有頭痛治療均已改版。",
+          "source_ids": [
+            "jp-cgrp-2025"
+          ],
+          "locator": "PDF 第 2 頁"
+        },
+        "access": {
+          "status": "summarized",
+          "text": "聲明引述日本最適使用條件：近 3 個月至少每月 4 個偏頭痛日，且至少一種既有預防藥無效、不耐受或禁忌；第一線定位不等於無條件給付。",
+          "source_ids": [
+            "jp-cgrp-2025"
+          ],
+          "locator": "PDF 第 3 頁：最適使用推進ガイドライン"
+        }
+      }
+    },
+    {
+      "id": "uk-nice-migraine",
+      "jurisdiction": "uk-nice",
+      "syndrome": "migraine",
+      "source_ids": [
+        "nice-cg150"
+      ],
+      "population": "本表取成人建議；原指引適用 ≥12 歲",
+      "domains": {
+        "acute": {
+          "status": "summarized",
+          "text": "可選 oral triptan 加 NSAID 或 paracetamol；也可依偏好單藥治療。需要時加入止吐藥。",
+          "source_ids": [
+            "nice-cg150"
+          ],
+          "locator": "§1.3.10–1.3.14"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "考慮 propranolol、topiramate 或 amitriptyline，依共病、風險與偏好選擇。",
+          "source_ids": [
+            "nice-cg150"
+          ],
+          "locator": "§1.3.17–1.3.21"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "慢性偏頭痛可考慮 botulinum toxin A；CGRP 預防依個別技術評估使用。Topiramate 有嚴格孕期防護要求。",
+          "source_ids": [
+            "nice-cg150"
+          ],
+          "locator": "§1.3.24–1.3.26；prophylactic treatment"
+        },
+        "access": {
+          "status": "summarized",
+          "text": "CGRP 預防通常須每月 ≥4 個偏頭痛日，且 ≥3 種預防藥失敗、不耐受或不適用；個別藥物適用範圍不同。",
+          "source_ids": [
+            "nice-cg150"
+          ],
+          "locator": "§1.3.24–1.3.26；NICE technology appraisals"
+        }
+      }
+    },
+    {
+      "id": "uk-sign-migraine",
+      "jurisdiction": "uk-sign",
+      "syndrome": "migraine",
+      "source_ids": [
+        "sign-acute-2026",
+        "sign-prevent-2026"
+      ],
+      "population": "成人偏頭痛；蘇格蘭",
+      "domains": {
+        "acute": {
+          "status": "summarized",
+          "text": "第一線含 aspirin、ibuprofen、sumatriptan；triptan 不適用或多次失敗者可考慮 rimegepant。",
+          "source_ids": [
+            "sign-acute-2026"
+          ],
+          "locator": "First-line / Second-line / Third-line therapy"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "第一線列 candesartan、propranolol、amitriptyline。Topiramate 列其他療法，育齡女性需孕期防護。",
+          "source_ids": [
+            "sign-prevent-2026"
+          ],
+          "locator": "First-line therapies / Other therapies"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "專科選項含 gepants、CGRP 抗體及慢性偏頭痛用 botulinum toxin A。",
+          "source_ids": [
+            "sign-prevent-2026"
+          ],
+          "locator": "Specialist therapies"
+        },
+        "access": {
+          "status": "summarized",
+          "text": "專科標靶治療通常先處理藥物過度使用，並經 ≥3 種口服預防藥適當試用無效；各藥物的陣發／慢性範圍不同。",
+          "source_ids": [
+            "sign-prevent-2026"
+          ],
+          "locator": "Specialist therapies"
+        }
+      }
+    },
+    {
+      "id": "de-migraine",
+      "jurisdiction": "de",
+      "syndrome": "migraine",
+      "source_ids": [
+        "de-2025"
+      ],
+      "population": "成人偏頭痛",
+      "domains": {
+        "acute": {
+          "status": "summarized",
+          "text": "輕中度先用 NSAID 等止痛藥；嚴重或反應不佳可用 triptan。Rimegepant 可用於止痛藥／triptan 無效或不耐受。",
+          "source_ids": [
+            "de-2025"
+          ],
+          "locator": "PDF 第 9–10 頁：Empfehlungen"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "依發作負擔與共病選藥，包含 beta-blocker、flunarizine、topiramate、amitriptyline 等。",
+          "source_ids": [
+            "de-2025"
+          ],
+          "locator": "PDF 第 11 頁"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "CGRP 抗體、atogepant 適用偏頭痛預防；rimegepant 用於陣發性，onabotulinumtoxinA 用於慢性。",
+          "source_ids": [
+            "de-2025"
+          ],
+          "locator": "PDF 第 11–13 頁"
+        },
+        "access": {
+          "status": "not_verified",
+          "text": "尚未核實本地現行給付條件；不可由臨床建議推定給付。",
+          "source_ids": [],
+          "locator": ""
+        }
+      }
+    },
+    {
+      "id": "fr-migraine",
+      "jurisdiction": "fr",
+      "syndrome": "migraine",
+      "source_ids": [
+        "fr-acute-2021",
+        "fr-position-2025"
+      ],
+      "population": "成人偏頭痛",
+      "domains": {
+        "acute": {
+          "status": "summarized",
+          "text": "輕度發作用 NSAID，嚴重發作用 triptan；triptan 單藥失敗或復發可合併 NSAID。",
+          "source_ids": [
+            "fr-acute-2021"
+          ],
+          "locator": "官方摘要：Points essentiels"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "後續立場聲明將 CGRP 抗體與 gepants 列為可提供的第一線預防選項。",
+          "source_ids": [
+            "fr-position-2025"
+          ],
+          "locator": "原始論文摘要 / 官方學會頁"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "育齡女性不再以 topiramate 作第一線，需慎重評估與避孕；孕期禁用。",
+          "source_ids": [
+            "fr-position-2025"
+          ],
+          "locator": "摘要：topiramate safety"
+        },
+        "access": {
+          "status": "summarized",
+          "text": "立場聲明所引可能給付範圍較窄：重度偏頭痛、每月 ≥8 個頭痛日且兩種預防藥失敗。此為文件當時門檻，非已核對的 2026 給付清單。",
+          "source_ids": [
+            "fr-position-2025"
+          ],
+          "locator": "摘要：possible reimbursement"
+        }
+      }
+    },
+    {
+      "id": "it-migraine",
+      "jurisdiction": "it",
+      "syndrome": "migraine",
+      "source_ids": [
+        "it-2025"
+      ],
+      "population": "成人偏頭痛；SISC／IHS 聯合建議",
+      "domains": {
+        "acute": {
+          "status": "summarized",
+          "text": "多種 triptan、paracetamol 等有強推薦；依藥物、劑量及證據品質逐項評級。",
+          "source_ids": [
+            "it-2025"
+          ],
+          "locator": "Table 3"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "陣發性偏頭痛：多種 CGRP 抗體、atogepant 與特定劑量 topiramate 獲強推薦。",
+          "source_ids": [
+            "it-2025"
+          ],
+          "locator": "Tables 4–5"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "慢性偏頭痛：onabotulinumtoxinA、atogepant 與多種 CGRP 抗體獲強推薦。推薦強度不等於第一線排序。",
+          "source_ids": [
+            "it-2025"
+          ],
+          "locator": "Table 6"
+        },
+        "access": {
+          "status": "not_verified",
+          "text": "SISC／IHS 聯合療效建議未在本表核對義大利 AIFA 現行給付門檻。",
+          "source_ids": [],
+          "locator": ""
+        }
+      }
+    },
+    {
+      "id": "es-migraine",
+      "jurisdiction": "es",
+      "syndrome": "migraine",
+      "source_ids": [
+        "es-2026"
+      ],
+      "population": "成人偏頭痛",
+      "domains": {
+        "acute": {
+          "status": "summarized",
+          "text": "急性治療依發作程度選擇 NSAID、triptan；亦討論 gepants 與 ditans 的適用情境。",
+          "source_ids": [
+            "es-2026"
+          ],
+          "locator": "第 3 章；PDF 第 84–96 頁"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "預防流程在可取得時優先考慮 anti-CGRP；共病或無法取得時可用傳統口服預防藥。",
+          "source_ids": [
+            "es-2026"
+          ],
+          "locator": "第 4 章 Figure 1；PDF 第 119 頁"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "慢性偏頭痛的第一線選項亦含 botulinum toxin A；反應不足可考慮更換或合併治療。",
+          "source_ids": [
+            "es-2026"
+          ],
+          "locator": "第 4 章 Figure 1；PDF 第 118–119 頁"
+        },
+        "access": {
+          "status": "not_verified",
+          "text": "手冊的「可取得時」治療流程不等於西班牙各地區無限制給付；本表未核實現行地方給付規則。",
+          "source_ids": [],
+          "locator": ""
+        }
+      }
+    },
+    {
+      "id": "nl-migraine",
+      "jurisdiction": "nl",
+      "syndrome": "migraine",
+      "source_ids": [
+        "nl-cgrp-2023"
+      ],
+      "population": "難治性慢性偏頭痛，無藥物過度使用頭痛",
+      "domains": {
+        "acute": {
+          "status": "not_covered",
+          "text": "此模組只處理 CGRP 抗體預防，未涵蓋急性治療。",
+          "source_ids": [
+            "nl-cgrp-2023"
+          ],
+          "locator": "文件範圍"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "考慮 CGRP 抗體於至少 3 種預防藥（含 topiramate／valproate）及 onabotulinumtoxinA 失敗後。",
+          "source_ids": [
+            "nl-cgrp-2023"
+          ],
+          "locator": "Aanbeveling"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "治療前及治療中監測血壓；告知長期安全資料有限。",
+          "source_ids": [
+            "nl-cgrp-2023"
+          ],
+          "locator": "Aanbeveling"
+        },
+        "access": {
+          "status": "summarized",
+          "text": "2023 模組明載先前預防藥及肉毒桿菌治療門檻；不能把這份舊版門檻當作已核對的 2026 現行保險規則。",
+          "source_ids": [
+            "nl-cgrp-2023"
+          ],
+          "locator": "Kosten / Aanvaardbaarheid en haalbaarheid"
+        }
+      }
+    },
+    {
+      "id": "dk-migraine",
+      "jurisdiction": "dk",
+      "syndrome": "migraine",
+      "source_ids": [
+        "dk-2026",
+        "dk-cgrp-2026"
+      ],
+      "population": "成人偏頭痛",
+      "domains": {
+        "acute": {
+          "status": "summarized",
+          "text": "止痛藥／NSAID、triptan 為主要選項；可加入止吐藥，必要時合併 triptan 與 NSAID。",
+          "source_ids": [
+            "dk-2026"
+          ],
+          "locator": "Anfaldsbehandling"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "依共病選擇 candesartan、beta-blocker、topiramate、amitriptyline 或標靶預防藥。",
+          "source_ids": [
+            "dk-2026"
+          ],
+          "locator": "Forebyggende behandling"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "慢性偏頭痛 CGRP 療法含抗體及 atogepant；按效果、耐受與成本選擇。",
+          "source_ids": [
+            "dk-cgrp-2026"
+          ],
+          "locator": "Indikation / Behandling"
+        },
+        "access": {
+          "status": "summarized",
+          "text": "慢性偏頭痛途徑要求至少一種降壓類及一種抗癲癇類預防藥失敗／不適用，且先處理藥物過度使用。",
+          "source_ids": [
+            "dk-cgrp-2026"
+          ],
+          "locator": "Patienter med kronisk migræne"
+        }
+      }
+    },
+    {
+      "id": "ch-migraine",
+      "jurisdiction": "ch",
+      "syndrome": "migraine",
+      "source_ids": [
+        "ch-2026"
+      ],
+      "population": "成人偏頭痛；第 12 版",
+      "domains": {
+        "acute": {
+          "status": "summarized",
+          "text": "輕度可用 NSAID；中重度用 triptan 或 gepant，可合併止吐藥。",
+          "source_ids": [
+            "ch-2026"
+          ],
+          "locator": "印刷頁 6–7（PDF 10–11）"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "依共病、耐受與負擔選擇傳統預防藥或 CGRP 標靶療法。",
+          "source_ids": [
+            "ch-2026"
+          ],
+          "locator": "印刷頁 8–10"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "慢性偏頭痛列 topiramate、botulinum toxin A、CGRP 抗體及 atogepant。",
+          "source_ids": [
+            "ch-2026"
+          ],
+          "locator": "印刷頁 11"
+        },
+        "access": {
+          "status": "summarized",
+          "text": "CGRP 阻斷療法標示由神經科依 Limitatio 處方；需另查現行支付條件。",
+          "source_ids": [
+            "ch-2026"
+          ],
+          "locator": "印刷頁 10–11"
+        }
+      }
+    },
+    {
+      "id": "fi-migraine",
+      "jurisdiction": "fi",
+      "syndrome": "migraine",
+      "source_ids": [
+        "fi-2024"
+      ],
+      "population": "本表整理成人建議",
+      "domains": {
+        "acute": {
+          "status": "summarized",
+          "text": "急性治療以止痛藥與 triptan 為主，須避免過度使用。",
+          "source_ids": [
+            "fi-2024"
+          ],
+          "locator": "Keskeinen sanoma"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "可在基層啟動預防藥，緩慢加量並以 3–6 個月療程評估。",
+          "source_ids": [
+            "fi-2024"
+          ],
+          "locator": "Keskeinen sanoma"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "慢性或難治者轉專科，考慮注射 CGRP 抗體或 onabotulinumtoxinA；此版尚未完整納入 gepants 預防建議。",
+          "source_ids": [
+            "fi-2024"
+          ],
+          "locator": "Keskeinen sanoma / estohoito"
+        },
+        "access": {
+          "status": "not_verified",
+          "text": "尚未核實本地現行給付條件；不可由臨床建議推定給付。",
+          "source_ids": [],
+          "locator": ""
+        }
+      }
+    },
+    {
+      "id": "eu-migraine",
+      "jurisdiction": "eu",
+      "syndrome": "migraine",
+      "source_ids": [
+        "ehf-2022"
+      ],
+      "population": "需預防治療的偏頭痛患者；跨國建議",
+      "domains": {
+        "acute": {
+          "status": "not_covered",
+          "text": "此指引聚焦 CGRP 抗體預防，未涵蓋急性治療。",
+          "source_ids": [
+            "ehf-2022"
+          ],
+          "locator": "文件範圍"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "專家共識：CGRP 抗體可列為第一線預防選項，依病史、共病、疾病負擔共同決定。",
+          "source_ids": [
+            "ehf-2022"
+          ],
+          "locator": "Table 9：Expert consensus statements"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "至少連續治療 3 個月後評估療效；個別患者可需更長觀察。",
+          "source_ids": [
+            "ehf-2022"
+          ],
+          "locator": "Table 9：evaluation of efficacy"
+        },
+        "access": {
+          "status": "summarized",
+          "text": "制定建議未納入成本、給付或藥品配送因素；不能代替各國規則。",
+          "source_ids": [
+            "ehf-2022"
+          ],
+          "locator": "Methods：Consensus-based statements"
+        }
+      }
+    },
+    {
+      "id": "eu-cluster",
+      "jurisdiction": "eu",
+      "syndrome": "cluster",
+      "source_ids": [
+        "ean-cluster-2023"
+      ],
+      "population": "成人叢集性頭痛；陣發／慢性須區分",
+      "domains": {
+        "acute": {
+          "status": "summarized",
+          "text": "強推薦高流量 100% 氧氣或皮下 sumatriptan。",
+          "source_ids": [
+            "ean-cluster-2023"
+          ],
+          "locator": "摘要：Recommendations"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "推薦 verapamil 預防；corticosteroid 可作短期過渡。",
+          "source_ids": [
+            "ean-cluster-2023"
+          ],
+          "locator": "摘要：Recommendations"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "替代選項含 lithium、topiramate；galcanezumab 與非侵入性迷走神經刺激的支持限陣發性。",
+          "source_ids": [
+            "ean-cluster-2023"
+          ],
+          "locator": "摘要：episodic cluster headache"
+        },
+        "access": {
+          "status": "not_verified",
+          "text": "跨國建議不代表各國核准或給付；本表未核實各地可取得性。",
+          "source_ids": [],
+          "locator": ""
+        }
+      }
+    },
+    {
+      "id": "uk-nice-cluster",
+      "jurisdiction": "uk-nice",
+      "syndrome": "cluster",
+      "source_ids": [
+        "nice-cg150"
+      ],
+      "population": "叢集性頭痛；本表取成人建議",
+      "domains": {
+        "acute": {
+          "status": "summarized",
+          "text": "提供 100% 氧氣及／或皮下、鼻用 triptan。",
+          "source_ids": [
+            "nice-cg150"
+          ],
+          "locator": "§1.3.35–1.3.38"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "發作期考慮 verapamil，需專科與心電圖監測建議。",
+          "source_ids": [
+            "nice-cg150"
+          ],
+          "locator": "§1.3.39"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "Verapamil 無效者轉專科。",
+          "source_ids": [
+            "nice-cg150"
+          ],
+          "locator": "§1.3.40"
+        },
+        "access": {
+          "status": "not_verified",
+          "text": "尚未核實本地現行給付條件；不可由臨床建議推定給付。",
+          "source_ids": [],
+          "locator": ""
+        }
+      }
+    },
+    {
+      "id": "jp-cluster",
+      "jurisdiction": "jp",
+      "syndrome": "cluster",
+      "source_ids": [
+        "jp-2021"
+      ],
+      "population": "叢集性頭痛",
+      "domains": {
+        "acute": {
+          "status": "summarized",
+          "text": "Sumatriptan 注射及氧氣為急性選項；居家氧氣需使用與防火指導。",
+          "source_ids": [
+            "jp-2021"
+          ],
+          "locator": "CQ IV-6–IV-7；印刷頁 301–308"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "Verapamil 為預防選項，須注意心傳導；可短期合併 steroid。",
+          "source_ids": [
+            "jp-2021"
+          ],
+          "locator": "CQ IV-8；印刷頁 309–310"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "其他預防方法的證據較有限；不可直接套用偏頭痛 CGRP 聲明。",
+          "source_ids": [
+            "jp-2021"
+          ],
+          "locator": "CQ IV-8"
+        },
+        "access": {
+          "status": "not_verified",
+          "text": "2021 指引記載日本適應症與居家氧氣條件；本表未核實 2026 現行支付規則。",
+          "source_ids": [],
+          "locator": ""
+        }
+      }
+    },
+    {
+      "id": "ch-cluster",
+      "jurisdiction": "ch",
+      "syndrome": "cluster",
+      "source_ids": [
+        "ch-2026"
+      ],
+      "population": "叢集性頭痛",
+      "domains": {
+        "acute": {
+          "status": "summarized",
+          "text": "氧氣、皮下／鼻用 sumatriptan 或鼻用 zolmitriptan。",
+          "source_ids": [
+            "ch-2026"
+          ],
+          "locator": "印刷頁 11"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "Verapamil 須心電圖監測；其他選項含 lithium、topiramate。",
+          "source_ids": [
+            "ch-2026"
+          ],
+          "locator": "印刷頁 11"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "短期 prednisone 或專科大枕神經注射作過渡治療。",
+          "source_ids": [
+            "ch-2026"
+          ],
+          "locator": "印刷頁 11"
+        },
+        "access": {
+          "status": "not_verified",
+          "text": "尚未核實本地現行給付條件；不可由臨床建議推定給付。",
+          "source_ids": [],
+          "locator": ""
+        }
+      }
+    },
+    {
+      "id": "eu-trigeminal-neuralgia",
+      "jurisdiction": "eu",
+      "syndrome": "trigeminal-neuralgia",
+      "source_ids": [
+        "ean-tn-2019"
+      ],
+      "population": "三叉神經痛，須鑑別次發病因",
+      "domains": {
+        "acute": {
+          "status": "summarized",
+          "text": "急性嚴重惡化可於監測環境用靜脈 fosphenytoin 或 lidocaine。",
+          "source_ids": [
+            "ean-tn-2019"
+          ],
+          "locator": "摘要：Results"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "長期第一線：carbamazepine 或 oxcarbazepine；MRI 協助排除次發病因。",
+          "source_ids": [
+            "ean-tn-2019"
+          ],
+          "locator": "摘要：Results"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "藥物無效或不耐受時考慮手術；典型三叉神經痛可首選微血管減壓術。",
+          "source_ids": [
+            "ean-tn-2019"
+          ],
+          "locator": "摘要：surgical treatment"
+        },
+        "access": {
+          "status": "not_verified",
+          "text": "尚未核實本地現行給付條件；不可由臨床建議推定給付。",
+          "source_ids": [],
+          "locator": ""
+        }
+      }
+    },
+    {
+      "id": "jp-trigeminal-neuralgia",
+      "jurisdiction": "jp",
+      "syndrome": "trigeminal-neuralgia",
+      "source_ids": [
+        "jp-2021"
+      ],
+      "population": "三叉神經痛",
+      "domains": {
+        "acute": {
+          "status": "summarized",
+          "text": "難治急性疼痛可考慮監測下靜脈 lidocaine。",
+          "source_ids": [
+            "jp-2021"
+          ],
+          "locator": "CQ VIII-20；印刷頁 462"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "Carbamazepine 為強推薦第一選擇；須評估交互作用、血液與嚴重皮膚不良反應。",
+          "source_ids": [
+            "jp-2021"
+          ],
+          "locator": "CQ VIII-20；印刷頁 462"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "藥物抵抗或耐受差者考慮非藥物療法；其他藥物證據較弱。",
+          "source_ids": [
+            "jp-2021"
+          ],
+          "locator": "CQ VIII-20；印刷頁 462"
+        },
+        "access": {
+          "status": "not_verified",
+          "text": "2021 文件的日本藥品可取得性不能當成已核實的 2026 給付狀態。",
+          "source_ids": [],
+          "locator": ""
+        }
+      }
+    },
+    {
+      "id": "ch-trigeminal-neuralgia",
+      "jurisdiction": "ch",
+      "syndrome": "trigeminal-neuralgia",
+      "source_ids": [
+        "ch-2026"
+      ],
+      "population": "三叉神經痛；須影像鑑別",
+      "domains": {
+        "acute": {
+          "status": "summarized",
+          "text": "急性惡化的靜脈治療限住院監測情境。",
+          "source_ids": [
+            "ch-2026"
+          ],
+          "locator": "印刷頁 21"
+        },
+        "prevention": {
+          "status": "summarized",
+          "text": "Carbamazepine 列第一線；oxcarbazepine 等列第二線。",
+          "source_ids": [
+            "ch-2026"
+          ],
+          "locator": "印刷頁 21"
+        },
+        "escalation": {
+          "status": "summarized",
+          "text": "藥物不足或不耐受時由跨專科評估手術；MRI 協助鑑別原發與次發。",
+          "source_ids": [
+            "ch-2026"
+          ],
+          "locator": "印刷頁 21–22"
+        },
+        "access": {
+          "status": "not_verified",
+          "text": "尚未核實本地現行給付條件；不可由臨床建議推定給付。",
+          "source_ids": [],
+          "locator": ""
+        }
+      }
+    }
+  ]
+}

@@ -1,8 +1,9 @@
 "use strict";
+importScripts("./assets/guidelines.js");
 
 // Scope-specific cache names keep different GitHub Pages project sites isolated.
 const PREFIX = `headache-digest:${self.registration.scope}:`;
-const CACHE = `${PREFIX}v11`;
+const CACHE = `${PREFIX}v12`;
 const SHELL = [
   "./",
   "./index.html",
@@ -11,6 +12,8 @@ const SHELL = [
   "./assets/app.js",
   "./assets/paper-filters.js",
   "./assets/reading-library.js",
+  "./assets/guidelines.js",
+  "./assets/guidelines.css",
   "./assets/icon.svg",
   "./assets/icon-192.png",
   "./assets/icon-512.png",
@@ -20,6 +23,7 @@ const DATA_URL = new URL("./data/headache_papers.json", self.registration.scope)
   .href;
 const METRICS_URL = new URL("./data/journal_metrics.json", self.registration.scope).href;
 const SYNDROMES_URL = new URL("./data/headache_syndromes.json", self.registration.scope).href;
+const GUIDELINES_URL = new URL("./data/headache_guidelines.json", self.registration.scope).href;
 const SHELL_URLS = new Set(
   SHELL.map((path) => new URL(path, self.registration.scope).href),
 );
@@ -49,7 +53,7 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   const url = new URL(event.request.url);
-  const isData = [DATA_URL, METRICS_URL, SYNDROMES_URL].includes(url.href);
+  const isData = [DATA_URL, METRICS_URL, SYNDROMES_URL, GUIDELINES_URL].includes(url.href);
   if (!isData && !SHELL_URLS.has(url.href)) return;
   event.respondWith(
     (async () => {
@@ -60,8 +64,10 @@ self.addEventListener("fetch", (event) => {
         if (!response.ok) throw new Error("Network response failed");
         if (isData) {
           const payload = await response.clone().json();
+          if (url.href === GUIDELINES_URL) self.DigestGuidelines.validate(payload);
           if (url.href === DATA_URL ? !Array.isArray(payload)
               : url.href === METRICS_URL ? payload?.metric !== "Journal Impact Factor"
+              : url.href === GUIDELINES_URL ? payload?.schema_version !== 1 || !Array.isArray(payload?.comparisons) || !Array.isArray(payload?.sources)
               : !Array.isArray(payload?.entries) || !Array.isArray(payload?.groups))
             throw new Error("Invalid data response");
         }

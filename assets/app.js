@@ -783,6 +783,6 @@ async function boot() {
       /* The online reader also works without service worker support. */
     }
   }
-  await Promise.all([loadPapers(), loadSyndromes()]);
+  await Promise.all([loadPapers(), loadSyndromes(), window.DigestGuidelines.mount()]);
 }
 boot();

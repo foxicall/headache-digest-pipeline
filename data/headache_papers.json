@@ -14411,32 +14411,6 @@
   },
   {
     "article_metadata": {
-      "pmid_or_id": "27780897",
-      "doi": "10.1177/0333102416675619",
-      "title": "Effect of high rate rTMS on somatosensory evoked potential in migraine.",
-      "source_society_or_journal": "Cephalalgia : an international journal of headache | International Headache Society",
-      "publication_date": "2016-10-25",
-      "study_design": "Clinical Trial"
-    },
-    "structured_summary": {
-      "methods": "三次10 Hz rTMS治療，每次600脈衝，持續412.4秒，於左額葉皮層進行，對應右側小指外展肌的熱點，隔日進行一次。於第三次rTMS治療前及30分鐘後進行中位數體感誘發電位（SEP）測試。",
-      "inclusion_criteria": [
-        "每月有四次或以上頭痛發作的偏頭痛患者"
-      ],
-      "exclusion_criteria": [
-        "未報告"
-      ],
-      "number_of_inclusion": "94 migraineurs; 56 received true rTMS and 38 sham stimulation.",
-      "participants_feature": "納入條件為每月有四次或以上頭痛發作的偏頭痛患者。年齡與性別分布：Not reported.",
-      "conclusion": "在偏頭痛患者中，10 Hz rTMS改善了習慣化，可能是頭痛緩解的生物學基礎。",
-      "pitfalls_and_limitations": [
-        "未報告的限制",
-        "僅根據摘要的證據可能無法全面評估研究結果"
-      ]
-    }
-  },
-  {
-    "article_metadata": {
       "pmid_or_id": "42418214",
       "doi": "10.1111/head.70184",
       "title": "Safety and tolerability of transnasal evaporative cooling for the acute treatment of migraine in an at-home setting: A randomized, double-blind, sham-controlled, decentralized clinical trial.",

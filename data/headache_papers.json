@@ -14384,33 +14384,6 @@
   },
   {
     "article_metadata": {
-      "pmid_or_id": "27788026",
-      "doi": "10.1056/nejmoa1610384",
-      "title": "Trial of Amitriptyline, Topiramate, and Placebo for Pediatric Migraine.",
-      "source_society_or_journal": "The New England journal of medicine",
-      "publication_date": "2016-10-27",
-      "study_design": "Clinical Trial, Phase III; Comparative Study; Multicenter Study; Randomized Controlled Trial"
-    },
-    "structured_summary": {
-      "methods": "我們進行了一項隨機、雙盲、安慰劑對照的臨床試驗，研究藥物阿米替林（每天每公斤體重1毫克）、托吡酯（每天每公斤2毫克）和安慰劑在8至17歲的兒童和青少年偏頭痛患者中的效果。患者以2:2:1的比例隨機分配接受其中一種藥物或安慰劑。主要結果是比較28天基線期與24週試驗最後28天的頭痛天數相對減少50%或更多。",
-      "inclusion_criteria": [
-        "年齡在8至17歲之間的偏頭痛患者"
-      ],
-      "exclusion_criteria": [
-        "未報告"
-      ],
-      "number_of_inclusion": "361 patients randomized; 328 included in primary efficacy analysis (132 in amitriptyline group, 130 in topiramate group, and 66 in placebo group)",
-      "participants_feature": "納入條件為8至17歲、診斷為偏頭痛的兒童與青少年。年齡與性別分布：Not reported.",
-      "conclusion": "在24週的期間內，阿米替林、托吡酯或安慰劑對兒童和青少年偏頭痛的頭痛頻率或頭痛相關殘疾的減少沒有顯著差異。活性藥物與較高的不良事件發生率相關。",
-      "pitfalls_and_limitations": [
-        "試驗因無效而提前結束",
-        "主要結果在各組之間沒有顯著差異",
-        "不良事件的發生率在接受阿米替林或托吡酯的患者中較高"
-      ]
-    }
-  },
-  {
-    "article_metadata": {
       "pmid_or_id": "42418214",
       "doi": "10.1111/head.70184",
       "title": "Safety and tolerability of transnasal evaporative cooling for the acute treatment of migraine in an at-home setting: A randomized, double-blind, sham-controlled, decentralized clinical trial.",

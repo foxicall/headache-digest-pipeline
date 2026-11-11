@@ -1,6 +1,59 @@
 [
   {
     "article_metadata": {
+      "pmid_or_id": "42775430",
+      "doi": "10.1111/head.70227",
+      "title": "Distribution and target engagement of peripherally administered fremanezumab in the cerebrospinal fluid of healthy volunteers.",
+      "source_society_or_journal": "Headache | American Headache Society",
+      "publication_date": "2026-09-23",
+      "study_design": "Clinical Trial"
+    },
+    "structured_summary": {
+      "methods": "這是一項開放標籤、非隨機、平行組、無治療對照的藥物動力學臨床試驗，於2023年2月16日至2023年4月1日在美國進行。健康志願者被分配到五個組別：組1沒有藥物干預，組2-5接受900毫克的fremanezumab靜脈注射。血液和腦脊液樣本在組1（n=6；血液和腦脊液控制的基線）以及注射後1天（組2；n=5）、3天（組3；n=5）、15天（組4；n=5）和30天（組5；n=5）收集。選定組別在注射後15分鐘和預定時間點進行額外的血液採樣。使用內部免疫測定法和高效液相色譜串聯質譜分析血漿和腦脊液樣本中的fremanezumab和總CGRP。",
+      "inclusion_criteria": [
+        "健康志願者"
+      ],
+      "exclusion_criteria": [
+        "未報告"
+      ],
+      "number_of_inclusion": "16 healthy volunteers (6 in Group 1, 5 in each of Groups 2-5)",
+      "participants_feature": "健康志願者，年齡和性別未報告，基線頭痛頻率/嚴重程度和先前治療未報告，相關合併症未報告。",
+      "conclusion": "目前的研究結果表明，fremanezumab在外周給藥後迅速分佈到中樞神經系統，並在腦脊液中持續保留fremanezumab及其對CGRP的靶向作用。需要進一步研究以確定進入腦脊液和靶向作用是否在fremanezumab對偏頭痛患者的臨床療效中發揮作用。",
+      "pitfalls_and_limitations": [
+        "未報告的限制",
+        "僅基於摘要的證據限制"
+      ]
+    }
+  },
+  {
+    "article_metadata": {
+      "pmid_or_id": "42768921",
+      "doi": "10.1111/head.70188",
+      "title": "Early improvements in function with atogepant as assessed by the Activity Impairment in Migraine-Diary: Post hoc analyses of three randomized, phase 3 clinical trials of atogepant for the preventive treatment of migraine.",
+      "source_society_or_journal": "Headache | American Headache Society",
+      "publication_date": "2026-09-22",
+      "study_design": "Randomized Controlled Trial; Multicenter Study; Clinical Trial, Phase III"
+    },
+    "structured_summary": {
+      "methods": "本研究為三項多中心、安慰劑對照、雙盲、平行組、12週的隨機臨床試驗的事後分析，參與者接受每日一次的atogepant 60 mg或安慰劑。",
+      "inclusion_criteria": [
+        "參與者為經診斷的偏頭痛患者，符合各試驗的具體條件。"
+      ],
+      "exclusion_criteria": [
+        "曾接受過兩至四類口服預防性偏頭痛治療失敗的患者。",
+        "有其他神經系統疾病的患者。"
+      ],
+      "number_of_inclusion": "Not reported",
+      "participants_feature": "參與者為偏頭痛患者，年齡範圍及性別未報告，基線偏頭痛頻率及嚴重程度未報告，先前治療情況及相關合併症未報告。",
+      "conclusion": "對於預防性偏頭痛治療，每日一次的atogepant與安慰劑相比，與AIM-D個別項目及活動限制項目的早期改善相關，並且在AIM-D領域分數上達到完全改善的機率更高，顯示出在偏頭痛範疇內的早期功能改善。",
+      "pitfalls_and_limitations": [
+        "本研究為事後分析，可能存在選擇偏差。",
+        "僅限於三項臨床試驗的數據，外部有效性可能有限。"
+      ]
+    }
+  },
+  {
+    "article_metadata": {
       "pmid_or_id": "42669793",
       "doi": "10.1177/03331024261480724",
       "title": "App-based self-administered biofeedback for the prevention of episodic migraine: A randomized controlled trial.",

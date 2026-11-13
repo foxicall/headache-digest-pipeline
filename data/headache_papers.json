@@ -14412,31 +14412,6 @@
   },
   {
     "article_metadata": {
-      "pmid_or_id": "27821639",
-      "doi": "10.1177/0333102416678623",
-      "title": "Migraine prevention with percutaneous mastoid electrical stimulator: A randomized double-blind controlled trial.",
-      "source_society_or_journal": "Cephalalgia : an international journal of headache | International Headache Society",
-      "publication_date": "2016-11-12",
-      "study_design": "Randomized Controlled Trial"
-    },
-    "structured_summary": {
-      "methods": "這是一項隨機、雙盲和安慰劑對照的試驗，涉及四個醫療中心。對於每月至少有兩次偏頭痛發作的患者，隨機分配至PMES或安慰劑刺激治療。治療每天進行45分鐘，持續3個月。",
-      "inclusion_criteria": [
-        "每月至少有兩次偏頭痛發作的患者"
-      ],
-      "exclusion_criteria": [
-        "Not reported"
-      ],
-      "number_of_inclusion": "Not reported",
-      "participants_feature": "納入條件為每月至少有兩次偏頭痛發作的間歇性偏頭痛患者。年齡與性別分布：Not reported。",
-      "conclusion": "PMES組在第三個月的偏頭痛天數顯著減少，與安慰劑組相比，減少幅度為-71.3%對-14.4%（p < 0.001）。PMES組的50%反應率顯著高於安慰劑組（82.5%對17.5%，p < 0.001）。在PMES組中，60%的患者在第三個月有≥75%的偏頭痛天數減少，35%的患者在第三個月沒有偏頭痛發作。兩組均無不良事件報告。",
-      "pitfalls_and_limitations": [
-        "Not reported"
-      ]
-    }
-  },
-  {
-    "article_metadata": {
       "pmid_or_id": "42418214",
       "doi": "10.1111/head.70184",
       "title": "Safety and tolerability of transnasal evaporative cooling for the acute treatment of migraine in an at-home setting: A randomized, double-blind, sham-controlled, decentralized clinical trial.",

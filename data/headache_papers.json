@@ -1,6 +1,33 @@
 [
   {
     "article_metadata": {
+      "pmid_or_id": "43021468",
+      "doi": "10.1093/brain/awag401",
+      "title": "Hypersensitivity to adrenomedullin in post-traumatic headache: a randomized crossover study.",
+      "source_society_or_journal": "Brain : a journal of neurology",
+      "publication_date": "2026-11-13",
+      "study_design": "Not reported"
+    },
+    "structured_summary": {
+      "methods": "我們進行了一項單中心、隨機、雙盲、安慰劑對照的雙向交叉研究，對象為持續性創傷後頭痛的成年人，且無創傷前偏頭痛病史。在至少相隔7天的兩個實驗日中，參與者接受了20分鐘的靜脈注射ADM（19.9 pmol kg⁻¹ min⁻¹）和等滲鹽水作為匹配的無效對照（安慰劑），隨機序列進行。頭痛結果在12小時內記錄。",
+      "inclusion_criteria": [
+        "成年人",
+        "持續性創傷後頭痛",
+        "無創傷前偏頭痛病史"
+      ],
+      "exclusion_criteria": [
+        "Not reported"
+      ],
+      "number_of_inclusion": "21 participants",
+      "participants_feature": "參與者平均年齡34.3歲，19名（90%）為女性，18名（86%）報告有類似偏頭痛的表現。",
+      "conclusion": "在ADM治療後，21名參與者中有17名（81%）出現類似偏頭痛的頭痛，而在安慰劑後僅有4名（19%）出現。ADM引起的頭痛強度的基線修正面積下限（AUC）顯著高於安慰劑（中位數1,110對420，P = 0.006）。這些發現顯示持續性創傷後頭痛對ADM相關信號的明顯反應，並支持ADM通路作為機制導向治療開發的候選目標。",
+      "pitfalls_and_limitations": [
+        "Not reported"
+      ]
+    }
+  },
+  {
+    "article_metadata": {
       "pmid_or_id": "42775430",
       "doi": "10.1111/head.70227",
       "title": "Distribution and target engagement of peripherally administered fremanezumab in the cerebrospinal fluid of healthy volunteers.",

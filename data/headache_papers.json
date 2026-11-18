@@ -1,6 +1,33 @@
 [
   {
     "article_metadata": {
+      "pmid_or_id": "43042641",
+      "doi": "10.1177/03331024261499722",
+      "title": "Sustained response to atogepant in episodic and chronic migraine: Post-hoc analyses of ELEVATE and PROGRESS, and their open-label extension.",
+      "source_society_or_journal": "Cephalalgia : an international journal of headache | International Headache Society | Japanese Headache Society",
+      "publication_date": "2026-11-17",
+      "study_design": "Randomized Controlled Trial"
+    },
+    "structured_summary": {
+      "methods": "這些後設分析評估了參與者對atogepant（口服降鈣素基因相關肽受體拮抗劑）的持續反應，基於兩項為期3個月的雙盲隨機對照試驗（RCTs）（ELEVATE和PROGRESS）以及由ELEVATE和PROGRESS的參與者組成的12個月開放標籤延伸（OLE）研究的中期分析。後設分析旨在評估atogepant 60 mg每日一次（QD）的持續反應。持續反應基於預定的每月偏頭痛天數（MMDs）減少的閾值，允許評估atogepant的長期療效。ELEVATE試驗招募了對兩到四類傳統口服預防藥物反應不佳的發作性偏頭痛參與者；PROGRESS試驗招募了慢性偏頭痛參與者。這些後設分析是在ELEVATE（151名參與者）和PROGRESS（256名參與者）的RCT的mITT人群中進行的。初始反應定義為從基線到每個相應RCT的第1個月MMDs減少≥50%、≥75%或100%。計算了在每個RCT的第2和第3個月中，維持或超過其第1個月反應閾值的參與者比例。對於OLE（ELEVATE，240名參與者和PROGRESS，284名參與者在mITT人群中），初始反應定義為從基線到OLE的第4個月MMDs減少≥50%、≥75%或100%。計算了在OLE的第12個月中，維持或超過其第4個月反應閾值的參與者比例。",
+      "inclusion_criteria": [
+        "參與者必須是發作性偏頭痛患者，對兩到四類傳統口服預防藥物反應不佳（ELEVATE試驗）",
+        "參與者必須是慢性偏頭痛患者（PROGRESS試驗）"
+      ],
+      "exclusion_criteria": [
+        "未報告"
+      ],
+      "number_of_inclusion": "ELEVATE: 151 participants; PROGRESS: 256 participants; OLE: ELEVATE: 240 participants; PROGRESS: 284 participants",
+      "participants_feature": "ELEVATE試驗的參與者為發作性偏頭痛患者，年齡和性別未報告；PROGRESS試驗的參與者為慢性偏頭痛患者，年齡和性別未報告。基線偏頭痛頻率和嚴重程度未報告。",
+      "conclusion": "參與者在使用atogepant後經歷了初始臨床意義的反應，並在3個月的RCT以及OLE研究的12個月中持續經歷持續反應。",
+      "pitfalls_and_limitations": [
+        "未報告的限制",
+        "僅基於摘要的證據限制"
+      ]
+    }
+  },
+  {
+    "article_metadata": {
       "pmid_or_id": "43021468",
       "doi": "10.1093/brain/awag401",
       "title": "Hypersensitivity to adrenomedullin in post-traumatic headache: a randomized crossover study.",

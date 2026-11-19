@@ -1,6 +1,31 @@
 [
   {
     "article_metadata": {
+      "pmid_or_id": "43045758",
+      "doi": "10.1038/s41582-026-01285-w",
+      "title": "Psychedelic treatment for headache disorders.",
+      "source_society_or_journal": "Nature reviews. Neurology",
+      "publication_date": "2026-11-17",
+      "study_design": "Review"
+    },
+    "structured_summary": {
+      "methods": "Review of psychedelic drugs in headache medicine, including historical context, relationship to conventional headache medications, and discussion of safety, logistical and legal concerns.",
+      "inclusion_criteria": [
+        "Not reported"
+      ],
+      "exclusion_criteria": [
+        "Not reported"
+      ],
+      "number_of_inclusion": "Not applicable; no enrolled cohort in a guideline.",
+      "participants_feature": "Not applicable; no participant population to describe.",
+      "conclusion": "Psychedelic drugs, such as psilocybin, have historical roles in headache medicine and are re-emerging as potential therapeutic options, particularly in cluster headache. Clinical trials support the efficacy and safety of psilocybin in transitional treatment for headache disorders, with ongoing studies of other compounds and treatment modes.",
+      "pitfalls_and_limitations": [
+        "Limited clinical and scientific evidence to date."
+      ]
+    }
+  },
+  {
+    "article_metadata": {
       "pmid_or_id": "43042641",
       "doi": "10.1177/03331024261499722",
       "title": "Sustained response to atogepant in episodic and chronic migraine: Post-hoc analyses of ELEVATE and PROGRESS, and their open-label extension.",

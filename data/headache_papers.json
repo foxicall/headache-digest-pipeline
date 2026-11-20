@@ -1,6 +1,33 @@
 [
   {
     "article_metadata": {
+      "pmid_or_id": "43056654",
+      "doi": "10.1212/wnl.0000000000218773",
+      "title": "Efficacy and Safety of 2 Rimegepant Dosing Regimens for the Prevention of Episodic Migraine: A Randomized Controlled Study.",
+      "source_society_or_journal": "Neurology | American Academy of Neurology",
+      "publication_date": "2026-11-19",
+      "study_design": "Randomized Controlled Trial; Multicenter Study; Clinical Trial, Phase IV"
+    },
+    "structured_summary": {
+      "methods": "這是一項第4期、隨機、安慰劑對照的研究。參與者為有≥1年發作性偏頭痛病史（有或無先兆）且每月有4-14次偏頭痛發作的成年人，從10個國家的門診/研究中心招募。經過28天的觀察期後，參與者被隨機分配至每日一次安慰劑、每隔一天75毫克rimegepant/交替安慰劑或每日一次75毫克rimegepant，進行為期12週的雙盲治療。主要終點是整個12週雙盲期內每月偏頭痛天數的平均減少，使用線性混合效應模型進行分析。關鍵次要終點使用分層檢驗以控制第一類錯誤。安全性評估包括不良事件（AEs）。",
+      "inclusion_criteria": [
+        "成年人（≥18歲）",
+        "有≥1年發作性偏頭痛病史（有或無先兆）",
+        "每月有4-14次偏頭痛發作"
+      ],
+      "exclusion_criteria": [
+        "Not reported"
+      ],
+      "number_of_inclusion": "692 participants (randomized)",
+      "participants_feature": "參與者（n = 692；中位年齡44.0歲，86.7%女性）接受雙盲治療，rimegepant每隔一天（n = 232）、rimegepant每日一次（n = 229）或安慰劑（n = 231）。",
+      "conclusion": "兩種rimegepant劑量方案在預防偏頭痛方面均優於安慰劑，且耐受性良好。這項研究顯示75毫克rimegepant每日一次在雙盲研究中的療效和安全性。",
+      "pitfalls_and_limitations": [
+        "本研究未設計為直接比較rimegepant每隔一天和每日一次的劑量方案。"
+      ]
+    }
+  },
+  {
+    "article_metadata": {
       "pmid_or_id": "43045758",
       "doi": "10.1038/s41582-026-01285-w",
       "title": "Psychedelic treatment for headache disorders.",

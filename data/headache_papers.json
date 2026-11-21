@@ -1,6 +1,31 @@
 [
   {
     "article_metadata": {
+      "pmid_or_id": "43061830",
+      "doi": "10.1093/brain/awag413",
+      "title": "Cortical and meningeal neuroimmune interactions contribute to the generation of migraine headaches.",
+      "source_society_or_journal": "Brain : a journal of neurology",
+      "publication_date": "2026-11-20",
+      "study_design": "Not reported"
+    },
+    "structured_summary": {
+      "methods": "Not reported",
+      "inclusion_criteria": [
+        "Not reported"
+      ],
+      "exclusion_criteria": [
+        "Not reported"
+      ],
+      "number_of_inclusion": "Not reported",
+      "participants_feature": "Migraine是一種普遍的疾病，排名所有疾病中導致殘疾的第二大原因。",
+      "conclusion": "這篇綜述整合了外周疼痛和炎症研究中的細胞和分子發現，檢視了神經元與膠質細胞之間，以及硬膜痛覺神經元與免疫細胞之間的動態互動，提供了一個理解痛覺神經元和膠質細胞如何協調信號非穩態腦狀態的概念框架，並提供了對涉及TSPO的PET研究結果的新見解。",
+      "pitfalls_and_limitations": [
+        "Not reported"
+      ]
+    }
+  },
+  {
+    "article_metadata": {
       "pmid_or_id": "43056654",
       "doi": "10.1212/wnl.0000000000218773",
       "title": "Efficacy and Safety of 2 Rimegepant Dosing Regimens for the Prevention of Episodic Migraine: A Randomized Controlled Study.",
